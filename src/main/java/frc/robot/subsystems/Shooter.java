@@ -9,7 +9,7 @@ public class Shooter extends SubsystemBase {
     void shoot(){
 
     }
-    void setShooterRM(float newRPM){
-        
+    void setShooterRPM(float newRPM){
+
     }
 }
