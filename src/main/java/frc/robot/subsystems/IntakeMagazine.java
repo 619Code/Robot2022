@@ -6,7 +6,7 @@ public class IntakeMagazine extends SubsystemBase {
     void feedShooter(){
 
     }
-    void setIntakeMotorRPM(float newRPM){
+    void setIntakeMotorRPM(double newRPM){
 
     }
 }
