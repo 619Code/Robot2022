@@ -30,4 +30,9 @@ public final class Constants {
     public static final double TOP_HUB_ALT = Units.inchesToMeters(8+8*12); // meters, height of top of tape on top hub
     public static final double TOP_HUB_RADIUS = Units.inchesToMeters((5+(3/8)+4*12)/2); // meters, outer radius of top hub
     public static final double TARGET_THICKNESS = Units.inchesToMeters(2); // meters, thickness of target tape
+
+    // Shot finding
+    public static final double CARGO_TERMINAL_VELOCITY = 13.7213 // meters/second
+    public static final double GRAVITY = 9.81 // meters/second
+    public static final double CARGO_RADIUS = Units.inchesToMeters(9.5); // meters
 }
