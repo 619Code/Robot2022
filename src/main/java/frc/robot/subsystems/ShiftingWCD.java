@@ -53,8 +53,12 @@ public class ShiftingWCD extends SubsystemBase {
         this.rightMotors.ResetEncoder();
     }
 
-    public double getHeadingDegrees() {
-        return -navx.getAngle();
+    public float getHeadingDegrees() {
+        return -navx.getFusedHeading();
+    }
+
+    public AHRS getNavx(){
+        return navx;
     }
 
     public Rotation2d getAngle() {
