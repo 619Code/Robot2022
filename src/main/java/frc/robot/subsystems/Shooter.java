@@ -3,16 +3,16 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
-    void setTurretYaw(double newYaw){
+    public void setTurretYaw(double newYaw){
 
     }
-    double getTurretYaw(){
-        
-    }
-    void shoot(){
+    public double getTurretYaw(){
 
     }
-    void setShooterRPM(double newRPM){
+    public void shoot(){
+
+    }
+    public void setShooterRPM(double newRPM){
 
     }
 }
