@@ -1,4 +1,4 @@
-package frc.robot.Shot;
+package frc.robot.helpers;
 
 public class Shot {
     private final double rpm;
