@@ -32,8 +32,8 @@ public final class Constants {
     public static final double TARGET_THICKNESS = Units.inchesToMeters(2); // meters, thickness of target tape
 
     // Shot finding
-    public static final double CARGO_TERMINAL_VELOCITY = 13.7213 // meters/second
-    public static final double GRAVITY = 9.81 // meters/second
+    public static final double CARGO_TERMINAL_VELOCITY = 13.7213; // meters/second
+    public static final double GRAVITY = 9.81; // meters/second
     public static final double CARGO_RADIUS = Units.inchesToMeters(9.5); // meters
-    public static final double MAX_MUZZLE_VELOCITY = 14 // meters/second, just a guess, needs characterization
+    public static final double MAX_MUZZLE_VELOCITY = 14; // meters/second, just a guess, needs characterization
 }
