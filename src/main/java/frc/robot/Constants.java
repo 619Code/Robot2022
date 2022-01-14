@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public final class Constants {
     //Drive CANs
@@ -20,7 +21,16 @@ public final class Constants {
     public static final double TRACK_WIDTH = Units.inchesToMeters(25); //distance between wheels in meters
 
     //Drive solenoids
-    public static final int PCM_CAN_ID = 0;
+    public static final PneumaticsModuleType PCM_CAN_ID = PneumaticsModuleType.CTREPCM;
     public static final int DRIVE_SOLENOID_FORWARD = 1;
     public static final int DRIVE_SOLENOID_BACK = 4;
+
+    //Intake CAN
+    public static final int LOADING_MOTOR = 0; //CHANGE THIS ONCE WE HAVE A LOADING MOTOR
+    //these do not like being set to -1, so keep that in mind.
+
+    //Intake Solenoid
+    public static final int INTAKE_SOLENOID = 0; //Also change this once we have a piston hooked up please
+    //Unless of course, you don't like working robots.
+
 }
