@@ -7,7 +7,7 @@ public class Shooter extends SubsystemBase {
 
     }
     public double getTurretYaw(){
-
+        return 0;
     }
     public void shoot(){
 
