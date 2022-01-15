@@ -33,4 +33,8 @@ public final class Constants {
     public static final double TOP_HUB_ALT = Units.inchesToMeters(8+8*12); // meters, height of top of tape on top hub
     public static final double TOP_HUB_RADIUS = Units.inchesToMeters((5+(3/8)+4*12)/2); // meters, outer radius of top hub
     public static final double TARGET_THICKNESS = Units.inchesToMeters(2); // meters, thickness of target tape
+
+    // LED constants
+    public static final int LED_PWM_PORT = 9;
+    public static final int LED_STRIP_LENGTH = 25;
 }
