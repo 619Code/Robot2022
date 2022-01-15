@@ -4,6 +4,7 @@ import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -11,6 +12,7 @@ public class IntakeMagazine extends SubsystemBase {
 
     private CANSparkMax intake;
     private Solenoid lower;
+    private boolean armDown;
 
     public IntakeMagazine() {
         // Magazine can only consist of 2 balls held at once, if at all.
@@ -27,6 +29,20 @@ public class IntakeMagazine extends SubsystemBase {
         
     }
 
+    public void spIntake() {
+        if (lower.get()) {
+            intake.set(0.8);
+        }
+        else {
+            lower.set(true);
+        }
 
+        armDown = lower.get();
+    }
+
+    public void raiseIntake() {
+        lower.set(false);
+        armDown = lower.get();
+    }
 
 }

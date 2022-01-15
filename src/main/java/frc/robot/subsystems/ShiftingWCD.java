@@ -33,8 +33,7 @@ public class ShiftingWCD extends SubsystemBase {
         drive.setSafetyEnabled(false);
 
         // shifter
-        shifter = new DoubleSolenoid(Constants.PCM_CAN_ID, PneumaticsModuleType.CTREPCM,
-                Constants.DRIVE_SOLENOID_FORWARD, Constants.DRIVE_SOLENOID_FORWARD);
+        shifter = new DoubleSolenoid(Constants.PCM_CAN_ID, Constants.DRIVE_SOLENOID_FORWARD, Constants.DRIVE_SOLENOID_FORWARD);
 
         // sensors
         navx = new AHRS(SPI.Port.kMXP);
