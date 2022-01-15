@@ -24,6 +24,9 @@ public final class Constants {
     public static final int DRIVE_SOLENOID_FORWARD = 1;
     public static final int DRIVE_SOLENOID_BACK = 4;
 
+    //Controller constants
+    public static final double JOYSTICK_DEADZONE = 0.075;
+  
     // Vision system
     public static final double LIMELIGHT_ALT = 1; // meters, altitude of LL on robot above ground
     public static final double LIMELIGHT_ANGLE = 80; // degrees, angle of LL above ground
