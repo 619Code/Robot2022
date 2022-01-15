@@ -34,7 +34,7 @@ public class ShiftingWCD extends SubsystemBase {
 
         // shifter
         shifter = new DoubleSolenoid(Constants.PCM_CAN_ID, PneumaticsModuleType.CTREPCM,
-                Constants.DRIVE_SOLENOID_FORWARD, Constants.DRIVE_SOLENOID_FORWARD);
+                Constants.DRIVE_SOLENOID_FORWARD, Constants.DRIVE_SOLENOID_BACK);
 
         // sensors
         navx = new AHRS(SPI.Port.kMXP);
@@ -70,7 +70,7 @@ public class ShiftingWCD extends SubsystemBase {
     }
 
     public void curve(double speed, double rotation, boolean isLowGear) {
-        drive.curvatureDrive(Constants.SPEED_ADJUST * speed, Constants.SPEED_ADJUST * -rotation, true);
+        drive.curvatureDrive(Constants.SPEED_ADJUST * -rotation, Constants.SPEED_ADJUST * speed, true);
         setShift(isLowGear);
     }
 }

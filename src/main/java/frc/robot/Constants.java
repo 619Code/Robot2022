@@ -23,4 +23,7 @@ public final class Constants {
     public static final int PCM_CAN_ID = 0;
     public static final int DRIVE_SOLENOID_FORWARD = 1;
     public static final int DRIVE_SOLENOID_BACK = 4;
+
+    //Controller constants
+    public static final double JOYSTICK_DEADZONE = 0.075;
 }
