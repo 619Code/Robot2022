@@ -1,20 +1,18 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeMagazine;
 
 public class IntakeCommand extends CommandBase {
 
-    private XboxController controller;
+    //private XboxController controller;
     private IntakeMagazine intake;
-    private boolean armDown;
+    //private boolean armDown;
 
-    public IntakeCommand(boolean armDown, IntakeMagazine intake, XboxController stick) {
+    public IntakeCommand(IntakeMagazine intake) {
         this.intake = intake;
-        this.controller = stick;
-        this.armDown = armDown;
+        //this.controller = stick;
+        //this.armDown = armDown;
 
         addRequirements(intake);
     }
@@ -26,12 +24,19 @@ public class IntakeCommand extends CommandBase {
     @Override
 
     public void execute() {
-        if (controller.getLeftBumperPressed()) {
-            intake.spIntake();
-        }
-        else if (controller.getRightBumperPressed()) {
-            intake.raiseIntake();
-        }
+        //if (controller.getLeftBumperPressed()) {
+            intake.lowerIntake();
+            intake.spIntake(0.4);
+        //}
+        //else if (controller.getRightBumperPressed()) {
+            //intake.raiseIntake();
+        //}
+    }
+
+    @Override
+    public void end(boolean isInterrupted) {
+        intake.spIntake(0.0);
+        intake.raiseIntake();
     }
     
 
