@@ -12,6 +12,7 @@ public class LedStrip extends SubsystemBase{
     public LedStrip() {
         ledStrip = new AddressableLED(Constants.LED_PWM_PORT);
         ledBuffer = new AddressableLEDBuffer(Constants.LED_STRIP_LENGTH);
+        ledStrip.setLength(Constants.LED_STRIP_LENGTH);
         ledStrip.setData(ledBuffer);
         ledStrip.start();
     }
