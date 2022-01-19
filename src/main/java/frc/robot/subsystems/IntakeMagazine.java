@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IntakeMagazine extends SubsystemBase {
 
     private VictorSPX intake;
-    private Solenoid lower;
+    public Solenoid lower;
 
     public IntakeMagazine() {
         // Magazine can only consist of 2 balls held at once, if at all.
 
         //Here's the motor needed to spin the intake bar.
-        intake = new VictorSPX(21);
+        intake = new VictorSPX(21); 
 
         //Wrist solenoid used to raise and lower the intake 
         lower = new Solenoid(Constants.PCM_CAN_ID, Constants.INTAKE_SOLENOID);
