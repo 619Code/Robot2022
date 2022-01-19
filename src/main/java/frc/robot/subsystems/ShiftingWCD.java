@@ -28,6 +28,9 @@ public class ShiftingWCD extends SubsystemBase {
         leftMotors = new DriveMotors(Constants.LEFT_LEADER, Constants.LEFT_FOLLOWER_0, Constants.LEFT_FOLLOWER_1);
         rightMotors = new DriveMotors(Constants.RIGHT_LEADER, Constants.RIGHT_FOLLOWER_0, Constants.RIGHT_FOLLOWER_1);
 
+        // invert the right side because WPILib doesnt do that for us anymore
+        rightMotors.setInverted(true);
+
         // drive
         drive = new DifferentialDrive(leftMotors.getLeadMotor(), rightMotors.getLeadMotor());
         drive.setSafetyEnabled(false);
@@ -74,7 +77,7 @@ public class ShiftingWCD extends SubsystemBase {
     }
 
     public void curve(double speed, double rotation, boolean isLowGear) {
-        drive.curvatureDrive(Constants.SPEED_ADJUST * -rotation, Constants.SPEED_ADJUST * speed, true);
+        drive.curvatureDrive(Constants.SPEED_ADJUST * speed, Constants.SPEED_ADJUST * -rotation, true);
         setShift(isLowGear);
     }
 }

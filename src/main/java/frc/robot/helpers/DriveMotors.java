@@ -37,4 +37,9 @@ public class DriveMotors {
     public void ResetEncoder() {
         this.encoder.setPosition(0);
     }
+
+    public void setInverted(boolean isInverted){
+        this.motors[0].setInverted(isInverted);
+        // no need to invert the followers
+    }
 }
