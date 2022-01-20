@@ -28,12 +28,16 @@ public class ShiftingWCD extends SubsystemBase {
         leftMotors = new DriveMotors(Constants.LEFT_LEADER, Constants.LEFT_FOLLOWER_0, Constants.LEFT_FOLLOWER_1);
         rightMotors = new DriveMotors(Constants.RIGHT_LEADER, Constants.RIGHT_FOLLOWER_0, Constants.RIGHT_FOLLOWER_1);
 
+        // invert the right side because WPILib doesnt do that for us anymore
+        rightMotors.setInverted(true);
+
         // drive
         drive = new DifferentialDrive(leftMotors.getLeadMotor(), rightMotors.getLeadMotor());
         drive.setSafetyEnabled(false);
 
         // shifter
-        shifter = new DoubleSolenoid(Constants.PCM_CAN_ID, Constants.DRIVE_SOLENOID_FORWARD, Constants.DRIVE_SOLENOID_FORWARD);
+        shifter = new DoubleSolenoid(Constants.PCM_CAN_ID, PneumaticsModuleType.CTREPCM,
+                Constants.DRIVE_SOLENOID_FORWARD, Constants.DRIVE_SOLENOID_BACK);
 
         // sensors
         navx = new AHRS(SPI.Port.kMXP);
@@ -52,8 +56,12 @@ public class ShiftingWCD extends SubsystemBase {
         this.rightMotors.ResetEncoder();
     }
 
-    public double getHeadingDegrees() {
-        return -navx.getAngle();
+    public float getHeadingDegrees() {
+        return -navx.getFusedHeading();
+    }
+
+    public AHRS getNavx(){
+        return navx;
     }
 
     public Rotation2d getAngle() {

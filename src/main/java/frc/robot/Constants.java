@@ -34,4 +34,17 @@ public final class Constants {
     public static final int INTAKE_SOLENOID = 0; //Also change this once we have a piston hooked up please
     //Unless of course, you don't like working robots.
 
+    //Controller constants
+    public static final double JOYSTICK_DEADZONE = 0.075;
+  
+    // Vision system
+    public static final double LIMELIGHT_ALT = 1; // meters, altitude of LL on robot above ground
+    public static final double LIMELIGHT_ANGLE = 80; // degrees, angle of LL above ground
+    public static final double TOP_HUB_ALT = Units.inchesToMeters(8+8*12); // meters, height of top of tape on top hub
+    public static final double TOP_HUB_RADIUS = Units.inchesToMeters((5+(3/8)+4*12)/2); // meters, outer radius of top hub
+    public static final double TARGET_THICKNESS = Units.inchesToMeters(2); // meters, thickness of target tape
+
+    // LED constants
+    public static final int LED_PWM_PORT = 0;
+    public static final int LED_STRIP_LENGTH = 25;
 }
