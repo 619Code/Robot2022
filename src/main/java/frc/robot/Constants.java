@@ -21,7 +21,7 @@ public final class Constants {
     public static final double TRACK_WIDTH = Units.inchesToMeters(25); //distance between wheels in meters
 
     //Drive solenoids
-    public static final PneumaticsModuleType PCM_CAN_ID = PneumaticsModuleType.CTREPCM;
+    public static final int PCM_CAN_ID = 0;
     public static final int DRIVE_SOLENOID_FORWARD = 1;
     public static final int DRIVE_SOLENOID_BACK = 4;
 
@@ -30,6 +30,7 @@ public final class Constants {
     //these do not like being set to -1, so keep that in mind.
 
     //Intake Solenoid
+    public static final PneumaticsModuleType INTAKE_MODULE_TYPE = PneumaticsModuleType.CTREPCM;
     public static final int INTAKE_SOLENOID = 0; //Also change this once we have a piston hooked up please
     //Unless of course, you don't like working robots.
 

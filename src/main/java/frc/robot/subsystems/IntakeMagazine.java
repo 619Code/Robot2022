@@ -20,7 +20,7 @@ public class IntakeMagazine extends SubsystemBase {
         intake = new VictorSPX(21); 
 
         //Wrist solenoid used to raise and lower the intake 
-        lower = new Solenoid(Constants.PCM_CAN_ID, Constants.INTAKE_SOLENOID);
+        lower = new Solenoid(Constants.INTAKE_MODULE_TYPE, Constants.INTAKE_SOLENOID);
 
         
     }
