@@ -2,11 +2,15 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import frc.robot.helpers.DriveMotors;
+//import frc.robot.helpers.DriveMotors;
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -16,8 +20,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 public class ShiftingWCD extends SubsystemBase {
     DifferentialDrive drive;
     DoubleSolenoid shifter;
-    DriveMotors leftMotors;
-    DriveMotors rightMotors;
+    MotorControllerGroup leftMotors;
+    MotorControllerGroup rightMotors;
 
     AHRS navx;
     DifferentialDriveKinematics kinematics; // converts rotation and velocity to wheel velocities
@@ -25,14 +29,21 @@ public class ShiftingWCD extends SubsystemBase {
 
     public ShiftingWCD() {
         // motors
-        leftMotors = new DriveMotors(Constants.LEFT_LEADER, Constants.LEFT_FOLLOWER_0, Constants.LEFT_FOLLOWER_1);
-        rightMotors = new DriveMotors(Constants.RIGHT_LEADER, Constants.RIGHT_FOLLOWER_0, Constants.RIGHT_FOLLOWER_1);
-
-        // invert the right side because WPILib doesnt do that for us anymore
-        rightMotors.setInverted(true);
+        CANSparkMax leftMotorArray[] = {
+            new CANSparkMax(Constants.LEFT_LEADER, MotorType.kBrushless),
+            new CANSparkMax(Constants.LEFT_FOLLOWER_0, MotorType.kBrushless),
+            new CANSparkMax(Constants.LEFT_FOLLOWER_1, MotorType.kBrushless)
+        }; 
+        CANSparkMax rightMotorArray[] = {
+            new CANSparkMax(Constants.RIGHT_LEADER, MotorType.kBrushless),
+            new CANSparkMax(Constants.RIGHT_FOLLOWER_0, MotorType.kBrushless),
+            new CANSparkMax(Constants.RIGHT_FOLLOWER_1, MotorType.kBrushless)
+        };
+        leftMotors = new MotorControllerGroup(leftMotorArray);
+        rightMotors = new MotorControllerGroup(rightMotorArray);
 
         // drive
-        drive = new DifferentialDrive(leftMotors.getLeadMotor(), rightMotors.getLeadMotor());
+        drive = new DifferentialDrive(leftMotors, rightMotors);
         drive.setSafetyEnabled(false);
 
         // shifter
@@ -42,18 +53,12 @@ public class ShiftingWCD extends SubsystemBase {
         // sensors
         navx = new AHRS(SPI.Port.kMXP);
         resetGyro();
-        resetEncoders();
         kinematics = new DifferentialDriveKinematics(Constants.TRACK_WIDTH);
         odometry = new DifferentialDriveOdometry(getAngle());
     }
 
     public void resetGyro() {
         navx.reset();
-    }
-
-    public void resetEncoders() {
-        this.leftMotors.ResetEncoder();
-        this.rightMotors.ResetEncoder();
     }
 
     public float getHeadingDegrees() {
