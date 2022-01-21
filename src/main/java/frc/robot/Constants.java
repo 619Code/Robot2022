@@ -11,6 +11,19 @@ public final class Constants {
     public static final int RIGHT_FOLLOWER_0 = 14;
     public static final int RIGHT_FOLLOWER_1 = 15;
 
+    //Other CAN IDs
+    public static final int INTAKE_MOTOR = 0; //temp value
+    public static final int HOPPER_MOTOR_0 = 0; //temp value
+    public static final int HOPPER_MOTOR_1 = 1; //temp value
+    public static final int TRANSITION_MOTOR = 2; //temp value
+    public static final int VERTICAL_MAG_MOTOR = 3; //temp value
+
+    //Ball Positions
+    public static final int SHOOTER_POSITION = 0;
+    public static final int VERTICAL_MAG_POSITION = 0;
+    public static final int TRANSITION_MAG_POSITION = 0;
+
+
     //Drive constants
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(6); //meters
     public static final int NEO_LIMIT = 45; //amps
@@ -23,6 +36,7 @@ public final class Constants {
     public static final int PCM_CAN_ID = 0;
     public static final int DRIVE_SOLENOID_FORWARD = 1;
     public static final int DRIVE_SOLENOID_BACK = 4;
+    public static final int INTAKE_SOLENOID = 0; //temp value
 
     //Controller constants
     public static final double JOYSTICK_DEADZONE = 0.075;

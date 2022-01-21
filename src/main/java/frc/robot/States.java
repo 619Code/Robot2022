@@ -4,4 +4,6 @@ public class States {
     public static double robotX;
     public static double robotY;
     public static boolean isLocationValid;
+
+    public static IsIntakingState IntakingState;
 }
