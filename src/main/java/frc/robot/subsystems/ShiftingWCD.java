@@ -29,10 +29,6 @@ public class ShiftingWCD extends SubsystemBase {
 
     public ShiftingWCD() {
         // motors
-        /*
-        leftMotors = new DriveMotors(Constants.LEFT_LEADER, Constants.LEFT_FOLLOWER_0, Constants.LEFT_FOLLOWER_1);
-        rightMotors = new DriveMotors(Constants.RIGHT_LEADER, Constants.RIGHT_FOLLOWER_0, Constants.RIGHT_FOLLOWER_1);
-        */
         CANSparkMax leftMotorArray[] = {
             new CANSparkMax(Constants.LEFT_LEADER, MotorType.kBrushless),
             new CANSparkMax(Constants.LEFT_FOLLOWER_0, MotorType.kBrushless),
@@ -57,7 +53,6 @@ public class ShiftingWCD extends SubsystemBase {
         // sensors
         navx = new AHRS(SPI.Port.kMXP);
         resetGyro();
-        //resetEncoders();
         kinematics = new DifferentialDriveKinematics(Constants.TRACK_WIDTH);
         odometry = new DifferentialDriveOdometry(getAngle());
     }
@@ -65,11 +60,6 @@ public class ShiftingWCD extends SubsystemBase {
     public void resetGyro() {
         navx.reset();
     }
-
-    /*public void resetEncoders() {
-        this.leftMotors.ResetEncoder();
-        this.rightMotors.ResetEncoder();
-    }*/
 
     public float getHeadingDegrees() {
         return -navx.getFusedHeading();
