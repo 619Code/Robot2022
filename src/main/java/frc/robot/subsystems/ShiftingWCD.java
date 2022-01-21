@@ -45,8 +45,6 @@ public class ShiftingWCD extends SubsystemBase {
         };
         leftMotors = new MotorControllerGroup(leftMotorArray);
         rightMotors = new MotorControllerGroup(rightMotorArray);
-        // invert the right side because WPILib doesnt do that for us anymore
-        rightMotors.setInverted(true);
 
         // drive
         drive = new DifferentialDrive(leftMotors, rightMotors);
