@@ -38,9 +38,9 @@ public final class Constants {
     public static final double JOYSTICK_DEADZONE = 0.075;
   
     // Vision system
-    public static final double LIMELIGHT_ALT = 1; // meters, altitude of LL on robot above ground
-    public static final double LIMELIGHT_ANGLE = 80; // degrees, angle of LL above ground
-    public static final double TOP_HUB_ALT = Units.inchesToMeters(8+8*12); // meters, height of top of tape on top hub
+    public static final double LIMELIGHT_ALT = Units.inchesToMeters(22); // meters, altitude of LL on robot above ground
+    public static final double LIMELIGHT_ANGLE = 0; // degrees, angle of LL above ground
+    public static final double TOP_HUB_ALT = Units.inchesToMeters(97.5); // not actual field, using differnet values for testing Units.inchesToMeters(8+8*12); // meters, height of top of tape on top hub
     public static final double TOP_HUB_RADIUS = Units.inchesToMeters((5+(3/8)+4*12)/2); // meters, outer radius of top hub
     public static final double TARGET_THICKNESS = Units.inchesToMeters(2); // meters, thickness of target tape
 
