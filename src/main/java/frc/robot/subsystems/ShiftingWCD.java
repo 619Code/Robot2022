@@ -51,6 +51,8 @@ public class ShiftingWCD extends SubsystemBase {
         };
         leftMotors = new MotorControllerGroup(leftMotorArray);
         rightMotors = new MotorControllerGroup(rightMotorArray);
+        // invert right motor
+        rightMotors.setInverted(true);
 
         // encoders
         leftEncoder = leftLeader.getEncoder();
