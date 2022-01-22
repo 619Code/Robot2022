@@ -9,11 +9,14 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 //import frc.robot.helpers.DriveMotors;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
@@ -22,6 +25,11 @@ public class ShiftingWCD extends SubsystemBase {
     DoubleSolenoid shifter;
     MotorControllerGroup leftMotors;
     MotorControllerGroup rightMotors;
+    CANSparkMax leftLeader;
+    CANSparkMax rightLeader;
+
+    RelativeEncoder leftEncoder;
+    RelativeEncoder rightEncoder;
 
     AHRS navx;
     DifferentialDriveKinematics kinematics; // converts rotation and velocity to wheel velocities
@@ -29,18 +37,26 @@ public class ShiftingWCD extends SubsystemBase {
 
     public ShiftingWCD() {
         // motors
+        leftLeader = new CANSparkMax(Constants.LEFT_LEADER, MotorType.kBrushless);
         CANSparkMax leftMotorArray[] = {
-            new CANSparkMax(Constants.LEFT_LEADER, MotorType.kBrushless),
+            leftLeader,
             new CANSparkMax(Constants.LEFT_FOLLOWER_0, MotorType.kBrushless),
             new CANSparkMax(Constants.LEFT_FOLLOWER_1, MotorType.kBrushless)
         }; 
+        rightLeader = new CANSparkMax(Constants.RIGHT_LEADER, MotorType.kBrushless);
         CANSparkMax rightMotorArray[] = {
-            new CANSparkMax(Constants.RIGHT_LEADER, MotorType.kBrushless),
+            rightLeader,
             new CANSparkMax(Constants.RIGHT_FOLLOWER_0, MotorType.kBrushless),
             new CANSparkMax(Constants.RIGHT_FOLLOWER_1, MotorType.kBrushless)
         };
         leftMotors = new MotorControllerGroup(leftMotorArray);
         rightMotors = new MotorControllerGroup(rightMotorArray);
+
+        // encoders
+        leftEncoder = leftLeader.getEncoder();
+        rightEncoder = rightLeader.getEncoder();
+        leftEncoder.setVelocityConversionFactor(Constants.RPM_TO_VELOCITY_CONVERSION_FACTOR);
+        rightEncoder.setVelocityConversionFactor(Constants.RPM_TO_VELOCITY_CONVERSION_FACTOR);
 
         // drive
         drive = new DifferentialDrive(leftMotors, rightMotors);
@@ -60,7 +76,6 @@ public class ShiftingWCD extends SubsystemBase {
     public void resetGyro() {
         navx.reset();
     }
-
     public float getHeadingDegrees() {
         return -navx.getFusedHeading();
     }
@@ -84,5 +99,24 @@ public class ShiftingWCD extends SubsystemBase {
     public void curve(double speed, double rotation, boolean isLowGear) {
         drive.curvatureDrive(Constants.SPEED_ADJUST * speed, Constants.SPEED_ADJUST * -rotation, true);
         setShift(isLowGear);
+    }
+
+    @Override
+    public void periodic(){
+        odometry.update(getAngle(), leftEncoder.getVelocity(), rightEncoder.getVelocity());
+    }
+
+    public Pose2d getPose() {
+        return odometry.getPoseMeters();
+    }
+
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(), rightEncoder.getVelocity());
+    }
+
+    public void tankDriveVolts(double leftVolts, double rightVolts) {
+        leftMotors.setVoltage(leftVolts);
+        rightMotors.setVoltage(rightVolts);
+        drive.feed();
     }
 }
