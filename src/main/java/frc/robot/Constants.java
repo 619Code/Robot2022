@@ -15,7 +15,7 @@ public final class Constants {
     //Drive constants
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(6); //meters
     public static final int NEO_LIMIT = 45; //amps
-    public static final double SPEED_ADJUST = 0.7; //how much to adjust speed of drive
+    public static final double SPEED_ADJUST = 0.8; //how much to adjust speed of drive
     public static final double DRIVE_RATIO_HIGH = (9.0/66.0) * (40.0/44.0); // gear ratio for high gear
     public static final double DRIVE_RATIO_LOW = (9.0/66.0) * (24.0/60.0); // gear ratio for low gear
     public static final double TRACK_WIDTH = Units.inchesToMeters(25); //distance between wheels in meters
@@ -39,9 +39,9 @@ public final class Constants {
     public static final double JOYSTICK_DEADZONE = 0.075;
   
     // Vision system
-    public static final double LIMELIGHT_ALT = Units.inchesToMeters(22); // meters, altitude of LL on robot above ground
+    public static final double LIMELIGHT_HEIGHT = Units.inchesToMeters(22); // meters, altitude of LL on robot above ground
     public static final double LIMELIGHT_ANGLE = 0; // degrees, angle of LL above ground
-    public static final double TOP_HUB_ALT = Units.inchesToMeters(97.5); // not actual field, using differnet values for testing Units.inchesToMeters(8+8*12); // meters, height of top of tape on top hub
+    public static final double TOP_HUB_HEIGHT = Units.inchesToMeters(97.5); // not actual field, using different values for testing Units.inchesToMeters(8+8*12); // meters, height of top of tape on top hub
     public static final double TOP_HUB_RADIUS = Units.inchesToMeters((5+(3/8)+4*12)/2); // meters, outer radius of top hub
     public static final double TARGET_THICKNESS = Units.inchesToMeters(2); // meters, thickness of target tape
 
