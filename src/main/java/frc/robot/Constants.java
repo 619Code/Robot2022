@@ -20,6 +20,7 @@ public final class Constants {
     public static final double DRIVE_RATIO_LOW = (9.0/66.0) * (24.0/60.0); // gear ratio for low gear
     public static final double TRACK_WIDTH = Units.inchesToMeters(25); //distance between wheels in meters
     public static final String ShuffleboardDriveTabName = "Drive";
+    public static final double RPM_TO_VELOCITY_CONVERSION_FACTOR = WHEEL_DIAMETER * Math.PI / 60; //conversion factor for rpm to velocity
 
     //Drive solenoids
     public static final int PCM_CAN_ID = 0;
@@ -39,9 +40,9 @@ public final class Constants {
     public static final double JOYSTICK_DEADZONE = 0.075;
   
     // Vision system
-    public static final double LIMELIGHT_ALT = 1; // meters, altitude of LL on robot above ground
-    public static final double LIMELIGHT_ANGLE = 80; // degrees, angle of LL above ground
-    public static final double TOP_HUB_ALT = Units.inchesToMeters(8+8*12); // meters, height of top of tape on top hub
+    public static final double LIMELIGHT_ALT = Units.inchesToMeters(22); // meters, altitude of LL on robot above ground
+    public static final double LIMELIGHT_ANGLE = 0; // degrees, angle of LL above ground
+    public static final double TOP_HUB_ALT = Units.inchesToMeters(97.5); // not actual field, using differnet values for testing Units.inchesToMeters(8+8*12); // meters, height of top of tape on top hub
     public static final double TOP_HUB_RADIUS = Units.inchesToMeters((5+(3/8)+4*12)/2); // meters, outer radius of top hub
     public static final double TARGET_THICKNESS = Units.inchesToMeters(2); // meters, thickness of target tape
 
