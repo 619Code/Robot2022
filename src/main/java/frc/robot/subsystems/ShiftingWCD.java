@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SPI;
@@ -43,14 +44,23 @@ public class ShiftingWCD extends SubsystemBase {
             new CANSparkMax(Constants.LEFT_FOLLOWER_0, MotorType.kBrushless),
             new CANSparkMax(Constants.LEFT_FOLLOWER_1, MotorType.kBrushless)
         }; 
+        for(CANSparkMax spark : leftMotorArray) {
+            spark.setIdleMode(IdleMode.kBrake);
+        }
+
         rightLeader = new CANSparkMax(Constants.RIGHT_LEADER, MotorType.kBrushless);
         CANSparkMax rightMotorArray[] = {
             rightLeader,
             new CANSparkMax(Constants.RIGHT_FOLLOWER_0, MotorType.kBrushless),
             new CANSparkMax(Constants.RIGHT_FOLLOWER_1, MotorType.kBrushless)
         };
+        for(CANSparkMax spark : rightMotorArray) {
+            spark.setIdleMode(IdleMode.kBrake);
+        }
+        
         leftMotors = new MotorControllerGroup(leftMotorArray);
         rightMotors = new MotorControllerGroup(rightMotorArray);
+        
         // invert right motor
         rightMotors.setInverted(true);
 
