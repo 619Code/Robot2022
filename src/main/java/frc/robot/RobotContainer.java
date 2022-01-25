@@ -10,7 +10,6 @@ import frc.robot.subsystems.LedStrip;
 import frc.robot.subsystems.ShiftingWCD;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.RainbowLedCommand;
-
 public class RobotContainer {
 
     public XboxController driver;
@@ -21,6 +20,8 @@ public class RobotContainer {
     private final LedStrip ledStrip;
 
     public RobotContainer() {
+        
+
         driver = new XboxController(0);
         operator = new XboxController(1);
 

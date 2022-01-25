@@ -8,11 +8,14 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShiftingWCD;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 
-public class DriveCommand extends CommandBase {
+public class DriveCommand extends CommandBase implements Loggable {
     private ShiftingWCD drive;
     private XboxController controller;
     private double leftY, rightX;
+    @Log
     private double throttle, rotation;
     private boolean isLowGear;
     private ShuffleboardTab shuffleboardTab;
