@@ -19,6 +19,7 @@ public final class Constants {
     public static final double DRIVE_RATIO_HIGH = (9.0/66.0) * (40.0/44.0); // gear ratio for high gear
     public static final double DRIVE_RATIO_LOW = (9.0/66.0) * (24.0/60.0); // gear ratio for low gear
     public static final double TRACK_WIDTH = Units.inchesToMeters(25); //distance between wheels in meters
+    public static final String ShuffleboardDriveTabName = "Drive";
     public static final double RPM_TO_VELOCITY_CONVERSION_FACTOR = WHEEL_DIAMETER * Math.PI / 60; //conversion factor for rpm to velocity
 
     //Drive solenoids

@@ -9,16 +9,18 @@ import frc.robot.subsystems.IntakeMagazine;
 import frc.robot.subsystems.LedStrip;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.ShiftingWCD;
+import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.AimCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.RainbowLedCommand;
-
 public class RobotContainer {
 
     public XboxController driver;
     public XboxController operator;
     public IntakeMagazine intake;
+    @Log
+    private DriveCommand driveCommand;
     public Limelight limelight;
     public Shooter shooter;
 
@@ -26,6 +28,8 @@ public class RobotContainer {
     private final LedStrip ledStrip;
 
     public RobotContainer() {
+        
+
         driver = new XboxController(0);
         operator = new XboxController(1);
 
@@ -34,7 +38,8 @@ public class RobotContainer {
         limelight = new Limelight();
         shooter = new Shooter();
 
-        drive.setDefaultCommand(new DriveCommand(drive, driver));
+        driveCommand = new DriveCommand(drive, driver);
+        drive.setDefaultCommand(driveCommand);
         drive.resetGyro();
 
         limelight.turnLightOff();

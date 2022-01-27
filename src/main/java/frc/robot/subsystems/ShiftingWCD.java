@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 //import frc.robot.helpers.DriveMotors;
 import com.kauailabs.navx.frc.AHRS;
@@ -21,7 +23,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
-public class ShiftingWCD extends SubsystemBase {
+public class ShiftingWCD extends SubsystemBase implements Loggable{
     DifferentialDrive drive;
     DoubleSolenoid shifter;
     MotorControllerGroup leftMotors;
@@ -88,6 +90,7 @@ public class ShiftingWCD extends SubsystemBase {
     public void resetGyro() {
         navx.reset();
     }
+    //@Log
     public float getHeadingDegrees() {
         return -navx.getFusedHeading();
     }

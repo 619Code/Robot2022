@@ -1,15 +1,24 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShiftingWCD;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 
-public class DriveCommand extends CommandBase {
+public class DriveCommand extends CommandBase implements Loggable {
     private ShiftingWCD drive;
     private XboxController controller;
-    private double speed, rotation;
+    private double leftY, rightX;
+    //@Log
+    private double throttle;
+    //@Log
+    private double rotation;
     private boolean isLowGear;
 
     public DriveCommand(ShiftingWCD drive, XboxController controller) {
@@ -20,25 +29,28 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        speed = -controller.getLeftY();
-        rotation = controller.getRightX();
+        leftY = -controller.getLeftY();
+        rightX = controller.getRightX();
+
         setVals();
-        drive.curve(speed, rotation, isLowGear);
+        drive.curve(throttle, rotation, isLowGear);
+
     }
 
     public void setVals() {
-        speed = (Math.abs(speed) > Constants.JOYSTICK_DEADZONE) ? speed : 0;
-        rotation = (Math.abs(rotation) > Constants.JOYSTICK_DEADZONE) ? rotation : 0;
+        throttle = (Math.abs(leftY) > Constants.JOYSTICK_DEADZONE) ? leftY : 0;
+        rotation = (Math.abs(rightX) > Constants.JOYSTICK_DEADZONE) ? rightX : 0;
 
         if (controller.getLeftTriggerAxis() > 0.5) {
             isLowGear = true;
         } else {
             isLowGear = false;
             if(controller.getRightTriggerAxis() < 0.5) {
-                speed *= 0.5/Constants.SPEED_ADJUST;
+                throttle *= 0.5/Constants.SPEED_ADJUST;
                 rotation *= 0.5/Constants.SPEED_ADJUST;
             }
         }
+
     }
 
     @Override
