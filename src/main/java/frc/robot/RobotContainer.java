@@ -8,6 +8,7 @@ import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.subsystems.IntakeMagazine;
 import frc.robot.subsystems.LedStrip;
 import frc.robot.subsystems.ShiftingWCD;
+import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.RainbowLedCommand;
 public class RobotContainer {
@@ -15,7 +16,8 @@ public class RobotContainer {
     public XboxController driver;
     public XboxController operator;
     public IntakeMagazine intake;
-
+    @Log
+    private DriveCommand driveCommand;
     private final ShiftingWCD drive;
     private final LedStrip ledStrip;
 
@@ -28,7 +30,8 @@ public class RobotContainer {
         drive = new ShiftingWCD();
         intake = new IntakeMagazine();
 
-        drive.setDefaultCommand(new DriveCommand(drive, driver));
+        driveCommand = new DriveCommand(drive, driver);
+        drive.setDefaultCommand(driveCommand);
         drive.resetGyro();
 
         ledStrip = new LedStrip();

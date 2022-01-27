@@ -15,8 +15,10 @@ public class DriveCommand extends CommandBase implements Loggable {
     private ShiftingWCD drive;
     private XboxController controller;
     private double leftY, rightX;
-    @Log
-    private double throttle, rotation;
+    //@Log
+    private double throttle;
+    //@Log
+    private double rotation;
     private boolean isLowGear;
     private ShuffleboardTab shuffleboardTab;
     private NetworkTableEntry throttleEntry;
