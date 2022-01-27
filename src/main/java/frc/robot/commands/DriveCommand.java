@@ -18,27 +18,21 @@ public class DriveCommand extends CommandBase implements Loggable {
     @Log
     private double throttle, rotation;
     private boolean isLowGear;
-    private ShuffleboardTab shuffleboardTab;
-    private NetworkTableEntry throttleEntry;
 
     public DriveCommand(ShiftingWCD drive, XboxController controller) {
         this.drive = drive;
         this.controller = controller;
-        addRequirements(drive);        
-        initReporting();
+        addRequirements(drive);
     }
 
     @Override
     public void execute() {
         leftY = -controller.getLeftY();
         rightX = controller.getRightX();
-        // System.out.print("y,x");
-        // System.out.print(leftY);
-        // System.out.print(rightX);
 
         setVals();
         drive.curve(throttle, rotation, isLowGear);
-        report();
+
     }
 
     public void setVals() {
@@ -56,31 +50,7 @@ public class DriveCommand extends CommandBase implements Loggable {
                 rotation *= 0.5;
             }
         }
-        // System.out.print("speed,rotation");
-        // System.out.print(throttle);
-        // System.out.print(rotation);
 
-    }
-    
-    public void initReporting() {
-        //shuffleboardTab.AddN
-        //shuffleboardTab.("Speed", speed);
-        // shuffleboardTab.add("Rotation", rotation);
-        // shuffleboardTab.add("Gear", (isLowGear ? "low" : "high"));
-        // shuffleboardTab.add("Joystick Left Y", leftY);
-        // shuffleboardTab.add("Joystick Right X", rightX);
-        shuffleboardTab = Shuffleboard.getTab(Constants.ShuffleboardDriveTabName);
-        throttleEntry = shuffleboardTab.add("Throttle", throttle).getEntry();
-        
-    }
-
-    public void report() {
-        throttleEntry.setNumber(throttle);
-        SmartDashboard.putNumber("Throttle", throttle);
-        SmartDashboard.putNumber("Rotation", rotation);
-        SmartDashboard.putString("Gear", (isLowGear ? "low" : "high"));
-        SmartDashboard.putNumber("Joystick Left Y", leftY);
-        SmartDashboard.putNumber("Joystick Right X", rightX);
     }
 
     @Override
