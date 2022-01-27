@@ -24,13 +24,8 @@ public class IntakeCommand extends CommandBase {
     @Override
 
     public void execute() {
-        //if (controller.getLeftBumperPressed()) {
-            intake.lowerIntake();
-            intake.spIntake(0.6);
-        //}
-        //else if (controller.getRightBumperPressed()) {
-            //intake.raiseIntake();
-        //}
+        intake.lowerIntake();
+        intake.spIntake(0.6);
     }
 
     @Override

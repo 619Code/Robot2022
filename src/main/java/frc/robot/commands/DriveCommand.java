@@ -47,15 +47,13 @@ public class DriveCommand extends CommandBase implements Loggable {
         throttle = (Math.abs(leftY) > Constants.JOYSTICK_DEADZONE) ? leftY : 0;
         rotation = (Math.abs(rightX) > Constants.JOYSTICK_DEADZONE) ? rightX : 0;
 
-        System.out.println(controller.getLeftTriggerAxis());
         if (controller.getLeftTriggerAxis() > 0.5) {
             isLowGear = true;
         } else {
             isLowGear = false;
-
             if(controller.getRightTriggerAxis() < 0.5) {
-                throttle *= 0.5;
-                rotation *= 0.5;
+                throttle *= 0.5/Constants.SPEED_ADJUST;
+                rotation *= 0.5/Constants.SPEED_ADJUST;
             }
         }
         // System.out.print("speed,rotation");
