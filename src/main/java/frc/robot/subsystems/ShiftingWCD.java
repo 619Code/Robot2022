@@ -5,11 +5,14 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 //import frc.robot.helpers.DriveMotors;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SPI;
@@ -20,7 +23,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
-public class ShiftingWCD extends SubsystemBase {
+public class ShiftingWCD extends SubsystemBase implements Loggable{
     DifferentialDrive drive;
     DoubleSolenoid shifter;
     MotorControllerGroup leftMotors;
@@ -43,14 +46,23 @@ public class ShiftingWCD extends SubsystemBase {
             new CANSparkMax(Constants.LEFT_FOLLOWER_0, MotorType.kBrushless),
             new CANSparkMax(Constants.LEFT_FOLLOWER_1, MotorType.kBrushless)
         }; 
+        for(CANSparkMax spark : leftMotorArray) {
+            spark.setIdleMode(IdleMode.kBrake);
+        }
+
         rightLeader = new CANSparkMax(Constants.RIGHT_LEADER, MotorType.kBrushless);
         CANSparkMax rightMotorArray[] = {
             rightLeader,
             new CANSparkMax(Constants.RIGHT_FOLLOWER_0, MotorType.kBrushless),
             new CANSparkMax(Constants.RIGHT_FOLLOWER_1, MotorType.kBrushless)
         };
+        for(CANSparkMax spark : rightMotorArray) {
+            spark.setIdleMode(IdleMode.kBrake);
+        }
+        
         leftMotors = new MotorControllerGroup(leftMotorArray);
         rightMotors = new MotorControllerGroup(rightMotorArray);
+        
         // invert right motor
         rightMotors.setInverted(true);
 
@@ -78,6 +90,7 @@ public class ShiftingWCD extends SubsystemBase {
     public void resetGyro() {
         navx.reset();
     }
+    //@Log
     public float getHeadingDegrees() {
         return -navx.getFusedHeading();
     }
