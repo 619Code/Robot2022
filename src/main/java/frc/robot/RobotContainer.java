@@ -10,6 +10,8 @@ import frc.robot.subsystems.LedStrip;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.ShiftingWCD;
 import frc.robot.subsystems.Shooter;
+import frc.robot.unused.AngleCommand;
+import frc.robot.unused.Angler;
 import frc.robot.commands.AimCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.RainbowLedCommand;
@@ -21,6 +23,8 @@ public class RobotContainer {
     public IntakeMagazine intake;
     public Limelight limelight;
     public Shooter shooter;
+
+    public Angler angler; //temp
 
     private final ShiftingWCD drive;
     private final LedStrip ledStrip;
@@ -36,6 +40,8 @@ public class RobotContainer {
 
         drive.setDefaultCommand(new DriveCommand(drive, driver));
         drive.resetGyro();
+
+        angler = new Angler(); //temp
 
         limelight.turnLightOff();
 
@@ -54,6 +60,7 @@ public class RobotContainer {
 
         JoystickButton aimButton = new JoystickButton(operator, XboxController.Button.kB.value);
         aimButton.whileHeld(new AimCommand(shooter, drive, limelight));
+        aimButton.whileHeld(new AngleCommand(angler)); //temp
         
         RainbowLedCommand ledCommand = new RainbowLedCommand(ledStrip);
         new JoystickButton(driver, XboxController.Button.kY.value).toggleWhenPressed(ledCommand);
