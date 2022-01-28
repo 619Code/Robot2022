@@ -28,11 +28,14 @@ public class AimCommand extends CommandBase {
     }
 
     public void execute() {
+        drive.curve(0, 0, false);
+
         limelight.update();
+        //System.out.println("angleX: " + limelight.angleX);
+        //System.out.println("angleY: " + limelight.angleY);
+        //System.out.println("Distance: " + limelight.distance);
 
         if(States.isLocationValid) {
-            //System.out.println("Distance: " + limelight.distance);
-
             shooter.setTurretYaw(shooter.getTurretYaw()+limelight.angleX);
             
             double theta = navx.getFusedHeading() + shooter.getTurretYaw() + limelight.angleX;

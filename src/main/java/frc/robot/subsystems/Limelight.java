@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -9,7 +10,7 @@ import frc.robot.States;
 
 public class Limelight extends SubsystemBase {
     private NetworkTableEntry tx, ty, ta, tv, light;
-    public double angleX, angleY, area, lastArea, distance;
+    public double angleX, angleY, area, distance;
     public boolean hasTarget;
     private NetworkTable table;
 
@@ -20,24 +21,24 @@ public class Limelight extends SubsystemBase {
         ta = table.getEntry("ta");
         tv = table.getEntry("tv");
         light = table.getEntry("ledMode");
-
-        lastArea = 0;
     }
 
     public void update() {
-        area = ta.getDouble(0);
         hasTarget = (tv.getDouble(0) == 1);
 
-        if(hasTarget && lastArea != 0 && area/lastArea > 2) {
-            area = lastArea;
-        } else {
+        if(hasTarget) {
             angleX = tx.getDouble(0);
             angleY = ty.getDouble(0);
+            area = ta.getDouble(0);
             distance = getDistance();
-            States.isLocationValid = hasTarget;
+            States.isLocationValid = true;
+        } else {
+            States.isLocationValid = false;
         }
+    }
 
-        lastArea = area;
+    private static double getListMedian(ArrayList<Double> list) {
+        return (list.get(9) + list.get(10)) / 2;
     }
 
     public double getDistance() {
