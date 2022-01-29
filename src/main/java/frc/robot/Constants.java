@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
@@ -49,4 +50,23 @@ public final class Constants {
     // LED constants
     public static final int LED_PWM_PORT = 0;
     public static final int LED_STRIP_LENGTH = 25;
+
+    // Kinematics/Auto Constants
+    public static final double ksVolts = 0.34791;
+    public static final double kvVoltSecondsPerMeter = 0.27259;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.060902;
+
+    public static final double kPDriveVel = 0.38794;
+    public static final DifferentialDriveKinematics kDriveKinematics =
+        new DifferentialDriveKinematics(TRACK_WIDTH);
+
+    public static final double kMaxSpeedMetersPerSecond = 0.5;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+
+    public static final double kRamseteB = 2;
+    public static final double kRamseteZeta = 0.7;
+
+    public static boolean kLeftEncoderReversed = false;
+
+
 }

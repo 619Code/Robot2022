@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -90,9 +91,10 @@ public class ShiftingWCD extends SubsystemBase implements Loggable{
     public void resetGyro() {
         navx.reset();
     }
-    //@Log
-    public float getHeadingDegrees() {
-        return -navx.getFusedHeading();
+    
+    @Log
+    public double getHeadingDegrees() {
+        return navx.getAngle();
     }
 
     public AHRS getNavx(){
@@ -122,16 +124,53 @@ public class ShiftingWCD extends SubsystemBase implements Loggable{
     }
 
     public Pose2d getPose() {
-        return odometry.getPoseMeters();
+        return new Pose2d(odometry.getPoseMeters().getX(), odometry.getPoseMeters().getY(), getAngle());
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(), rightEncoder.getVelocity());
+        double leftVelocity = (leftEncoder.getVelocity() / Constants.DRIVE_RATIO_HIGH) * (Constants.WHEEL_DIAMETER / 60);
+        double rightVelocity = (rightEncoder.getVelocity() / Constants.DRIVE_RATIO_HIGH) * (Constants.WHEEL_DIAMETER / 60);
+        return new DifferentialDriveWheelSpeeds(leftVelocity, rightVelocity);
     }
 
     public void tankDriveVolts(double leftVolts, double rightVolts) {
         leftMotors.setVoltage(leftVolts);
         rightMotors.setVoltage(rightVolts);
+        //System.out.println("Left volts: " + leftVolts);
+        //System.out.println("Right volts: "+ rightVolts);
         drive.feed();
     }
+
+    //auto-things
+
+    public void resetOdometry(Pose2d pose) {
+        resetEncoders();
+        odometry.resetPosition(pose, new Rotation2d(0));
+        resetGyro();
+    }
+
+    public void resetEncoders() {
+        this.leftEncoder.setPosition(0.0);
+        this.rightEncoder.setPosition(0.0);
+    }
+
+
+    //these didn't work - maybe we'll need them later.
+
+    // private final Encoder m_leftEncoder =
+    //   new Encoder(
+    //     Constants.LEFT_LEADER,
+    //     Constants.LEFT_FOLLOWER_0,
+    //     Constants.LEFT_FOLLOWER_1,
+    //     false //left motors reversed status
+    //     );
+
+    // private final Encoder m_rightEncoder =
+    //     new Encoder(
+    //         Constants.RIGHT_LEADER,
+    //         Constants.RIGHT_FOLLOWER_0,
+    //         Constants.RIGHT_FOLLOWER_1,
+    //         true //right motors reversed status
+    //         );
+    
 }
