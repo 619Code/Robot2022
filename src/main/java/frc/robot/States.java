@@ -5,5 +5,6 @@ public class States {
     public static double robotY;
     public static boolean isLocationValid;
 
-    public static IsIntakingState IntakingState;
+    public static boolean IsMagFull;
+    
 }

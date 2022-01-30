@@ -12,17 +12,26 @@ public final class Constants {
     public static final int RIGHT_FOLLOWER_0 = 14;
     public static final int RIGHT_FOLLOWER_1 = 15;
 
-    //Other CAN IDs
-    public static final int INTAKE_MOTOR = 0; //temp value
-    public static final int HOPPER_MOTOR_0 = 0; //temp value
-    public static final int HOPPER_MOTOR_1 = 1; //temp value
-    public static final int TRANSITION_MOTOR = 2; //temp value
-    public static final int VERTICAL_MAG_MOTOR = 3; //temp value
+    
+    //Turret Constants
+    public static final double turretDegreesPerTick = 0;
+    public static final double TARGET_TOLERANCE = 0;
+    public static final double flywheelSpeedUptime = 1;
+    public static final double shooterEmptyPeriod = 2;
 
     //Ball Positions
-    public static final int SHOOTER_POSITION = 0;
-    public static final int VERTICAL_MAG_POSITION = 0;
-    public static final int TRANSITION_MAG_POSITION = 0;
+    public static final int HIGH_MAG_POSITION = 0;
+    public static final int LOW_MAG_POSITION = 0;
+
+    //Turret CANs
+    public static final int TURRET_TURNING_MOTOR = 0; //temp value
+    public static final int TURRET_PITCH_MOTOR = 0; //temp value
+    public static final int TURRET_SHOOTING_MOTOR = 0; //temp value
+
+    //Turret PID
+    public static final int TURRET_KP = 0;
+    public static final int TURRET_KI = 0;
+    public static final int TURRET_KD = 0;
 
 
     //Drive constants
@@ -33,14 +42,20 @@ public final class Constants {
     public static final double DRIVE_RATIO_LOW = (9.0/66.0) * (24.0/60.0); // gear ratio for low gear
     public static final double TRACK_WIDTH = Units.inchesToMeters(25); //distance between wheels in meters
 
+
     //Drive solenoids
     public static final int PCM_CAN_ID = 0;
     public static final int DRIVE_SOLENOID_FORWARD = 1;
     public static final int DRIVE_SOLENOID_BACK = 4;
-    public static final int INTAKE_SOLENOID = 0; //temp value
+
 
     //Intake CAN
-    public static final int LOADING_MOTOR = 0; //CHANGE THIS ONCE WE HAVE A LOADING MOTOR
+    public static final int LOADING_MOTOR = 0;
+    public static final int HOPPER_LEFT_MOTOR = 0;
+    public static final int HOPPER_RIGHT_MOTOR = 0;
+    public static final int VERTICAL_MOTOR = 0;
+    public static final int TRANSITION_MOTOR = 0;
+    //CHANGE THIS ONCE WE HAVE A LOADING MOTOR
     //these do not like being set to -1, so keep that in mind.
 
     //Intake Solenoid

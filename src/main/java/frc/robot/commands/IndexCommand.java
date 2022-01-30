@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 //import edu.wpi.first.wpilibj2.XboxController;
 
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.subsystems.IntakeMagazine;;
+import frc.robot.subsystems.IntakeHopper;
 
 public class IndexCommand extends CommandBase {
-private IntakeMagazine Intake;
+private IntakeHopper Intake;
 private XboxController controller;
 
     
