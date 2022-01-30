@@ -47,6 +47,19 @@ public final class Constants {
     public static final double TARGET_THICKNESS = Units.inchesToMeters(2); // meters, thickness of target tape
 
     // LED constants
-    public static final int LED_PWM_PORT = 0;
-    public static final int LED_STRIP_LENGTH = 25;
+    public static final int LED_PWM_PORT = 0; // roboRIO PWM port
+    public static final int LED_STRIP_LENGTH = 25; // number of LEDs in the strip
+
+    // Climber constants
+    public static final int CLIMBER_LEFT_MOTOR = 16; // CAN ID
+    public static final int CLIMBER_RIGHT_MOTOR = 17; // CAN ID
+    public static final int CLIMBER_SOLENOID_CLAW_OPEN = 2; // PCM ID
+    public static final int CLIMBER_SOLENOID_CLAW_CLOSE = 3; // PCM ID
+    public static final int CLIMBER_SOLENOID_ARM_UP = 5; // PCM ID
+    public static final int CLIMBER_SOLENOID_ARM_DOWN = 6; // PCM ID
+    public static final double CLIMB_WINCH_DIAMETER = Units.inchesToMeters(2); // meters, diameter of climb winch
+    public static final double CLIMB_ROPE_LENGTH = Units.inchesToMeters(48); // meters, length of climb winch
+    public static final double CLIMBER_WINCH_P = 0.04; // P constant for winch PID
+    public static final double CLIMBER_WINCH_I = 0; // I constant for winch PID
+    public static final double CLIMBER_WINCH_D = 0.02; // D constant for winch PID
 }
