@@ -48,8 +48,6 @@ public final class Constants {
     public static final double TARGET_THICKNESS = Units.inchesToMeters(2); // meters, thickness of target tape
 
     // LED constants
-    public static final int LED_PWM_PORT = 0;
-    public static final int LED_STRIP_LENGTH = 25;
     public static final int LED_PWM_PORT = 0; // roboRIO PWM port
     public static final int LED_STRIP_LENGTH = 25; // number of LEDs in the strip
 
