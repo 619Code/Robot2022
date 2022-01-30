@@ -42,7 +42,7 @@ public final class Constants {
   
     // Vision system
     public static final double LIMELIGHT_HEIGHT = Units.inchesToMeters(22); // meters, altitude of LL on robot above ground
-    public static final double LIMELIGHT_ANGLE = 0; // degrees, angle of LL above ground
+    public static final double LIMELIGHT_ANGLE = 30; // degrees, angle of LL above ground
     public static final double TOP_HUB_HEIGHT = Units.inchesToMeters(97.5); // not actual field, using different values for testing Units.inchesToMeters(8+8*12); // meters, height of top of tape on top hub
     public static final double TOP_HUB_RADIUS = Units.inchesToMeters((5+(3/8)+4*12)/2); // meters, outer radius of top hub
     public static final double TARGET_THICKNESS = Units.inchesToMeters(2); // meters, thickness of target tape
@@ -50,6 +50,8 @@ public final class Constants {
     // LED constants
     public static final int LED_PWM_PORT = 0;
     public static final int LED_STRIP_LENGTH = 25;
+    public static final int LED_PWM_PORT = 0; // roboRIO PWM port
+    public static final int LED_STRIP_LENGTH = 25; // number of LEDs in the strip
 
     // Kinematics/Auto Constants
     public static final double ksVolts = 0.34791;
@@ -68,5 +70,16 @@ public final class Constants {
 
     public static boolean kLeftEncoderReversed = false;
 
-
+    // Climber constants
+    public static final int CLIMBER_LEFT_MOTOR = 16; // CAN ID
+    public static final int CLIMBER_RIGHT_MOTOR = 17; // CAN ID
+    public static final int CLIMBER_SOLENOID_CLAW_OPEN = 2; // PCM ID
+    public static final int CLIMBER_SOLENOID_CLAW_CLOSE = 3; // PCM ID
+    public static final int CLIMBER_SOLENOID_ARM_UP = 5; // PCM ID
+    public static final int CLIMBER_SOLENOID_ARM_DOWN = 6; // PCM ID
+    public static final double CLIMB_WINCH_DIAMETER = Units.inchesToMeters(2); // meters, diameter of climb winch
+    public static final double CLIMB_ROPE_LENGTH = Units.inchesToMeters(48); // meters, length of climb winch
+    public static final double CLIMBER_WINCH_P = 0.04; // P constant for winch PID
+    public static final double CLIMBER_WINCH_I = 0; // I constant for winch PID
+    public static final double CLIMBER_WINCH_D = 0.02; // D constant for winch PID
 }
