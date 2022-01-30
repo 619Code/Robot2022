@@ -1,7 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.controller.PIDController;
 import java.util.List;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -23,6 +23,7 @@ import frc.robot.subsystems.IntakeMagazine;
 import frc.robot.subsystems.LedStrip;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.ShiftingWCD;
+import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.subsystems.Shooter;
 import frc.robot.unused.AngleCommand;
@@ -46,8 +47,11 @@ public class RobotContainer {
     private final ShiftingWCD drive;
     private final LedStrip ledStrip;
 
+    @Config.PIDController
+    private PIDController targetPID;
+
     public RobotContainer() {
-        
+        targetPID = new PIDController(0, 0, 0);
 
         driver = new XboxController(0);
         operator = new XboxController(1);
@@ -79,7 +83,7 @@ public class RobotContainer {
         intakeUpButton.whileHeld(new RetractIntakeCommand(intake));
 
         JoystickButton aimButton = new JoystickButton(operator, XboxController.Button.kB.value);
-        aimButton.whileHeld(new AimCommand(shooter, drive, limelight));
+        aimButton.whileHeld(new AimCommand(shooter, drive, limelight, targetPID));
         aimButton.whileHeld(new AngleCommand(angler)); //temp
         
         RainbowLedCommand ledCommand = new RainbowLedCommand(ledStrip);

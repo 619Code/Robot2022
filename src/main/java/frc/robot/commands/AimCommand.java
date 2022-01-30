@@ -3,8 +3,10 @@ package frc.robot.commands;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.ShiftingWCD;
 import frc.robot.subsystems.Shooter;
+import io.github.oblarg.oblog.annotations.Config;
 import frc.robot.Constants;
 import frc.robot.States;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -13,8 +15,10 @@ public class AimCommand extends CommandBase {
     private ShiftingWCD drive;
     private Limelight limelight;
     private AHRS navx;
+
+    private PIDController targetPID = new PIDController(0, 0, 0);
     
-    public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub){
+    public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub) {
         shooter = shooterSub;
         drive = driveSub;
         limelight = limelightSub;
@@ -23,12 +27,17 @@ public class AimCommand extends CommandBase {
         addRequirements(drive);
     }
 
+    public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub, PIDController PID) {
+        this(shooterSub, driveSub, limelightSub);
+        this.targetPID = PID;
+    }
+
     public void initialize() {
         limelight.turnLightOn();
     }
 
     public void execute() {
-        drive.curve(0, 0, false);
+        //drive.curve(0, 0, false);
 
         limelight.update();
         //System.out.println("angleX: " + limelight.angleX);
@@ -36,7 +45,8 @@ public class AimCommand extends CommandBase {
         //System.out.println("Distance: " + limelight.distance);
 
         if(States.isLocationValid) {
-            shooter.setTurretYaw(shooter.getTurretYaw()+limelight.angleX);
+            //shooter.setTurretYaw(shooter.getTurretYaw()+limelight.angleX);
+            drive.curve(0, -targetPID.calculate(limelight.angleX, 0), false);
             
             double theta = navx.getFusedHeading() + shooter.getTurretYaw() + limelight.angleX;
             double x = limelight.distance * Math.cos(Math.toRadians(theta));
