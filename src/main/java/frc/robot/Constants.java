@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
@@ -49,4 +50,36 @@ public final class Constants {
     // LED constants
     public static final int LED_PWM_PORT = 0;
     public static final int LED_STRIP_LENGTH = 25;
+    public static final int LED_PWM_PORT = 0; // roboRIO PWM port
+    public static final int LED_STRIP_LENGTH = 25; // number of LEDs in the strip
+
+    // Kinematics/Auto Constants
+    public static final double ksVolts = 0.34791;
+    public static final double kvVoltSecondsPerMeter = 0.27259;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.060902;
+
+    public static final double kPDriveVel = 0.38794;
+    public static final DifferentialDriveKinematics kDriveKinematics =
+        new DifferentialDriveKinematics(TRACK_WIDTH);
+
+    public static final double kMaxSpeedMetersPerSecond = 0.5;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+
+    public static final double kRamseteB = 2;
+    public static final double kRamseteZeta = 0.7;
+
+    public static boolean kLeftEncoderReversed = false;
+
+    // Climber constants
+    public static final int CLIMBER_LEFT_MOTOR = 16; // CAN ID
+    public static final int CLIMBER_RIGHT_MOTOR = 17; // CAN ID
+    public static final int CLIMBER_SOLENOID_CLAW_OPEN = 2; // PCM ID
+    public static final int CLIMBER_SOLENOID_CLAW_CLOSE = 3; // PCM ID
+    public static final int CLIMBER_SOLENOID_ARM_UP = 5; // PCM ID
+    public static final int CLIMBER_SOLENOID_ARM_DOWN = 6; // PCM ID
+    public static final double CLIMB_WINCH_DIAMETER = Units.inchesToMeters(2); // meters, diameter of climb winch
+    public static final double CLIMB_ROPE_LENGTH = Units.inchesToMeters(48); // meters, length of climb winch
+    public static final double CLIMBER_WINCH_P = 0.04; // P constant for winch PID
+    public static final double CLIMBER_WINCH_I = 0; // I constant for winch PID
+    public static final double CLIMBER_WINCH_D = 0.02; // D constant for winch PID
 }
