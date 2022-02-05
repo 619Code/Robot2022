@@ -28,7 +28,6 @@ public class IntakeCommand extends CommandBase {
     @Override
 
     public void execute() {
-
         if(States.IsMagFull == false){
             intake.lowerIntake();
             intake.spIntake(0.6);
@@ -46,10 +45,9 @@ public class IntakeCommand extends CommandBase {
     public void endIntaking(){
 
         intake.raiseIntake();
-        intake.spIntake(0);
+        intake.spIntake(.6);
         intake.hopperStuff();
         verticalMag.intake();
-
     }
 
     @Override
