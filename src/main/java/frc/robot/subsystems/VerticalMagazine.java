@@ -50,7 +50,7 @@ public class VerticalMagazine extends SubsystemBase {
         if (this.lowPosition.hasBall() && this.highPosition.hasBall()) {
 
             transitionMotor.set(0);
-            //ihSubsystem.raiseIntake();
+            
             return true;
 
         }
