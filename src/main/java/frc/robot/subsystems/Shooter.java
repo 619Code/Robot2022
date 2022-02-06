@@ -102,12 +102,12 @@ private double turnMotorSpeed;
 
     }
 
-    public synchronized double error(){
+    public double error(){
 
         return getAngle().getDegrees() - getSetpoint();
 
     }
-    public synchronized boolean isOnTarget(){
+    public boolean isOnTarget(){
 
         return (Math.abs(error()) < Constants.TARGET_TOLERANCE);
 

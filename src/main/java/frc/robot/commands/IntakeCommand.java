@@ -13,10 +13,9 @@ public class IntakeCommand extends CommandBase {
     //private boolean armDown;
 
     public IntakeCommand(IntakeHopper intake, VerticalMagazine verticalMag) {
+        
         this.intake = intake;
         this.verticalMag = verticalMag;
-        //this.controller = stick;
-        //this.armDown = armDown;
 
         addRequirements(intake, verticalMag);
     }

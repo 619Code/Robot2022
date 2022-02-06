@@ -69,6 +69,7 @@ public class RobotContainer {
         drive = new ShiftingWCD();
         intake = new IntakeHopper();
         intakeCommand = new IntakeCommand(intake, verticalMag);
+        limelight = new Limelight();
         shooter = new Shooter();
         retractIntake = new RetractIntakeCommand(intake);
         joystickAnalogButton = new JoystickAnalogButton(operator, 3);

@@ -44,7 +44,7 @@ public class IntakeHopper extends SubsystemBase {
 
     public boolean isLowered(){
     
-    return lower.get();   
+        return lower.get();   
 
     }
 
