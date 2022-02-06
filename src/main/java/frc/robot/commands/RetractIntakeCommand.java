@@ -1,13 +1,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeMagazine;
+import frc.robot.subsystems.IntakeHopper;
 
 public class RetractIntakeCommand extends CommandBase{
 
-    private IntakeMagazine intake;
+    private IntakeHopper intake;
 
-    public RetractIntakeCommand(IntakeMagazine intake) {
+    public RetractIntakeCommand(IntakeHopper intake) {
         this.intake = intake;
         addRequirements(intake);
     }
