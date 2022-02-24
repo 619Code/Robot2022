@@ -37,18 +37,15 @@ public class AimCommand extends CommandBase {
     }
 
     public void execute() {
-        //drive.curve(0, 0, false);
-
         limelight.update();
         //System.out.println("angleX: " + limelight.angleX);
         //System.out.println("angleY: " + limelight.angleY);
         //System.out.println("Distance: " + limelight.distance);
 
         if(States.isLocationValid) {
-            //shooter.setTurretYaw(shooter.getTurretYaw()+limelight.angleX);
             drive.curve(0, -targetPID.calculate(limelight.angleX, 0), false);
             
-            double theta = navx.getFusedHeading() + shooter.getTurretYaw() + limelight.angleX;
+            double theta = navx.getFusedHeading() + limelight.angleX;
             double x = limelight.distance * Math.cos(Math.toRadians(theta));
             double y = limelight.distance * Math.sin(Math.toRadians(theta));
             States.robotX = x;
@@ -56,6 +53,8 @@ public class AimCommand extends CommandBase {
 
             //System.out.println("X distance: " + x);
             //System.out.println("Y distance: " + y);
+        } else {
+            drive.curve(0, 0, false);
         }
     }
 

@@ -12,28 +12,40 @@ public final class Constants {
     public static final int LEFT_FOLLOWER_1 = 12;
     public static final int RIGHT_FOLLOWER_0 = 14;
     public static final int RIGHT_FOLLOWER_1 = 15;
-
     
     //Turret Constants
-    public static final double turretDegreesPerTick = 0;
+    public static final double MINIMUM_TURRET_ANGLE = 0;
+    public static final double TURRET_DEGREES_PER_REV = 0;
     public static final double TARGET_TOLERANCE = 0;
-    public static final double flywheelSpeedUptime = 1;
-    public static final double shooterEmptyPeriod = 2;
+
+    //Hood Constants
+    public static final double MINIMUM_HOOD_ANGLE = 0;
+    public static final double HOOD_DEGREES_PER_REV = 0;
 
     //Ball Positions
-    public static final int HIGH_MAG_POSITION = 0;
-    public static final int LOW_MAG_POSITION = 0;
+    public static final int VERTICAL_POSITION = 0;
+    public static final int FRONT_POSITION = 0;
 
     //Turret CANs
-    public static final int TURRET_TURNING_MOTOR = 0; //temp value
-    public static final int TURRET_PITCH_MOTOR = 0; //temp value
-    public static final int TURRET_SHOOTING_MOTOR = 0; //temp value
+    public static final int TURRET_MOTOR = 0; //temp value
+    public static final int HOOD_MOTOR = 0; //temp value
+    public static final int SHOOT_MOTOR = 0; //temp value
+
+    //Shooter PID
+    public static final int SHOOTER_KP = 0;
+    public static final int SHOOTER_KI = 0;
+    public static final int SHOOTER_KD = 0;
+    public static final double SHOOTER_MAX_RPM = 0;
+
+    //Hood PID
+    public static final int HOOD_KP = 0;
+    public static final int HOOD_KI = 0;
+    public static final int HOOD_KD = 0;
 
     //Turret PID
     public static final int TURRET_KP = 0;
     public static final int TURRET_KI = 0;
     public static final int TURRET_KD = 0;
-
 
     //Drive constants
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(6); //meters
@@ -45,19 +57,18 @@ public final class Constants {
     public static final String SHUFFLEBOARD_DRIVE_TAB_NAME = "Drive";
     public static final double RPM_TO_VELOCITY_CONVERSION_FACTOR = WHEEL_DIAMETER * Math.PI / 60; //conversion factor for rpm to velocity
 
-
     //Drive solenoids
     public static final int PCM_CAN_ID = 0;
     public static final int DRIVE_SOLENOID_FORWARD = 1;
     public static final int DRIVE_SOLENOID_BACK = 4;
 
-
     //Intake CAN
     public static final int LOADING_MOTOR = 0;
     public static final int HOPPER_LEFT_MOTOR = 0;
     public static final int HOPPER_RIGHT_MOTOR = 0;
-    public static final int VERTICAL_MOTOR = 0;
-    public static final int TRANSITION_MOTOR = 0;
+    public static final int ROLLER_MOTOR = 0;
+    public static final int FRONT_BELT_MOTOR = 0;
+    public static final int BACK_BELT_MOTOR = 0;
     //CHANGE THIS ONCE WE HAVE A LOADING MOTOR
     //these do not like being set to -1, so keep that in mind.
 

@@ -14,120 +14,107 @@ import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
 
-private CANSparkMax shootMotor;
-private CANSparkMax turnMotor;
-private CANSparkMax pitchMotor;
-private RelativeEncoder turnMotorEncoder;
-private SparkMaxPIDController pidController;
-private double turnMotorSpeed;
+    private CANSparkMax shooterMotor;
+    private CANSparkMax turretMotor;
+    private CANSparkMax hoodMotor;
 
+    private RelativeEncoder shooterEncoder;
+    private RelativeEncoder turretEncoder;
+    private RelativeEncoder hoodEncoder;
 
-    public Shooter(){
-        
-        shootMotor = new CANSparkMax(Constants.TURRET_SHOOTING_MOTOR, MotorType.kBrushless);
-        turnMotor = new CANSparkMax(Constants.TURRET_TURNING_MOTOR, MotorType.kBrushless);
-        pitchMotor = new CANSparkMax(Constants.TURRET_PITCH_MOTOR, MotorType.kBrushless);
-        this.turnMotorEncoder = turnMotor.getEncoder();
-        this.pidController = turnMotor.getPIDController();
-        turnMotor.setIdleMode(IdleMode.kBrake);
-    }
-    
+    private SparkMaxPIDController shooterPID;
+    private double shooterSetPoint;
+    private double shooterVelocity;
 
-    public void runFlywheel(){
-       
-        shootMotor.set(.3);
+    private SparkMaxPIDController hoodPID;
+    private double hoodSetPoint;
+    private double hoodAngle;
 
-    }
+    private SparkMaxPIDController turretPID;
+    private double turretSetPoint;
+    private double turretAngle;
 
-    public void turn(Rotation2d rotation){
-        
-        this.turnMotorEncoder.setPosition(rotation.getRadians() / (2 * Math.PI * Constants.turretDegreesPerTick));
-        
-    }
+    public Shooter() {
+        shooterMotor = new CANSparkMax(Constants.SHOOT_MOTOR, MotorType.kBrushless);
+        turretMotor = new CANSparkMax(Constants.TURRET_MOTOR, MotorType.kBrushless);
+        hoodMotor = new CANSparkMax(Constants.HOOD_MOTOR, MotorType.kBrushless);
 
-    public double move(){
+        shooterEncoder = shooterMotor.getEncoder();
+        hoodEncoder = hoodMotor.getEncoder();
 
-        turnMotor.set(turnMotorSpeed);
-        return turnMotorSpeed;
-
+        initMotorSettings();
+        initPIDs();
     }
 
-    public synchronized double getSetpoint(){
+    public void initMotorSettings() {
+        shooterMotor.restoreFactoryDefaults();
+        turretMotor.restoreFactoryDefaults();
+        hoodMotor.restoreFactoryDefaults();
 
-        return turnMotorSpeed * Constants.turretDegreesPerTick * 360;
+        turretMotor.setIdleMode(IdleMode.kBrake);
+        hoodMotor.setIdleMode(IdleMode.kBrake);
 
+        turretMotor.setSoftLimit(SoftLimitDirection.kForward, 0.0f);
+        turretMotor.setSoftLimit(SoftLimitDirection.kReverse, 0.0f);
+        hoodMotor.setSoftLimit(SoftLimitDirection.kForward, 0.0f);
+        hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, 0.0f);
     }
 
-    public synchronized Rotation2d getAngle() {
+    public void initPIDs() {
+        shooterPID = shooterMotor.getPIDController();
+        shooterPID.setP(Constants.SHOOTER_KP);
+        shooterPID.setI(Constants.SHOOTER_KI);
+        shooterPID.setD(Constants.SHOOTER_KD);
+        shooterPID.setOutputRange(0, 1);
 
-        return Rotation2d.fromDegrees(Constants.turretDegreesPerTick * this.turnMotorEncoder.getPosition());
-
+        hoodPID = hoodMotor.getPIDController();
+        hoodPID.setP(Constants.HOOD_KP);
+        hoodPID.setI(Constants.HOOD_KI);
+        hoodPID.setD(Constants.HOOD_KD);
+        hoodPID.setOutputRange(-1, 1);
     }
 
-    public void softLimit(){
-
-        turnMotor.setSoftLimit(SoftLimitDirection.kReverse, 0.0f);
-
+    public void shoot(double speed) {
+        shooterVelocity = shooterEncoder.getVelocity();
+        shooterSetPoint = Constants.SHOOTER_MAX_RPM * speed;
+        shooterPID.setReference(shooterSetPoint, CANSparkMax.ControlType.kVelocity);
     }
 
-    public void funPIDStuff(){
-
-        pidController.setD(.7);
-        pidController.setP(.7);
-        pidController.setI(.7);
-        pidController.setFF(.7);
-
+    public void setHoodAngle(double angle) { //add limit switch stuff
+        hoodAngle = Constants.MINIMUM_HOOD_ANGLE + hoodEncoder.getPosition() * Constants.HOOD_DEGREES_PER_REV;
+        hoodSetPoint = (angle - Constants.MINIMUM_HOOD_ANGLE) / Constants.HOOD_DEGREES_PER_REV;
+        hoodPID.setReference(hoodSetPoint, CANSparkMax.ControlType.kPosition);
     }
 
-    public void setAngle(double degrees){
-
-        turnMotor.set(degrees + (Constants.turretDegreesPerTick));
-
+    public void setTurretAngle(double angle) { //add limit switch stuff
+        turretAngle = Constants.MINIMUM_TURRET_ANGLE + turretEncoder.getPosition() * Constants.TURRET_DEGREES_PER_REV;
+        turretSetPoint = (angle - Constants.MINIMUM_TURRET_ANGLE) / Constants.TURRET_DEGREES_PER_REV;
+        turretPID.setReference(turretSetPoint, CANSparkMax.ControlType.kPosition);
     }
 
-    public void setTurretYaw(double newYaw){
-
-
-            this.setAngle(newYaw);
-
+    public double getShooterSpeed() {
+        return shooterVelocity;
     }
 
-    public double getTurretYaw(){
-
-        return getAngle().getRadians();
-
+    public double getHoodAngle() {
+        return hoodAngle;
     }
 
-    public void shoot(){
-
+    public double getTurretAngle() {
+        return turretAngle;
     }
 
-    public double error(){
-
-        return getAngle().getDegrees() - getSetpoint();
-
-    }
-    public boolean isOnTarget(){
-
-        return (Math.abs(error()) < Constants.TARGET_TOLERANCE);
-
+    public void moveTurret(double speed) {
+        turretMotor.set(speed);
     }
 
-    public void setShooterRPM(double newRPM){
-
-
+    public void moveHood(double speed) {
+        hoodMotor.set(speed);
     }
 
-    public void stop(){
-
-        turnMotor.set(0);
-
+    public void stopAll() {
+        shoot(0);
+        moveTurret(0);
+        moveHood(0);
     }
-
-    public void end(){
-
-        shootMotor.set(0);
-        
-    }
-
 }

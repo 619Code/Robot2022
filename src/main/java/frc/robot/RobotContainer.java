@@ -22,28 +22,23 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.helpers.JoystickAnalogButton;
-import frc.robot.subsystems.IntakeHopper;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.LedStrip;
-import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.ShiftingWCD;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.subsystems.Shooter;
-import frc.robot.unused.AngleCommand;
-import frc.robot.unused.Angler;
 import frc.robot.commands.AimCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.RainbowLedCommand;
+
 public class RobotContainer {
 
     private static final ControlVectorList Rotation2d = null;
     public XboxController driver;
     public XboxController operator;
-    public IntakeHopper intake;
+    public Intake intake;
     public IntakeCommand intakeCommand;
     public Shooter shoot;
-    public VerticalMagazine verticalMag;
+    public Magazine magazine;
     public RetractIntakeCommand retractIntake;
     public JoystickAnalogButton joystickAnalogButton;
 
@@ -51,8 +46,6 @@ public class RobotContainer {
     private DriveCommand driveCommand;
     public Limelight limelight;
     public Shooter shooter;
-
-    public Angler angler; //temp
 
     private final ShiftingWCD drive;
     private final LedStrip ledStrip;
@@ -67,8 +60,8 @@ public class RobotContainer {
         operator = new XboxController(1);
 
         drive = new ShiftingWCD();
-        intake = new IntakeHopper();
-        intakeCommand = new IntakeCommand(intake, verticalMag);
+        intake = new Intake();
+        intakeCommand = new IntakeCommand(intake, magazine);
         limelight = new Limelight();
         shooter = new Shooter();
         retractIntake = new RetractIntakeCommand(intake);
@@ -78,8 +71,6 @@ public class RobotContainer {
         driveCommand = new DriveCommand(drive, driver);
         drive.setDefaultCommand(driveCommand);
         drive.resetGyro();
-
-        angler = new Angler(); //temp
 
         limelight.turnLightOff();
 
@@ -91,21 +82,20 @@ public class RobotContainer {
 
     private void configureControls() {
         JoystickButton intakeDownButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-        intakeDownButton.whileHeld(new IntakeCommand(intake, verticalMag));
+        intakeDownButton.whileHeld(new IntakeCommand(intake, magazine));
         
         JoystickButton intakeUpButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
         intakeUpButton.whileHeld(new RetractIntakeCommand(intake));
 
         JoystickButton aimButton = new JoystickButton(operator, XboxController.Button.kB.value);
         aimButton.whileHeld(new AimCommand(shooter, drive, limelight, targetPID));
-        aimButton.whileHeld(new AngleCommand(angler)); //temp
         
         RainbowLedCommand ledCommand = new RainbowLedCommand(ledStrip);
         new JoystickButton(driver, XboxController.Button.kY.value).toggleWhenPressed(ledCommand);
         //new JoystickButton(primaryController, XboxController.Button.kX.value).cancelWhenPressed(ledCommand);
         //Shooter shoot = new JoystickButton(operator, XboxController.Button.kX.value);
         var shootButton = new JoystickAnalogButton(operator, XboxController.Axis.kRightTrigger.value, .5);
-        shootButton.whileHeld(new ShootCommand(shooter, operator));       
+        shootButton.whileHeld(new ShootCommand(shooter, magazine, operator));       
     }
 
     public Command getAutonomousCommand() {
