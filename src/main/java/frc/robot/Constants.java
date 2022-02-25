@@ -109,4 +109,13 @@ public final class Constants {
     public static final double CLIMBER_WINCH_P = 0.04; // P constant for winch PID
     public static final double CLIMBER_WINCH_I = 0; // I constant for winch PID
     public static final double CLIMBER_WINCH_D = 0.02; // D constant for winch PID
+
+    // Ultrasonic constants
+    public static final int HOPPER_SENSOR_PING = 7; // trig/ping pin
+    public static final int HOPPER_SENSOR_ECHO = 6; // trig/ping pin
+    public static final int MAG_SENSOR_PING = 5; // trig/ping pin
+    public static final int MAG_SENSOR_ECHO = 4; // trig/ping pin
+
+    public static final double MAG_BACK_TO_HOPPER_END = 32; // inches
+    public static final double MAG_SENSOR_TO_SHOOTER = 26; // inches
 }
