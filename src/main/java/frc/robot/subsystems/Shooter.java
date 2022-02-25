@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.*;
@@ -29,10 +27,12 @@ public class Shooter extends SubsystemBase {
     private SparkMaxPIDController hoodPID;
     private double hoodSetPoint;
     private double hoodAngle;
+    private SparkMaxLimitSwitch hoodSwitch;
 
     private SparkMaxPIDController turretPID;
     private double turretSetPoint;
     private double turretAngle;
+    private SparkMaxLimitSwitch turretSwitch;
 
     public Shooter() {
         shooterMotor = new CANSparkMax(Constants.SHOOT_MOTOR, MotorType.kBrushless);
@@ -50,6 +50,12 @@ public class Shooter extends SubsystemBase {
         shooterMotor.restoreFactoryDefaults();
         turretMotor.restoreFactoryDefaults();
         hoodMotor.restoreFactoryDefaults();
+
+        hoodSwitch = hoodMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+        hoodSwitch.enableLimitSwitch(true);
+
+        turretSwitch = turretMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+        turretSwitch.enableLimitSwitch(true);
 
         turretMotor.setIdleMode(IdleMode.kBrake);
         hoodMotor.setIdleMode(IdleMode.kBrake);
@@ -78,6 +84,18 @@ public class Shooter extends SubsystemBase {
         shooterVelocity = shooterEncoder.getVelocity();
         shooterSetPoint = Constants.SHOOTER_MAX_RPM * speed;
         shooterPID.setReference(shooterSetPoint, CANSparkMax.ControlType.kVelocity);
+    }
+
+    public boolean AtHoodZeroPoint() {
+        return this.hoodSwitch.isPressed();
+    }
+
+    public boolean AtTurretZeroPoint() {
+        return this.hoodSwitch.isPressed();
+    }
+
+    public void SetHoodZeroPoint() {
+        this.hoodEncoder.setPosition(0);
     }
 
     public void setHoodAngle(double angle) { //add limit switch stuff
