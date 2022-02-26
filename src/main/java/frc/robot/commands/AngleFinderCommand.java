@@ -17,7 +17,7 @@ public class AngleFinderCommand extends CommandBase{
 
     public void initialize() {
         // NOTE: Assumes DEGREES_PER_REV is 1
-        shooter.setAngle(deviceType, forward ? -100 : -100);
+        shooter.setAngle(deviceType, forward ? 100 : -100);
     }
 
     public boolean isFinished() {
