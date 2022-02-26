@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -34,6 +35,8 @@ public class Shooter extends SubsystemBase {
     private double turretAngle;
     private SparkMaxLimitSwitch turretSwitch;
 
+    private DigitalInput hoodDistanceSensor;
+
     public Shooter() {
         shooterMotor = new CANSparkMax(Constants.SHOOT_MOTOR, MotorType.kBrushless);
         turretMotor = new CANSparkMax(Constants.TURRET_MOTOR, MotorType.kBrushless);
@@ -41,6 +44,9 @@ public class Shooter extends SubsystemBase {
 
         shooterEncoder = shooterMotor.getEncoder();
         hoodEncoder = hoodMotor.getEncoder();
+        turretEncoder = turretMotor.getEncoder();
+
+        hoodDistanceSensor = new DigitalInput(Constants.HOOD_DISTANCE_SENSOR);
 
         initMotorSettings();
         initPIDs();
@@ -53,7 +59,6 @@ public class Shooter extends SubsystemBase {
 
         hoodSwitch = hoodMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
         hoodSwitch.enableLimitSwitch(true);
-
         turretSwitch = turretMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
         turretSwitch.enableLimitSwitch(true);
 
@@ -77,7 +82,7 @@ public class Shooter extends SubsystemBase {
         hoodPID.setP(Constants.HOOD_KP);
         hoodPID.setI(Constants.HOOD_KI);
         hoodPID.setD(Constants.HOOD_KD);
-        hoodPID.setOutputRange(-1, 1);
+        hoodPID.setOutputRange(-0.1, 0.1);
     }
 
     public void shoot(double speed) {
@@ -87,15 +92,21 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean AtHoodZeroPoint() {
-        return this.hoodSwitch.isPressed();
+        //return this.hoodSwitch.isPressed();
+        System.out.println(!hoodDistanceSensor.get());
+        return !hoodDistanceSensor.get();
     }
 
     public boolean AtTurretZeroPoint() {
-        return this.hoodSwitch.isPressed();
+        return this.turretSwitch.isPressed();
     }
 
     public void SetHoodZeroPoint() {
         this.hoodEncoder.setPosition(0);
+    }
+
+    public void SetTurretZeroPoint() {
+        this.turretEncoder.setPosition(0);
     }
 
     public void setHoodAngle(double angle) { //add limit switch stuff
@@ -115,11 +126,11 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getHoodAngle() {
-        return hoodAngle;
+        return Constants.MINIMUM_HOOD_ANGLE + hoodEncoder.getPosition() * Constants.HOOD_DEGREES_PER_REV;
     }
 
     public double getTurretAngle() {
-        return turretAngle;
+        return Constants.MINIMUM_TURRET_ANGLE + turretEncoder.getPosition() * Constants.TURRET_DEGREES_PER_REV;
     }
 
     public void moveTurret(double speed) {
