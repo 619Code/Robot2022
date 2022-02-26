@@ -48,7 +48,7 @@ public class RobotContainer {
     public Shooter shooter;
 
     private final ShiftingWCD drive;
-    private final LedStrip ledStrip;
+    //private final LedStrip ledStrip;
 
     @Config.PIDController
     private PIDController targetPID;
@@ -74,9 +74,6 @@ public class RobotContainer {
 
         limelight.turnLightOff();
 
-        ledStrip = new LedStrip();
-        // ledStrip.setDefaultCommand(new RainbowLedCommand(ledStrip));
-
         configureControls();
     }
 
@@ -90,12 +87,11 @@ public class RobotContainer {
         JoystickButton aimButton = new JoystickButton(operator, XboxController.Button.kB.value);
         aimButton.whileHeld(new AimCommand(shooter, drive, limelight, targetPID));
         
-        RainbowLedCommand ledCommand = new RainbowLedCommand(ledStrip);
-        new JoystickButton(driver, XboxController.Button.kY.value).toggleWhenPressed(ledCommand);
-        //new JoystickButton(primaryController, XboxController.Button.kX.value).cancelWhenPressed(ledCommand);
-        //Shooter shoot = new JoystickButton(operator, XboxController.Button.kX.value);
+        //RainbowLedCommand ledCommand = new RainbowLedCommand(ledStrip);
+        //new JoystickButton(driver, XboxController.Button.kY.value).toggleWhenPressed(ledCommand);
+
         var shootButton = new JoystickAnalogButton(operator, XboxController.Axis.kRightTrigger.value, .5);
-        shootButton.whileHeld(new ShootCommand(shooter, magazine, operator));       
+        shootButton.whileHeld(new ShootCommand(shooter, magazine));       
     }
 
     public Command getAutonomousCommand() {

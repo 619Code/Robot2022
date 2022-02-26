@@ -13,11 +13,9 @@ public class ShootCommand extends CommandBase {
 
     private Shooter shooter;
     private Magazine magazine;
-    private Timer endTimer;
     BallPosition[] positions;
 
-    public ShootCommand(Shooter shooter, Magazine magazine, XboxController joystick) {
-        this.endTimer = new Timer();
+    public ShootCommand(Shooter shooter, Magazine magazine) {
         this.shooter = shooter;
         this.magazine = magazine;
 
@@ -27,12 +25,14 @@ public class ShootCommand extends CommandBase {
     @Override
     public void initialize() {}
 
-    public void execute() { //change this to include the start timer
+    public void execute() {
         fireBalls(0.55, 60);
     }
 
     public void fireBalls(double velocity, double hoodAngle) {
         shooter.shoot(velocity);
+        shooter.setHoodAngle(hoodAngle);
+
         boolean spedUp = Math.abs(shooter.getShooterSpeed() / Constants.SHOOTER_MAX_RPM - velocity) < 0.05; //velocity is within 5% of the goal
         boolean hoodSet = Math.abs(shooter.getHoodAngle() - hoodAngle) < 0.03; //hood position is within 3% of the goal
         if(spedUp && hoodSet) {
@@ -42,7 +42,7 @@ public class ShootCommand extends CommandBase {
         }
     }
 
-    public boolean isFinished(boolean isInterrupted) { //change this to include the end timer
+    public boolean isFinished(boolean isInterrupted) {
         return magazine.isEmpty();
     }
 
