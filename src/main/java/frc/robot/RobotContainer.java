@@ -28,6 +28,7 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.AimCommand;
+import frc.robot.commands.AngleFinderCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.RainbowLedCommand;
 
@@ -99,6 +100,10 @@ public class RobotContainer {
         // shootButton.whileHeld(new ShootCommand(shooter, magazine, operator));   
         JoystickButton zeroHoodButton = new JoystickButton(driver, XboxController.Button.kA.value);
         zeroHoodButton.whenPressed(new ZeroCommand(shooter, Shooter.EDeviceType.Hood));
+
+        JoystickButton angleFinderButton = new JoystickButton(operator, XboxController.Button.kX.value);
+        // modify these values as needed
+        angleFinderButton.whenPressed(new AngleFinderCommand(shooter, Shooter.EDeviceType.Hood, true));
     }
 
     public Command getAutonomousCommand() {
