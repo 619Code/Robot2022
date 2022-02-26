@@ -20,16 +20,16 @@ public final class Constants {
 
     //Hood Constants
     public static final double MINIMUM_HOOD_ANGLE = 0;
-    public static final double HOOD_DEGREES_PER_REV = 0;
+    public static final double HOOD_DEGREES_PER_REV = 1;
 
     //Ball Positions
     public static final int VERTICAL_POSITION = 0;
     public static final int FRONT_POSITION = 0;
 
     //Turret CANs
-    public static final int TURRET_MOTOR = 0; //temp value
-    public static final int HOOD_MOTOR = 0; //temp value
-    public static final int SHOOT_MOTOR = 0; //temp value
+    public static final int TURRET_MOTOR = 20; //temp value
+    public static final int HOOD_MOTOR = 10; //temp value
+    public static final int SHOOT_MOTOR = 21; //temp value
 
     //Shooter PID
     public static final int SHOOTER_KP = 0;
@@ -38,9 +38,9 @@ public final class Constants {
     public static final double SHOOTER_MAX_RPM = 0;
 
     //Hood PID
-    public static final int HOOD_KP = 0;
-    public static final int HOOD_KI = 0;
-    public static final int HOOD_KD = 0;
+    public static final double HOOD_KP = 13.581;
+    public static final double HOOD_KI = 0;
+    public static final double HOOD_KD = 0.23237;
 
     //Turret PID
     public static final int TURRET_KP = 0;
@@ -120,4 +120,5 @@ public final class Constants {
     public static final double CLIMBER_WINCH_P = 0.04; // P constant for winch PID
     public static final double CLIMBER_WINCH_I = 0; // I constant for winch PID
     public static final double CLIMBER_WINCH_D = 0.02; // D constant for winch PID
+    public static final int HOOD_DISTANCE_SENSOR = 1;
 }
