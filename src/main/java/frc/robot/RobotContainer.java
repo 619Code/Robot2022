@@ -22,7 +22,6 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ZeroCommand;
-import frc.robot.commands.ZeroHoodCommand;
 import frc.robot.helpers.JoystickAnalogButton;
 import frc.robot.subsystems.*;
 import io.github.oblarg.oblog.annotations.Config;

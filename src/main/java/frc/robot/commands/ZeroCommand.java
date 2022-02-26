@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Shooter.EDeviceType;
 
 public class ZeroCommand extends CommandBase {
 
@@ -21,6 +20,7 @@ public class ZeroCommand extends CommandBase {
     private Shooter shooter;
     public ZeroCommand(Shooter shooter, Shooter.EDeviceType deviceType)
     {
+        this.zeroStage = EZeroStages.NotStarted;
         this.deviceType = deviceType;
         this.shooter = shooter;
 
@@ -65,6 +65,8 @@ public class ZeroCommand extends CommandBase {
                     this.shooter.setAngle(deviceType, 0);
                     this.zeroStage = EZeroStages.Zeroed;
                 }
+                break;
+            case Zeroed:
                 break;
         }
     }
