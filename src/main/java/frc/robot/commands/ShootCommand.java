@@ -9,94 +9,45 @@ import frc.robot.Constants;
 import frc.robot.States;
 import frc.robot.helpers.*;
 
-
 public class ShootCommand extends CommandBase {
 
-private Shooter shoot;
-private VerticalMagazine verticalMag;
-private XboxController joystick;
-private Timer speedUpTimer;
-private Timer allDoneTimer;
-BallPosition[] positions;
-private boolean allDone;
+    private Shooter shooter;
+    private Magazine magazine;
+    BallPosition[] positions;
 
-    public ShootCommand(Shooter shoot, XboxController joystick){
+    public ShootCommand(Shooter shooter, Magazine magazine) {
+        this.shooter = shooter;
+        this.magazine = magazine;
 
-        this.speedUpTimer = new Timer();
-        this.allDoneTimer = new Timer();
-        this.shoot = shoot;
-        this.verticalMag = verticalMag;
-
-        addRequirements(verticalMag, shoot);
-
+        addRequirements(magazine, shooter);
     }
-    
-
 
     @Override
-    public void initialize(){
+    public void initialize() {}
 
-    }
-  
-
-    public void execute(){
-
-        allDoneTimer.start();
-
-        speedUpTimer.start();
-        fireBall();
-
-
+    public void execute() {
+        fireBalls(0.55, 60);
     }
 
-    public boolean isEmpty(){
+    public void fireBalls(double velocity, double hoodAngle) {
+        shooter.shoot(velocity);
+        shooter.setHoodAngle(hoodAngle);
 
-        if(!verticalMag.isEmpty()){
-
-            allDoneTimer.reset();
-            allDoneTimer.start();
-
+        boolean spedUp = Math.abs(shooter.getShooterSpeed() / Constants.SHOOTER_MAX_RPM - velocity) < 0.05; //velocity is within 5% of the goal
+        boolean hoodSet = Math.abs(shooter.getHoodAngle() - hoodAngle) < 0.03; //hood position is within 3% of the goal
+        if(spedUp && hoodSet) {
+            magazine.loadShooter();
+        } else {
+            magazine.stopAll();
         }
-
-        if(verticalMag.isEmpty() && allDoneTimer.advanceIfElapsed(Constants.shooterEmptyPeriod)){
-
-            return true;
-        }
-
-        return false;
     }
 
-    public void fireBall(){
-
-        if(this.isEmpty()){            
-            shoot.end();
-            verticalMag.end();
-            allDone = true;
-            return;
-        }
-        
-        if(shoot.isOnTarget()){
-            shoot.runFlywheel();
-        }
-
-        if(speedUpTimer.advanceIfElapsed(Constants.flywheelSpeedUptime)){
-            verticalMag.discharge();
-          
-
-        }
-
-    
-        
+    public boolean isFinished(boolean isInterrupted) {
+        return magazine.isEmpty();
     }
 
-    public boolean isFinished(boolean isInterrupted){
-
-        return allDone;
-    }
-
-
-
-    protected void end(){
-
+    protected void end() {
+        shooter.stopAll();
+        magazine.stopAll();
     }
 }

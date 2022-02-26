@@ -6,18 +6,11 @@ public class BallPosition {
 
     private DigitalInput sensor;
 
-    public BallPosition(int channel){
-
+    public BallPosition(int channel) {
         sensor = new DigitalInput(channel);
-
     }
 
-    public boolean hasBall(){
-        if(sensor.get()){
-            return false;
-        } else {
-            return true;
-        }
+    public boolean hasBall() {
+        return !sensor.get();
     }
-    
 }

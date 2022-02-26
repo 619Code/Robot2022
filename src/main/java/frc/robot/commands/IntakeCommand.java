@@ -2,59 +2,43 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.States;
-import frc.robot.subsystems.IntakeHopper;
-import frc.robot.subsystems.VerticalMagazine;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Magazine;
 
 public class IntakeCommand extends CommandBase {
 
     //private XboxController controller;
-    private IntakeHopper intake;
-    private VerticalMagazine verticalMag;
+    private Intake intake;
+    private Magazine magazine;
     //private boolean armDown;
 
-    public IntakeCommand(IntakeHopper intake, VerticalMagazine verticalMag) {
-        
+    public IntakeCommand(Intake intake, Magazine magazine) {
         this.intake = intake;
-        this.verticalMag = verticalMag;
+        this.magazine = magazine;
 
-        addRequirements(intake, verticalMag);
+        addRequirements(intake, magazine);
     }
 
     @Override
-
     public void initialize() {}
 
     @Override
-
     public void execute() {
-        if(States.IsMagFull == false){
+        if(!States.isMagFull){
             intake.lowerIntake();
-            intake.spIntake(0.6);
-            intake.hopperStuff();
-            States.IsMagFull = verticalMag.intake();
-
+            intake.spinIntake(0.6);
+            States.isMagFull = magazine.isFull();
         } else {
-
-            endIntaking();
-
+            intake.raiseIntake();
+            intake.spinIntake(0);
+            magazine.intakeBalls();
         }
-     
-    }
-
-    public void endIntaking(){
-
-        intake.raiseIntake();
-        intake.spIntake(.6);
-        intake.hopperStuff();
-        verticalMag.intake();
     }
 
     @Override
     public void end(boolean isInterrupted) {
-    
-        endIntaking();
-
+        intake.raiseIntake();
+        intake.spinIntake(0);
+        magazine.intakeBalls();
     }
-    
-
 }
