@@ -13,6 +13,12 @@ import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
 
+    public enum EDeviceType
+    {
+        Hood,
+        Turret
+    }
+
     private CANSparkMax shooterMotor;
     private CANSparkMax turretMotor;
     private CANSparkMax hoodMotor;
@@ -125,6 +131,30 @@ public class Shooter extends SubsystemBase {
         return shooterVelocity;
     }
 
+    public void setAngle(EDeviceType deviceType, double angle)
+    {
+        if (deviceType == EDeviceType.Hood)
+            this.setHoodAngle(angle);
+        else
+            this.setTurretAngle(angle);
+    }
+
+    public boolean AtZeroPoint(EDeviceType deviceType)
+    {
+        if (deviceType == EDeviceType.Hood)
+            return this.AtHoodZeroPoint();
+        else
+            return this.AtTurretZeroPoint();
+    }
+
+    public double getAngle(EDeviceType deviceType)
+    {
+        if (deviceType == EDeviceType.Hood)
+            return this.getHoodAngle();
+        else
+            return this.getTurretAngle();
+    }
+
     public double getHoodAngle() {
         return Constants.MINIMUM_HOOD_ANGLE + hoodEncoder.getPosition() * Constants.HOOD_DEGREES_PER_REV;
     }
@@ -145,5 +175,12 @@ public class Shooter extends SubsystemBase {
         shoot(0);
         moveTurret(0);
         moveHood(0);
+    }
+
+    public void SetZeroPoint(EDeviceType deviceType) {
+        if (deviceType == EDeviceType.Hood)
+            this.SetHoodZeroPoint();
+        else
+            this.SetTurretZeroPoint();
     }
 }

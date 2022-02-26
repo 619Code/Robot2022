@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.ZeroCommand;
 import frc.robot.commands.ZeroHoodCommand;
 import frc.robot.helpers.JoystickAnalogButton;
 import frc.robot.subsystems.*;
@@ -98,7 +99,7 @@ public class RobotContainer {
         // var shootButton = new JoystickAnalogButton(operator, XboxController.Axis.kRightTrigger.value, .5);
         // shootButton.whileHeld(new ShootCommand(shooter, magazine, operator));   
         JoystickButton zeroHoodButton = new JoystickButton(driver, XboxController.Button.kA.value);
-        zeroHoodButton.whenPressed(new ZeroHoodCommand(shooter));
+        zeroHoodButton.whenPressed(new ZeroCommand(shooter, Shooter.EDeviceType.Hood));
     }
 
     public Command getAutonomousCommand() {
