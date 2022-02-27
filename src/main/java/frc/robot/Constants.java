@@ -121,4 +121,6 @@ public final class Constants {
     public static final double CLIMBER_WINCH_I = 0; // I constant for winch PID
     public static final double CLIMBER_WINCH_D = 0.02; // D constant for winch PID
     public static final int HOOD_DISTANCE_SENSOR = 1;
+    public static final double CLIMBER_UP_RATE = .3;
+    public static final double CLIMBER_DOWN_RATE = .3;
 }
