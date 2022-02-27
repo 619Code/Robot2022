@@ -144,24 +144,29 @@ public class RobotContainer {
 //         Pose2d bOrigin = drive.getPose();
 //         offTarmac = offTarmac.relativeTo(bOrigin);
 
-//         RamseteCommand ramseteCommand =
-//         new RamseteCommand(
-//             offTarmac,
-//             drive::getPose,
-//             new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
-//             new SimpleMotorFeedforward(
-//                 Constants.ksVolts,
-//                 Constants.kvVoltSecondsPerMeter,
-//                 Constants.kaVoltSecondsSquaredPerMeter),
-//             Constants.kDriveKinematics,
-//             drive::getWheelSpeeds,
-//             new PIDController(Constants.kPDriveVel, 0, 0),
-//             new PIDController(Constants.kPDriveVel, 0, 0),
-//             // RamseteCommand passes volts to the callback
-//             drive::tankDriveVolts,
-//             drive);
+        // RamseteCommand ramseteCommand =
+        // new RamseteCommand(
+        //     offTarmac,
+        //     drive::getPose,
+        //     new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
+        //     new SimpleMotorFeedforward(
+        //         Constants.ksVolts,
+        //         Constants.kvVoltSecondsPerMeter,
+        //         Constants.kaVoltSecondsSquaredPerMeter),
+        //     Constants.kDriveKinematics,
+        //     drive::getWheelSpeeds,
+        //     new PIDController(Constants.kPDriveVel, 0, 0),
+        //     new PIDController(Constants.kPDriveVel, 0, 0),
+        //     // RamseteCommand passes volts to the callback
+        //     drive::tankDriveVolts,
+        //     drive);
 
 //     // Run path following command, then stop at the end.
 //     return ramseteCommand.andThen(() -> drive.tankDriveVolts(0, 0));
+
+//     // For 1-ball auto, run following:
+//    return ramseteCommand.alongWith(new ZeroCommand(shooter, Shooter.EDeviceType.Hood)).andThen(
+    //      () -> drive.tankDriveVolts(0, 0)).alongWith(new AimCommand(shooter, drive, limelight)).andThen(
+    //          new ShootCommand(shooter, magazine));
    }
 }
