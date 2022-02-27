@@ -13,14 +13,16 @@ public class Limelight extends SubsystemBase {
     public double angleX, angleY, area, distance;
     public boolean hasTarget;
     private NetworkTable table;
+    public ShiftingWCD drive;
 
-    public Limelight() {
+    public Limelight(ShiftingWCD drive) {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         tx = table.getEntry("tx");
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
         tv = table.getEntry("tv");
         light = table.getEntry("ledMode");
+        this.drive = drive;
     }
 
     public void update() {
@@ -32,6 +34,13 @@ public class Limelight extends SubsystemBase {
             area = ta.getDouble(0);
             distance = getDistance();
             States.isLocationValid = true;
+            
+            double theta = drive.getAngle().getDegrees() + angleX;
+            double x = distance * Math.cos(Math.toRadians(theta));
+            double y = distance * Math.sin(Math.toRadians(theta));
+            States.robotX = x;
+            States.robotY = y;
+
         } else {
             States.isLocationValid = false;
         }

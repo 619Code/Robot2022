@@ -6,6 +6,8 @@ import frc.robot.subsystems.Shooter;
 import io.github.oblarg.oblog.annotations.Config;
 import frc.robot.Constants;
 import frc.robot.States;
+import frc.robot.helpers.Shot;
+import frc.robot.helpers.ShotFinder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import com.kauailabs.navx.frc.AHRS;
@@ -41,21 +43,24 @@ public class AimCommand extends CommandBase {
         //System.out.println("angleX: " + limelight.angleX);
         //System.out.println("angleY: " + limelight.angleY);
         //System.out.println("Distance: " + limelight.distance);
-
         if(States.isLocationValid) {
+            // point the robot towards the target
             drive.curve(0, -targetPID.calculate(limelight.angleX, 0), false);
-            
-            double theta = navx.getFusedHeading() + limelight.angleX;
-            double x = limelight.distance * Math.cos(Math.toRadians(theta));
-            double y = limelight.distance * Math.sin(Math.toRadians(theta));
-            States.robotX = x;
-            States.robotY = y;
-
+            Shot shot = ShotFinder.getShot(limelight.distance);
+            if(!shot.isValid){
+                // TODO: Flash LEDs red or orange or smth
+            } else {
+                shooter.setShooterSpeedByRPM(shot.rpm);
+                shooter.setHoodAngle(shot.hoodAngle);
+                // TODO: set LED color by chance of success
+            }
             //System.out.println("X distance: " + x);
             //System.out.println("Y distance: " + y);
         } else {
+            // TODO: Flash LEDs red or smth
             drive.curve(0, 0, false);
         }
+
     }
 
     public void end(boolean isInterrupted) {
