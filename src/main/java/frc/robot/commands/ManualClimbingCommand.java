@@ -14,6 +14,7 @@ public class ManualClimbingCommand extends CommandBase {
     {
         this.controller = controller;
         this.climber = climber;
+        this.addRequirements(climber);
     }
 
     public void execute()
