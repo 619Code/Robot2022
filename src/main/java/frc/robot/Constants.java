@@ -14,9 +14,9 @@ public final class Constants {
     public static final int RIGHT_FOLLOWER_1 = 15;
     
     //Turret Constants
-    public static final double MINIMUM_TURRET_ANGLE = 0;
-    public static final double TURRET_DEGREES_PER_REV = 0;
-    public static final double TARGET_TOLERANCE = 0;
+    // public static final double MINIMUM_TURRET_ANGLE = 0;
+    // public static final double TURRET_DEGREES_PER_REV = 0;
+    // public static final double TARGET_TOLERANCE = 0;
 
     //Hood Constants
     public static final double MINIMUM_HOOD_ANGLE = 0;
@@ -27,7 +27,7 @@ public final class Constants {
     public static final int FRONT_POSITION = 0;
 
     //Turret CANs
-    public static final int TURRET_MOTOR = 20; //temp value
+    // public static final int TURRET_MOTOR = 20; //temp value
     public static final int HOOD_MOTOR = 10; //temp value
     public static final int SHOOT_MOTOR = 21; //temp value
 
@@ -43,9 +43,9 @@ public final class Constants {
     public static final double HOOD_KD = 0.23237;
 
     //Turret PID
-    public static final int TURRET_KP = 0;
-    public static final int TURRET_KI = 0;
-    public static final int TURRET_KD = 0;
+    // public static final int TURRET_KP = 0;
+    // public static final int TURRET_KI = 0;
+    // public static final int TURRET_KD = 0;
 
     //Drive constants
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(6); //meters
