@@ -132,7 +132,7 @@ public class Shooter extends SubsystemBase {
     //     turretPID.setReference(turretSetPoint, CANSparkMax.ControlType.kPosition);
     // }
 
-    public double getShooterSpeed() {
+    public double getShooterRPM() {
         shooterVelocity = shooterEncoder.getVelocity();
         return shooterVelocity;
     }
