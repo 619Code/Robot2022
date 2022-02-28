@@ -5,8 +5,7 @@ import frc.robot.States;
 
 public class ShotFinder {
     private static final double LAUNCH_ANGLE_STEP = 1;
-    private static final double VELOCITY_STEP = 0.5;
-
+    
     public static Shot getShot(double distanceToGoal) {
         // this function calculates the rpm and hood angle needed for a shot gien the info in States
         Shot shot = new Shot();
@@ -43,7 +42,7 @@ public class ShotFinder {
                 }
             }
             shot.isValid = true;
-            shot.rpm = velocityToRPM(bestAngle, bestVelocity);
+            shot.rpm = velocityToRPM(bestVelocity, launchAngleToHoodAngle(bestAngle));
             shot.hoodAngle = launchAngleToHoodAngle(bestAngle);
             shot.chanceOfSuccess = bestChanceOfSuccess;
         }
@@ -57,11 +56,11 @@ public class ShotFinder {
         return velocity;
     }
 
-    private static double launchAngleToHoodAngle(double hoodAngle) {
+    private static double launchAngleToHoodAngle(double launchAngle) {
         // this function calculates the launch angle given the hoodAngle
         // it needs characterization of the shooter for acutal values
         // so return dummy values for now
-        return hoodAngle;
+        return launchAngle;
     }
 
     private static double calculateVelocity(double launchAngle, double distanceToGoal, double height) {
@@ -73,7 +72,7 @@ public class ShotFinder {
         // v = sqrt((g*x)/sin(2*theta))
         double v = Math.sqrt((Constants.GRAVITY*distanceToGoal)/Math.sin(2*launchAngle));
         // this assumes that the shooter and goal are at the same height, *hopefully it doesn't matter!*
-        return (Constants.SHOOTER_MAX_RPM > velocityToRPM(v, launchAngle)) ? v : -1;
+        return (Constants.SHOOTER_MAX_RPM > velocityToRPM(v, launchAngleToHoodAngle(launchAngle))) ? v : -1;
     }
 
     private static double calculateChanceOfSuccess(double launchAngle, double launchVelocity){
