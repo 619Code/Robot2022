@@ -40,6 +40,7 @@ public class Limelight extends SubsystemBase {
             double y = distance * Math.sin(Math.toRadians(theta));
             States.robotX = x;
             States.robotY = y;
+            States.distance = distance;
 
         } else {
             States.isLocationValid = false;

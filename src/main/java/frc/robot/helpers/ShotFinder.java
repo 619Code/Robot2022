@@ -22,7 +22,6 @@ public class ShotFinder {
             // 2. for each one of those calculate the needed launch velocity for that angle
             // 3. if we can get that velocity, we have a shot
             // 4. if we can't, we have to try the next launch angle
-            double launchAngle = 0;
             double launchVelocity = 0;
             double bestAngle = 0;
             double bestVelocity = 0;
@@ -72,9 +71,9 @@ public class ShotFinder {
         // if we can't get there, return -1
         // x = (v^2*sin(2*theta))/g
         // v = sqrt((g*x)/sin(2*theta))
-        double v = sqrt((Constants.GRAVITY*distanceToGoal)/sin(2*launchAngle))
+        double v = Math.sqrt((Constants.GRAVITY*distanceToGoal)/Math.sin(2*launchAngle));
         // this assumes that the shooter and goal are at the same height, *hopefully it doesn't matter!*
-        return (Constants.SHOOTER_MAX_RPM > velocityToRPM(v)) ? v : -1;
+        return (Constants.SHOOTER_MAX_RPM > velocityToRPM(v, launchAngle)) ? v : -1;
     }
 
     private static double calculateChanceOfSuccess(double launchAngle, double launchVelocity){

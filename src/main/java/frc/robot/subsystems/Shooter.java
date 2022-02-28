@@ -133,6 +133,7 @@ public class Shooter extends SubsystemBase {
     // }
 
     public double getShooterSpeed() {
+        shooterVelocity = shooterEncoder.getVelocity();
         return shooterVelocity;
     }
 
