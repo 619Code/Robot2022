@@ -20,6 +20,7 @@ public final class Constants {
 
     //Hood Constants
     public static final double MINIMUM_HOOD_ANGLE = 0;
+    public static final double MAXIMUM_HOOD_ANGLE = 90;
     public static final double HOOD_DEGREES_PER_REV = 1;
 
     //Ball Positions
@@ -123,4 +124,7 @@ public final class Constants {
     public static final int HOOD_DISTANCE_SENSOR = 1;
     public static final double CLIMBER_UP_RATE = .3;
     public static final double CLIMBER_DOWN_RATE = .3;
+
+    // Shot finding constants
+    public static final double GRAVITY = 9.81; // m/s^2
 }

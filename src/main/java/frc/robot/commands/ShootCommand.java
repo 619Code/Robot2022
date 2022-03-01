@@ -26,14 +26,22 @@ public class ShootCommand extends CommandBase {
     public void initialize() {}
 
     public void execute() {
-        fireBalls(0.55, 60);
+        if(!States.isLocationValid){
+            return; 
+            // TODO: blink LEDS
+        }
+        Shot shot = ShotFinder.getShot(States.distance);
+        if(!shot.isValid){
+            return;
+        }
+        fireBalls(shot.rpm, shot.hoodAngle);
     }
 
-    public void fireBalls(double velocity, double hoodAngle) {
-        shooter.shoot(velocity);
+    public void fireBalls(double rpm, double hoodAngle) {
+        shooter.setShooterSpeedByRPM(rpm);
         shooter.setHoodAngle(hoodAngle);
 
-        boolean spedUp = Math.abs(shooter.getShooterSpeed() / Constants.SHOOTER_MAX_RPM - velocity) < 0.05; //velocity is within 5% of the goal
+        boolean spedUp = Math.abs(shooter.getShooterRPM() / rpm) < 0.05; //velocity is within 5% of the goal
         boolean hoodSet = Math.abs(shooter.getHoodAngle() - hoodAngle) < 0.03; //hood position is within 3% of the goal
         if(spedUp && hoodSet) {
             magazine.loadShooter();

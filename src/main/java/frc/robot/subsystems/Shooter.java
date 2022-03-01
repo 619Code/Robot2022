@@ -97,6 +97,11 @@ public class Shooter extends SubsystemBase {
         shooterPID.setReference(shooterSetPoint, CANSparkMax.ControlType.kVelocity);
     }
 
+    public void setShooterSpeedByRPM(double speed) {
+        shooterSetPoint = speed;
+        shooterPID.setReference(shooterSetPoint, CANSparkMax.ControlType.kVelocity);
+    }
+
     public boolean AtHoodZeroPoint() {
         //return this.hoodSwitch.isPressed();
         System.out.println(!hoodDistanceSensor.get());
@@ -127,7 +132,8 @@ public class Shooter extends SubsystemBase {
     //     turretPID.setReference(turretSetPoint, CANSparkMax.ControlType.kPosition);
     // }
 
-    public double getShooterSpeed() {
+    public double getShooterRPM() {
+        shooterVelocity = shooterEncoder.getVelocity();
         return shooterVelocity;
     }
 
