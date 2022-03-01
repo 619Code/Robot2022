@@ -22,7 +22,6 @@ public class Magazine extends SubsystemBase {
 
     public Magazine() {
         rollerMotor = new CANSparkMax(Constants.ROLLER_MOTOR, MotorType.kBrushless);
-        frontBeltMotor = new CANSparkMax(Constants.FRONT_BELT_MOTOR, MotorType.kBrushless);
         backBeltMotor = new CANSparkMax(Constants.BACK_BELT_MOTOR, MotorType.kBrushless);
 
         verticalPosition = new BallPosition(Constants.VERTICAL_POSITION);
@@ -36,7 +35,6 @@ public class Magazine extends SubsystemBase {
     }
 
     public void loadShooter() {
-        frontBeltMotor.set(0.3);
         backBeltMotor.set(0.3);
     }
 
@@ -59,7 +57,6 @@ public class Magazine extends SubsystemBase {
 
     public void stopAll() {
         rollerMotor.set(0);
-        frontBeltMotor.set(0);
         backBeltMotor.set(0);
     }
 }
