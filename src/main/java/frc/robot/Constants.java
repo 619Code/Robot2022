@@ -49,12 +49,12 @@ public final class Constants {
     // public static final int TURRET_KD = 0;
 
     //Drive constants
-    public static final double WHEEL_DIAMETER = Units.inchesToMeters(6); //meters
+    public static final double WHEEL_DIAMETER = Units.inchesToMeters(5.827); //meters
     public static final int NEO_LIMIT = 45; //amps
     public static final double SPEED_ADJUST = 0.8; //how much to adjust speed of drive
     public static final double DRIVE_RATIO_HIGH = (9.0/66.0) * (40.0/44.0); // gear ratio for high gear
     public static final double DRIVE_RATIO_LOW = (9.0/66.0) * (24.0/60.0); // gear ratio for low gear
-    public static final double TRACK_WIDTH = Units.inchesToMeters(25); //distance between wheels in meters
+    public static final double TRACK_WIDTH = Units.inchesToMeters(23); //distance between wheels in meters
     public static final String SHUFFLEBOARD_DRIVE_TAB_NAME = "Drive";
     public static final double RPM_TO_VELOCITY_CONVERSION_FACTOR = WHEEL_DIAMETER * Math.PI / 60; //conversion factor for rpm to velocity
 
@@ -114,7 +114,7 @@ public final class Constants {
     public static final int CLIMBER_SOLENOID_CLAW_CLOSE = 3; // PCM ID
     public static final int CLIMBER_SOLENOID_ARM_UP = 5; // PCM ID
     public static final int CLIMBER_SOLENOID_ARM_DOWN = 6; // PCM ID
-    public static final double CLIMB_WINCH_DIAMETER = Units.inchesToMeters(2); // meters, diameter of climb winch
+    public static final double CLIMB_WINCH_DIAMETER = Units.inchesToMeters(0.964); // meters, diameter of climb winch
     public static final double CLIMB_ROPE_LENGTH = Units.inchesToMeters(48); // meters, length of climb winch
     public static final double CLIMBER_WINCH_P = 0.04; // P constant for winch PID
     public static final double CLIMBER_WINCH_I = 0; // I constant for winch PID
