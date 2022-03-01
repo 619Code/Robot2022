@@ -64,10 +64,8 @@ public final class Constants {
     public static final int DRIVE_SOLENOID_BACK = 7;
 
     //Intake CAN
-    public static final int LOADING_MOTOR = 0;
-    public static final int HOPPER_LEFT_MOTOR = 0;
-    public static final int HOPPER_RIGHT_MOTOR = 0;
-    public static final int ROLLER_MOTOR = 0;
+    public static final int LOADING_MOTOR = 4;
+    public static final int ROLLER_MOTOR = 5;
     public static final int FRONT_BELT_MOTOR = 0;
     public static final int BACK_BELT_MOTOR = 8;
     //CHANGE THIS ONCE WE HAVE A LOADING MOTOR
