@@ -66,7 +66,6 @@ public final class Constants {
     //Intake CAN
     public static final int LOADING_MOTOR = 4;
     public static final int ROLLER_MOTOR = 5;
-    public static final int FRONT_BELT_MOTOR = 0;
     public static final int BACK_BELT_MOTOR = 8;
     //CHANGE THIS ONCE WE HAVE A LOADING MOTOR
     //these do not like being set to -1, so keep that in mind.
