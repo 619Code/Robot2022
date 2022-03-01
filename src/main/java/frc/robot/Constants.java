@@ -6,12 +6,12 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public final class Constants {
     //Drive CANs
-    public static final int LEFT_LEADER = 10;
-    public static final int RIGHT_LEADER = 13;
-    public static final int LEFT_FOLLOWER_0 = 11;
-    public static final int LEFT_FOLLOWER_1 = 12;
-    public static final int RIGHT_FOLLOWER_0 = 14;
-    public static final int RIGHT_FOLLOWER_1 = 15;
+    public static final int LEFT_LEADER = 1;
+    public static final int RIGHT_LEADER = 9;
+    public static final int LEFT_FOLLOWER_0 = 2;
+    public static final int LEFT_FOLLOWER_1 = 3;
+    public static final int RIGHT_FOLLOWER_0 = 10;
+    public static final int RIGHT_FOLLOWER_1 = 11;
     
     //Turret Constants
     // public static final double MINIMUM_TURRET_ANGLE = 0;
@@ -29,8 +29,8 @@ public final class Constants {
 
     //Turret CANs
     // public static final int TURRET_MOTOR = 20; //temp value
-    public static final int HOOD_MOTOR = 10; //temp value
-    public static final int SHOOT_MOTOR = 21; //temp value
+    public static final int HOOD_MOTOR = 16; 
+    public static final int SHOOT_MOTOR = 15; 
 
     //Shooter PID
     public static final int SHOOTER_KP = 0;
@@ -60,22 +60,20 @@ public final class Constants {
 
     //Drive solenoids
     public static final int PCM_CAN_ID = 0;
-    public static final int DRIVE_SOLENOID_FORWARD = 1;
-    public static final int DRIVE_SOLENOID_BACK = 4;
+    public static final int DRIVE_SOLENOID_FORWARD = 0;
+    public static final int DRIVE_SOLENOID_BACK = 7;
 
     //Intake CAN
-    public static final int LOADING_MOTOR = 0;
-    public static final int HOPPER_LEFT_MOTOR = 0;
-    public static final int HOPPER_RIGHT_MOTOR = 0;
-    public static final int ROLLER_MOTOR = 0;
+    public static final int LOADING_MOTOR = 4;
+    public static final int ROLLER_MOTOR = 5;
     public static final int FRONT_BELT_MOTOR = 0;
-    public static final int BACK_BELT_MOTOR = 0;
+    public static final int BACK_BELT_MOTOR = 8;
     //CHANGE THIS ONCE WE HAVE A LOADING MOTOR
     //these do not like being set to -1, so keep that in mind.
 
     //Intake Solenoid
     public static final PneumaticsModuleType INTAKE_MODULE_TYPE = PneumaticsModuleType.CTREPCM;
-    public static final int INTAKE_SOLENOID = 0; //Also change this once we have a piston hooked up please
+    public static final int INTAKE_SOLENOID = 1; //Also change this once we have a piston hooked up please
     //Unless of course, you don't like working robots.
 
     //Controller constants
@@ -110,8 +108,8 @@ public final class Constants {
     public static boolean kLeftEncoderReversed = false;
 
     // Climber constants
-    public static final int CLIMBER_LEFT_MOTOR = 16; // CAN ID
-    public static final int CLIMBER_RIGHT_MOTOR = 17; // CAN ID
+    public static final int CLIMBER_LEFT_MOTOR = 7; // CAN ID
+    public static final int CLIMBER_RIGHT_MOTOR = 6; // CAN ID
     public static final int CLIMBER_SOLENOID_CLAW_OPEN = 2; // PCM ID
     public static final int CLIMBER_SOLENOID_CLAW_CLOSE = 3; // PCM ID
     public static final int CLIMBER_SOLENOID_ARM_UP = 5; // PCM ID
