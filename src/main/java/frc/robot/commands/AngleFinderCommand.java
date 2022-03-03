@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.EDeviceType;
 
@@ -16,8 +17,7 @@ public class AngleFinderCommand extends CommandBase{
     }
 
     public void initialize() {
-        // NOTE: Assumes DEGREES_PER_REV is 1
-        shooter.setAngle(deviceType, forward ? 100 : -100);
+        shooter.setAngle(deviceType, (forward ? 100 : -100) / Constants.HOOD_DEGREES_PER_REV);
     }
 
     public boolean isFinished() {

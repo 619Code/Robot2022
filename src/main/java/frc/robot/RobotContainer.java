@@ -101,9 +101,12 @@ public class RobotContainer {
         JoystickButton zeroHoodButton = new JoystickButton(driver, XboxController.Button.kA.value);
         zeroHoodButton.whenPressed(new ZeroCommand(shooter, Shooter.EDeviceType.Hood));
 
-        JoystickButton angleFinderButton = new JoystickButton(operator, XboxController.Button.kX.value);
+        JoystickButton angleFinderDownButton = new JoystickButton(operator, XboxController.Button.kX.value);
         // modify these values as needed
-        angleFinderButton.whenPressed(new AngleFinderCommand(shooter, Shooter.EDeviceType.Hood, true));
+        angleFinderDownButton.whenPressed(new AngleFinderCommand(shooter, Shooter.EDeviceType.Hood, true));
+        JoystickButton angleFinderUpButton = new JoystickButton(operator, XboxController.Button.kY.value);
+        // modify these values as needed
+        angleFinderUpButton.whenPressed(new AngleFinderCommand(shooter, Shooter.EDeviceType.Hood, false));
     }
 
     public Command getAutonomousCommand() {
