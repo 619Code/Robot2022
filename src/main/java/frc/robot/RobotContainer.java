@@ -49,7 +49,7 @@ public class RobotContainer {
     public Limelight limelight;
     public Shooter shooter;
 
-    //private final ShiftingWCD drive;
+    private final ShiftingWCD drive;
     //private final LedStrip ledStrip;
 
     @Config.PIDController
@@ -61,18 +61,22 @@ public class RobotContainer {
         driver = new XboxController(0);
         operator = new XboxController(1);
 
-        //drive = new ShiftingWCD();
-        //intake = new Intake();
+        drive = new ShiftingWCD();
+        driveCommand = new DriveCommand(drive, driver);
+        drive.setDefaultCommand(driveCommand);
+        drive.resetGyro();
+
+        //magazine = new Magazine();
+        
+        intake = new Intake();
+        intake.raiseIntake();
         //intakeCommand = new IntakeCommand(intake, magazine);
+
         //limelight = new Limelight();
-        shooter = new Shooter();
+        //shooter = new Shooter();
         //retractIntake = new RetractIntakeCommand(intake);
         //joystickAnalogButton = new JoystickAnalogButton(operator, 3);
         //limelight = new Limelight();
-
-        //driveCommand = new DriveCommand(drive, driver);
-        //drive.setDefaultCommand(driveCommand);
-        //drive.resetGyro();
 
         //limelight.turnLightOff();
 
@@ -98,12 +102,12 @@ public class RobotContainer {
         // //Shooter shoot = new JoystickButton(operator, XboxController.Button.kX.value);
         // var shootButton = new JoystickAnalogButton(operator, XboxController.Axis.kRightTrigger.value, .5);
         // shootButton.whileHeld(new ShootCommand(shooter, magazine, operator));   
-        JoystickButton zeroHoodButton = new JoystickButton(driver, XboxController.Button.kA.value);
-        zeroHoodButton.whenPressed(new ZeroCommand(shooter, Shooter.EDeviceType.Hood));
+        //JoystickButton zeroHoodButton = new JoystickButton(driver, XboxController.Button.kA.value);
+        //zeroHoodButton.whenPressed(new ZeroCommand(shooter, Shooter.EDeviceType.Hood));
 
-        JoystickButton angleFinderButton = new JoystickButton(operator, XboxController.Button.kX.value);
+        //JoystickButton angleFinderButton = new JoystickButton(operator, XboxController.Button.kX.value);
         // modify these values as needed
-        angleFinderButton.whenPressed(new AngleFinderCommand(shooter, Shooter.EDeviceType.Hood, true));
+        //angleFinderButton.whenPressed(new AngleFinderCommand(shooter, Shooter.EDeviceType.Hood, true));
     }
 
     public Command getAutonomousCommand() {
