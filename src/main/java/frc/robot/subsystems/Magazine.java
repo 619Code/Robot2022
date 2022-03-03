@@ -31,7 +31,15 @@ public class Magazine extends SubsystemBase {
     }
 
     public void intakeBalls() {
-        //do logic for this later
+        if(frontPosition.hasBall()){
+
+            rollerMotor.set(0.3);
+
+        } else {
+
+            rollerMotor.set(0);
+
+        }
     }
 
     public void loadShooter() {
