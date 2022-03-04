@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.*;
+import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -34,14 +35,14 @@ public class Shooter extends SubsystemBase {
     private SparkMaxPIDController hoodPID;
     private double hoodSetPoint;
     private double hoodAngle;
-    private SparkMaxLimitSwitch hoodSwitch;
+    //private SparkMaxLimitSwitch hoodSwitch;
 
     // private SparkMaxPIDController turretPID;
     // private double turretSetPoint;
     // private double turretAngle;
     // private SparkMaxLimitSwitch turretSwitch;
 
-    private DigitalInput hoodDistanceSensor;
+    private SparkMaxLimitSwitch hoodSwitch;
 
     public Shooter() {
         shooterMotor = new CANSparkMax(Constants.SHOOT_MOTOR, MotorType.kBrushless);
@@ -52,8 +53,8 @@ public class Shooter extends SubsystemBase {
         hoodEncoder = hoodMotor.getEncoder();
         // turretEncoder = turretMotor.getEncoder();
 
-        hoodDistanceSensor = new DigitalInput(Constants.HOOD_DISTANCE_SENSOR);
-
+        //hoodDistanceSensor = new DigitalInput(Constants.HOOD_DISTANCE_SENSOR);
+        //hoodSwitch = shooterMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
         initMotorSettings();
         initPIDs();
     }
@@ -106,9 +107,16 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean AtHoodZeroPoint() {
-        //return this.hoodSwitch.isPressed();
-        System.out.println(!hoodDistanceSensor.get());
-        return !hoodDistanceSensor.get();
+        //System.out.println(this.hoodSwitch.isPressed());
+        return this.hoodSwitch.isPressed();
+        // System.out.println(!hoodDistanceSensor.get());
+        // return !hoodDistanceSensor.get();
+    }
+
+    public boolean atHoodZeroPointRPM() {
+        double velocity = this.hoodEncoder.getVelocity();
+        System.out.println(velocity);
+        return velocity == 0.0;
     }
 
     // public boolean AtTurretZeroPoint() {
@@ -151,7 +159,7 @@ public class Shooter extends SubsystemBase {
     public boolean AtZeroPoint(EDeviceType deviceType)
     {
         if (deviceType == EDeviceType.Hood)
-            return this.AtHoodZeroPoint();
+            return this.atHoodZeroPointRPM();
         else
             //return this.AtTurretZeroPoint();
             return false;

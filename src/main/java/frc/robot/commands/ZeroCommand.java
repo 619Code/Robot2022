@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
@@ -17,12 +18,16 @@ public class ZeroCommand extends CommandBase {
     private double backOffAngle = 5;
     private Shooter.EDeviceType deviceType;
 
+    private Timer endTimer;
+
     private Shooter shooter;
     public ZeroCommand(Shooter shooter, Shooter.EDeviceType deviceType)
     {
         this.zeroStage = EZeroStages.NotStarted;
         this.deviceType = deviceType;
         this.shooter = shooter;
+
+        this.endTimer = new Timer();
 
         if (deviceType == Shooter.EDeviceType.Hood)
             backOffAngle = 5;
@@ -35,12 +40,13 @@ public class ZeroCommand extends CommandBase {
         zeroStage = EZeroStages.NotStarted;
     }
     public void execute() {
-        System.out.println(this.deviceType.toString() + " Zero Stage: " + zeroStage);
+        //System.out.println(this.deviceType.toString() + " Zero Stage: " + zeroStage);
         switch(zeroStage){
             case NotStarted:
-
+                endTimer.start();
                 zeroStage = EZeroStages.TowardsHighSpeed;
-                // no break here so we immediately go to the next case (fall through)
+                this.shooter.setAngle(this.deviceType, this.shooter.getAngle(this.deviceType) - 10);
+                break;
             case TowardsHighSpeed:
                 if(!shooter.AtZeroPoint(this.deviceType)){
                     this.shooter.setAngle(this.deviceType, this.shooter.getAngle(this.deviceType) - 10);
@@ -51,7 +57,7 @@ public class ZeroCommand extends CommandBase {
                 }
                 break;
             case BackingOff:
-                if(Math.abs(shooter.getAngle(this.deviceType) - backOffAngle) < 1){
+                if(Math.abs(shooter.getAngle(this.deviceType) + backOffAngle) < 1){
                     this.zeroStage = EZeroStages.TowardsLowSpeed;
                 } else {
                     this.shooter.setAngle(this.deviceType, backOffAngle);

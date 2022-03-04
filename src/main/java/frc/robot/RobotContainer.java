@@ -19,9 +19,12 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ManualClimbingCommand;
+import frc.robot.commands.MoveHoodUpCommand;
 import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ZeroCommand;
+import frc.robot.commands.ZeroCommandSimple;
 import frc.robot.helpers.JoystickAnalogButton;
 import frc.robot.subsystems.*;
 import io.github.oblarg.oblog.annotations.Config;
@@ -29,8 +32,10 @@ import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.AimCommand;
 import frc.robot.commands.AngleFinderCommand;
+import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.RainbowLedCommand;
+import frc.robot.commands.MoveHoodUpCommand;;
 
 public class RobotContainer {
 
@@ -43,13 +48,14 @@ public class RobotContainer {
     public Shooter shoot;
     public Magazine magazine;
     public JoystickAnalogButton joystickAnalogButton;
+    public Climber climber;
 
     @Log
     private DriveCommand driveCommand;
     public Limelight limelight;
     public Shooter shooter;
 
-    //private final ShiftingWCD drive;
+    private final ShiftingWCD drive;
     //private final LedStrip ledStrip;
 
     @Config.PIDController
@@ -71,6 +77,9 @@ public class RobotContainer {
         //retractIntake = new RetractIntakeCommand(intake);
 
         magazine = new Magazine();
+        climber = new Climber();
+        var climbCommand = new ManualClimbingCommand(climber, operator );
+        climber.setDefaultCommand(climbCommand);
 
         //limelight = new Limelight();
         shooter = new Shooter();
@@ -106,9 +115,15 @@ public class RobotContainer {
         JoystickButton zeroHoodButton = new JoystickButton(driver, XboxController.Button.kA.value);
         zeroHoodButton.whenPressed(new ZeroCommand(shooter, Shooter.EDeviceType.Hood));
 
-        JoystickButton angleFinderButton = new JoystickButton(operator, XboxController.Button.kX.value);
+        //JoystickButton angleFinderButton = new JoystickButton(operator, XboxController.Button.kX.value);
         // modify these values as needed
-        angleFinderButton.whenPressed(new AngleFinderCommand(shooter, Shooter.EDeviceType.Hood, true));
+        //angleFinderButton.whenPressed(new AngleFinderCommand(shooter, Shooter.EDeviceType.Hood, true));
+        JoystickButton zeroHood = new JoystickButton(driver, XboxController.Button.kB.value);
+        zeroHood.whenPressed(new ZeroCommandSimple(shooter, Shooter.EDeviceType.Hood));
+
+        JoystickButton xButton = new JoystickButton(driver, XboxController.Button.kX.value);
+        var moveHoodUpCommand = new MoveHoodUpCommand(shooter);
+        xButton.whileHeld(moveHoodUpCommand);
     }
 
     public Command getAutonomousCommand() {

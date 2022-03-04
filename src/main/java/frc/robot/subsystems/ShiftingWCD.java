@@ -47,7 +47,7 @@ public class ShiftingWCD extends SubsystemBase implements Loggable{
             new CANSparkMax(Constants.LEFT_FOLLOWER_1, MotorType.kBrushless)
         }; 
         for(CANSparkMax spark : leftMotorArray) {
-            spark.setIdleMode(IdleMode.kBrake);
+            spark.setIdleMode(IdleMode.kCoast);
         }
 
         rightLeader = new CANSparkMax(Constants.RIGHT_LEADER, MotorType.kBrushless);
@@ -57,7 +57,7 @@ public class ShiftingWCD extends SubsystemBase implements Loggable{
             new CANSparkMax(Constants.RIGHT_FOLLOWER_1, MotorType.kBrushless)
         };
         for(CANSparkMax spark : rightMotorArray) {
-            spark.setIdleMode(IdleMode.kBrake);
+            spark.setIdleMode(IdleMode.kCoast);
         }
         
         leftMotors = new MotorControllerGroup(leftMotorArray);

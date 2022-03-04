@@ -18,10 +18,18 @@ public final class Constants {
     // public static final double TURRET_DEGREES_PER_REV = 0;
     // public static final double TARGET_TOLERANCE = 0;
 
+    //Hood Angles from CAD
+    // 81 degrees 
+    // 53.5 degrees
+
     //Hood Constants
+    //0 = 15 degrees
+    public static final double BASE_HOOD_ANGLE = 75;
+    public static final double HIGH_HOOD_ANGLE = 60;
     public static final double MINIMUM_HOOD_ANGLE = 0;
-    public static final double MAXIMUM_HOOD_ANGLE = 90;
+    public static final double MAXIMUM_HOOD_ANGLE = 98;
     public static final double HOOD_DEGREES_PER_REV = 1;
+
 
     //Ball Positions
     public static final int VERTICAL_POSITION = 0;
@@ -51,7 +59,7 @@ public final class Constants {
     //Drive constants
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(5.827); //meters
     public static final int NEO_LIMIT = 45; //amps
-    public static final double SPEED_ADJUST = 0.8; //how much to adjust speed of drive
+    public static final double SPEED_ADJUST = 0.4; //how much to adjust speed of drive
     public static final double DRIVE_RATIO_HIGH = (9.0/66.0) * (40.0/44.0); // gear ratio for high gear
     public static final double DRIVE_RATIO_LOW = (9.0/66.0) * (24.0/60.0); // gear ratio for low gear
     public static final double TRACK_WIDTH = Units.inchesToMeters(23); //distance between wheels in meters
@@ -107,8 +115,8 @@ public final class Constants {
     public static boolean kLeftEncoderReversed = false;
 
     // Climber constants
-    public static final int CLIMBER_LEFT_MOTOR = 7; // CAN ID
-    public static final int CLIMBER_RIGHT_MOTOR = 6; // CAN ID
+    public static final int CLIMBER_LEFT_MOTOR = 6; // CAN ID
+    public static final int CLIMBER_RIGHT_MOTOR = 7; // CAN ID
     public static final int CLIMBER_SOLENOID_CLAW_OPEN = 2; // PCM ID
     public static final int CLIMBER_SOLENOID_CLAW_CLOSE = 3; // PCM ID
     public static final int CLIMBER_SOLENOID_ARM_UP = 5; // PCM ID
