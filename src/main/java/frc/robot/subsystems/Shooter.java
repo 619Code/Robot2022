@@ -11,14 +11,28 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 
-public class Shooter extends SubsystemBase {
+public class Shooter extends SubsystemBase implements Loggable {
+
+    private PIDController shooterOnboardPID;
 
     public enum EDeviceType
     {
         Hood,
         Turret
     }
+
+    @Log
+    private double currentVelocity = 0;
+
+    private double shooterP;
+    private double shooterI;
+    private double shooterD;
+    private double shooterMinOutput = -1;
+    private double shooterMaxOutput = 0;
 
     private CANSparkMax shooterMotor;
     // private CANSparkMax turretMotor;
@@ -28,13 +42,23 @@ public class Shooter extends SubsystemBase {
     // private RelativeEncoder turretEncoder;
     private RelativeEncoder hoodEncoder;
 
+
     private SparkMaxPIDController shooterPID;
     private double shooterSetPoint;
+    
+    @Log
     private double shooterVelocity;
+
+    @Log
+    private double shooterCountsPerRevolution;
+    
+    @Log
+    private double velocityConversionFactor;
 
     private SparkMaxPIDController hoodPID;
     private double hoodSetPoint;
     private double hoodAngle;
+    
     //private SparkMaxLimitSwitch hoodSwitch;
 
     // private SparkMaxPIDController turretPID;
@@ -50,6 +74,7 @@ public class Shooter extends SubsystemBase {
         hoodMotor = new CANSparkMax(Constants.HOOD_MOTOR, MotorType.kBrushless);
 
         shooterEncoder = shooterMotor.getEncoder();
+        shooterEncoder.setVelocityConversionFactor(1);
         hoodEncoder = hoodMotor.getEncoder();
         // turretEncoder = turretMotor.getEncoder();
 
@@ -81,11 +106,18 @@ public class Shooter extends SubsystemBase {
     }
 
     public void initPIDs() {
-        shooterPID = shooterMotor.getPIDController();
-        shooterPID.setP(Constants.SHOOTER_KP);
-        shooterPID.setI(Constants.SHOOTER_KI);
-        shooterPID.setD(Constants.SHOOTER_KD);
-        shooterPID.setOutputRange(-1, 0);
+
+        this.shooterP = Constants.SHOOTER_KP;
+        this.shooterI = Constants.SHOOTER_KI;
+        this.shooterD = Constants.SHOOTER_KD;
+
+        this.shooterOnboardPID = new PIDController(this.shooterP, this.shooterI, this.shooterD);
+                
+        // shooterPID = shooterMotor.getPIDController();
+        // shooterPID.setP(this.shooterP);
+        // shooterPID.setI(this.shooterI);
+        // shooterPID.setD(this.shooterD);
+        // shooterPID.setOutputRange(this.shooterMinOutput, this.shooterMaxOutput);
 
         hoodPID = hoodMotor.getPIDController();
         hoodPID.setP(Constants.HOOD_KP);
@@ -101,9 +133,23 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setShooterSpeedByRPM(double speed) {
-        /*shooterSetPoint = -speed;
-        shooterPID.setReference(shooterSetPoint, CANSparkMax.ControlType.kVelocity);*/
-        shooterMotor.set(-0.5);
+        // shooterPID = shooterMotor.getPIDController();
+        // shooterPID.setP(this.shooterP);
+        // shooterPID.setI(this.shooterI);
+        // shooterPID.setD(this.shooterD);
+        // shooterPID.setOutputRange(this.shooterMinOutput, this.shooterMaxOutput);
+        shooterOnboardPID.setP(this.shooterP);
+        shooterOnboardPID.setI(this.shooterI);
+        shooterOnboardPID.setD(this.shooterD);
+
+        shooterSetPoint = -speed;
+        //shooterPID.setReference(shooterSetPoint, CANSparkMax.ControlType.kVelocity);
+        var newTarget = shooterOnboardPID.calculate(this.shooterEncoder.getVelocity(), speed);
+        var newRate = Math.max(Constants.SHOOTER_MIN_OUTPUT, newTarget/Constants.SHOOTER_MAX_RPM * -1);
+        this.shooterMotor.set(newRate);
+        this.currentVelocity = this.shooterEncoder.getVelocity();
+        this.shooterCountsPerRevolution = shooterEncoder.getCountsPerRevolution();
+        this.velocityConversionFactor = this.shooterEncoder.getVelocityConversionFactor();
     }
 
     public boolean AtHoodZeroPoint() {
@@ -115,7 +161,7 @@ public class Shooter extends SubsystemBase {
 
     public boolean atHoodZeroPointRPM() {
         double velocity = this.hoodEncoder.getVelocity();
-        System.out.println(velocity);
+        //System.out.println(velocity);
         return velocity == 0.0;
     }
 
@@ -201,5 +247,30 @@ public class Shooter extends SubsystemBase {
             this.SetHoodZeroPoint();
         // else
             // this.SetTurretZeroPoint();
+    }
+
+    @Config(defaultValueNumeric = Constants.SHOOTER_KP)
+    public void setShooterP(double value) {
+        this.shooterP = value;
+    }
+
+    @Config(defaultValueNumeric = Constants.SHOOTER_KI)
+    public void setShooterI(double value) {
+        this.shooterI = value;
+    }
+
+    @Config(defaultValueNumeric = Constants.SHOOTER_KD)
+    public void setShooterD(double value) {
+        this.shooterD = value;
+    }
+
+    @Config(defaultValueNumeric = Constants.SHOOTER_MIN_OUTPUT)
+    public void setShooterMinOutput(double value) {
+        this.shooterMinOutput = value;
+    }
+
+    @Config(defaultValueNumeric = Constants.SHOOTER_MAX_OUTPUT)
+    public void setShooterMaxOutput(double value) {
+        this.shooterMaxOutput = value;
     }
 }

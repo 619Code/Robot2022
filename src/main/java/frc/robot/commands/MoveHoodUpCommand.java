@@ -16,8 +16,8 @@ public class MoveHoodUpCommand extends CommandBase{
     public void execute() {
         var newAngle = this.shooter.getAngle(Shooter.EDeviceType.Hood) + 10;
         this.shooter.setAngle(Shooter.EDeviceType.Hood, newAngle);
-        System.out.println("HoodUp:" + newAngle);
-        System.out.println("HoodAngle:" + this.shooter.getAngle(Shooter.EDeviceType.Hood));
+        //System.out.println("HoodUp:" + newAngle);
+        //System.out.println("HoodAngle:" + this.shooter.getAngle(Shooter.EDeviceType.Hood));
         //this.shooter.moveHood(0.1);
     }
 

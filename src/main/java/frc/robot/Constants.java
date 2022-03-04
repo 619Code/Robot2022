@@ -41,10 +41,13 @@ public final class Constants {
     public static final int SHOOT_MOTOR = 15; 
 
     //Shooter PID
-    public static final double SHOOTER_KP = 0.65508;
-    public static final double SHOOTER_KI = 0;
-    public static final double SHOOTER_KD = 0;
+    //public static final double SHOOTER_KP = 0.65508;
+    public static final double SHOOTER_KP = .445;
+    public static final double SHOOTER_KI = 0.0;
+    public static final double SHOOTER_KD = 0.0;
     public static final double SHOOTER_MAX_RPM = 5000;
+    public static final double SHOOTER_MAX_OUTPUT = 0;
+    public static final double SHOOTER_MIN_OUTPUT = -1;
 
     //Hood PID
     public static final double HOOD_KP = 13.581;

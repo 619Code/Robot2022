@@ -44,12 +44,12 @@ public class ZeroCommandSimple extends CommandBase {
     public void execute() {
         var newAngle = this.shooter.getAngle(this.deviceType) - 10;
         this.shooter.setAngle(this.deviceType, newAngle);
-        System.out.println("HoodZero:" + newAngle);
+        //System.out.println("HoodZero:" + newAngle);
     }
 
     public void end(boolean isInterrupted){
         this.shooter.SetZeroPoint(deviceType);
-        System.out.println("END!!!");
+        //System.out.println("END!!!");
         this.shooter.setAngle(this.deviceType, 0);
     }
 

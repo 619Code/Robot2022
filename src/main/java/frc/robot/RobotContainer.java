@@ -23,6 +23,7 @@ import frc.robot.commands.ManualClimbingCommand;
 import frc.robot.commands.MoveHoodUpCommand;
 import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.TuneShooterCommand;
 import frc.robot.commands.ZeroCommand;
 import frc.robot.commands.ZeroCommandSimple;
 import frc.robot.helpers.JoystickAnalogButton;
@@ -50,9 +51,15 @@ public class RobotContainer {
     public JoystickAnalogButton joystickAnalogButton;
     public Climber climber;
 
+    //Commands
+    @Log 
+    private TuneShooterCommand tuneShooterCommand;
+
     @Log
     private DriveCommand driveCommand;
     public Limelight limelight;
+
+    @Log
     public Shooter shooter;
     //private final LedStrip ledStrip;
 
@@ -66,9 +73,9 @@ public class RobotContainer {
         operator = new XboxController(1);
 
         drive = new ShiftingWCD();
-        driveCommand = new DriveCommand(drive, driver);
-        drive.setDefaultCommand(driveCommand);
-        drive.resetGyro();
+        // driveCommand = new DriveCommand(drive, driver);
+        // drive.setDefaultCommand(driveCommand);
+        // drive.resetGyro();
 
         intake = new Intake();
         intake.raiseIntake();
@@ -81,11 +88,13 @@ public class RobotContainer {
 
         //limelight = new Limelight();
         shooter = new Shooter();
+        this.tuneShooterCommand = new TuneShooterCommand(shooter, magazine);
+        shooter.setDefaultCommand(tuneShooterCommand);
 
         //joystickAnalogButton = new JoystickAnalogButton(operator, 3);
-        //limelight = new Limelight();
-
-        //limelight.turnLightOff();
+        
+        limelight = new Limelight(drive);
+        limelight.turnLightOff();
 
         //ledStrip = new LedStrip();
         // ledStrip.setDefaultCommand(new RainbowLedCommand(ledStrip));
@@ -97,8 +106,8 @@ public class RobotContainer {
         JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
         intakeButton.whileHeld(new IntakeCommand(intake, magazine));
         
-        // JoystickButton intakeUpButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-        // intakeUpButton.whileHeld(new RetractIntakeCommand(intake));
+        JoystickButton intakeUpButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+        intakeUpButton.whileHeld(new RetractIntakeCommand(intake));
 
         // JoystickButton aimButton = new JoystickButton(operator, XboxController.Button.kB.value);
         // aimButton.whileHeld(new AimCommand(shooter, drive, limelight, targetPID));
@@ -122,6 +131,8 @@ public class RobotContainer {
         JoystickButton xButton = new JoystickButton(driver, XboxController.Button.kX.value);
         var moveHoodUpCommand = new MoveHoodUpCommand(shooter);
         xButton.whileHeld(moveHoodUpCommand);
+
+
     }
 
     public Command getAutonomousCommand() {

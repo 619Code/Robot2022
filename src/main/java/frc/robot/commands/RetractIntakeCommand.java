@@ -14,6 +14,7 @@ public class RetractIntakeCommand extends CommandBase{
 
     @Override
     public void execute() {
+        System.out.println("Raising intake! Intake is " + (intake.isLowered() ? "low" : "high"));
         intake.raiseIntake();
     }
 }

@@ -43,7 +43,7 @@ public class ShootCommand extends CommandBase {
         //shooter.setHoodAngle(hoodAngle);
 
         boolean spedUp = Math.abs(shooter.getShooterRPM() / rpm) < 0.05; //velocity is within 5% of the goal
-        System.out.println(shooter.getShooterRPM());
+        //System.out.println(shooter.getShooterRPM());
         //boolean hoodSet = Math.abs(shooter.getHoodAngle() - hoodAngle) < 0.03; //hood position is within 3% of the goal
         boolean hoodSet = true;
         if(spedUp && hoodSet) {

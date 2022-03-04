@@ -15,8 +15,8 @@ public class Magazine extends SubsystemBase {
     private CANSparkMax frontBeltMotor;
     private CANSparkMax backBeltMotor;
 
-    private BallPosition verticalPosition;
-    private BallPosition frontPosition;
+    public BallPosition verticalPosition;
+    public BallPosition frontPosition;
 
     private Timer endTimer;
 
@@ -24,14 +24,15 @@ public class Magazine extends SubsystemBase {
         rollerMotor = new CANSparkMax(Constants.ROLLER_MOTOR, MotorType.kBrushless);
         backBeltMotor = new CANSparkMax(Constants.BACK_BELT_MOTOR, MotorType.kBrushless);
 
-        //verticalPosition = new BallPosition(Constants.VERTICAL_POSITION);
+        verticalPosition = new BallPosition(Constants.VERTICAL_POSITION);
         //frontPosition = new BallPosition(Constants.FRONT_POSITION);
 
         endTimer = new Timer();
     }
 
     public void intakeBalls() {
-        backBeltMotor.set(-0.3);
+        
+        backBeltMotor.set(-0.3);        
     }
 
     public void loadShooter() {
