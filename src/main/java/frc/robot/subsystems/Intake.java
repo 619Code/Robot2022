@@ -11,16 +11,16 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
-    private VictorSPX intakeMotor;
+    private CANSparkMax intakeMotor;
     public Solenoid wrist;
 
     public Intake() {
-        intakeMotor = new VictorSPX(21); 
-        wrist = new Solenoid(Constants.INTAKE_MODULE_TYPE, Constants.INTAKE_SOLENOID);
+        intakeMotor = new CANSparkMax(4, MotorType.kBrushless);; 
+        //wrist = new Solenoid(Constants.INTAKE_MODULE_TYPE, Constants.INTAKE_SOLENOID);
     }
 
     public void spinIntake(double percent) {
-        intakeMotor.set(ControlMode.PercentOutput, percent);
+        intakeMotor.set(.3);
     }
 
     public boolean isLowered(){

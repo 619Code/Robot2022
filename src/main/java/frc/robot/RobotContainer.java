@@ -19,9 +19,12 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ManualClimbingCommand;
+import frc.robot.commands.MoveHoodUpCommand;
 import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ZeroCommand;
+import frc.robot.commands.ZeroCommandSimple;
 import frc.robot.helpers.JoystickAnalogButton;
 import frc.robot.subsystems.*;
 import io.github.oblarg.oblog.annotations.Config;
@@ -29,8 +32,10 @@ import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.AimCommand;
 import frc.robot.commands.AngleFinderCommand;
+import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.RainbowLedCommand;
+import frc.robot.commands.MoveHoodUpCommand;;
 
 public class RobotContainer {
 
@@ -43,6 +48,7 @@ public class RobotContainer {
     public Magazine magazine;
     public RetractIntakeCommand retractIntake;
     public JoystickAnalogButton joystickAnalogButton;
+    public Climber climber;
 
     @Log
     private DriveCommand driveCommand;
@@ -66,14 +72,17 @@ public class RobotContainer {
         drive.setDefaultCommand(driveCommand);
         drive.resetGyro();
 
+        climber = new Climber();
+        var climbCommand = new ManualClimbingCommand(climber, operator );
+        climber.setDefaultCommand(climbCommand);
         //magazine = new Magazine();
         
-        intake = new Intake();
-        intake.raiseIntake();
+        //intake = new Intake();
+        //intake.raiseIntake();
         //intakeCommand = new IntakeCommand(intake, magazine);
 
         //limelight = new Limelight();
-        //shooter = new Shooter();
+        shooter = new Shooter();
         //retractIntake = new RetractIntakeCommand(intake);
         //joystickAnalogButton = new JoystickAnalogButton(operator, 3);
         //limelight = new Limelight();
@@ -108,6 +117,12 @@ public class RobotContainer {
         //JoystickButton angleFinderButton = new JoystickButton(operator, XboxController.Button.kX.value);
         // modify these values as needed
         //angleFinderButton.whenPressed(new AngleFinderCommand(shooter, Shooter.EDeviceType.Hood, true));
+        JoystickButton zeroHood = new JoystickButton(driver, XboxController.Button.kB.value);
+        zeroHood.whenPressed(new ZeroCommandSimple(shooter, Shooter.EDeviceType.Hood));
+
+        JoystickButton xButton = new JoystickButton(driver, XboxController.Button.kX.value);
+        var moveHoodUpCommand = new MoveHoodUpCommand(shooter);
+        xButton.whileHeld(moveHoodUpCommand);
     }
 
     public Command getAutonomousCommand() {

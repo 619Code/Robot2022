@@ -33,8 +33,8 @@ public class DriveCommand extends CommandBase implements Loggable {
         rightX = controller.getRightX();
 
         setVals();
-        System.out.println("Speed: " + throttle);
-        System.out.println("Rotation: " + rotation);
+        //System.out.println("Speed: " + throttle);
+        //System.out.println("Rotation: " + rotation);
         drive.curve(throttle, rotation, isLowGear);
 
     }
