@@ -54,8 +54,6 @@ public class RobotContainer {
     private DriveCommand driveCommand;
     public Limelight limelight;
     public Shooter shooter;
-
-    private final ShiftingWCD drive;
     //private final LedStrip ledStrip;
 
     @Config.PIDController

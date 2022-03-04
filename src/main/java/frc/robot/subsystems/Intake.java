@@ -22,7 +22,6 @@ public class Intake extends SubsystemBase {
     public void spinIntake(double percent) {
         intakeMotor.set(percent);
     }
-    }
 
     public boolean isLowered(){
         return wrist.get();   
