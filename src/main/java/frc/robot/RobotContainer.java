@@ -42,11 +42,11 @@ public class RobotContainer {
     private static final ControlVectorList Rotation2d = null;
     public XboxController driver;
     public XboxController operator;
+
+    public ShiftingWCD drive;
     public Intake intake;
-    public IntakeCommand intakeCommand;
     public Shooter shoot;
     public Magazine magazine;
-    public RetractIntakeCommand retractIntake;
     public JoystickAnalogButton joystickAnalogButton;
     public Climber climber;
 
@@ -72,18 +72,18 @@ public class RobotContainer {
         drive.setDefaultCommand(driveCommand);
         drive.resetGyro();
 
+        intake = new Intake();
+        intake.raiseIntake();
+        //retractIntake = new RetractIntakeCommand(intake);
+
+        magazine = new Magazine();
         climber = new Climber();
         var climbCommand = new ManualClimbingCommand(climber, operator );
         climber.setDefaultCommand(climbCommand);
-        //magazine = new Magazine();
-        
-        //intake = new Intake();
-        //intake.raiseIntake();
-        //intakeCommand = new IntakeCommand(intake, magazine);
 
         //limelight = new Limelight();
         shooter = new Shooter();
-        //retractIntake = new RetractIntakeCommand(intake);
+
         //joystickAnalogButton = new JoystickAnalogButton(operator, 3);
         //limelight = new Limelight();
 
@@ -96,8 +96,8 @@ public class RobotContainer {
     }
 
     private void configureControls() {
-        // JoystickButton intakeDownButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-        // intakeDownButton.whileHeld(new IntakeCommand(intake, magazine));
+        JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+        intakeButton.whileHeld(new IntakeCommand(intake, magazine));
         
         // JoystickButton intakeUpButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
         // intakeUpButton.whileHeld(new RetractIntakeCommand(intake));
@@ -108,11 +108,12 @@ public class RobotContainer {
         // RainbowLedCommand ledCommand = new RainbowLedCommand(ledStrip);
         // new JoystickButton(driver, XboxController.Button.kY.value).toggleWhenPressed(ledCommand);
         // //new JoystickButton(primaryController, XboxController.Button.kX.value).cancelWhenPressed(ledCommand);
-        // //Shooter shoot = new JoystickButton(operator, XboxController.Button.kX.value);
-        // var shootButton = new JoystickAnalogButton(operator, XboxController.Axis.kRightTrigger.value, .5);
-        // shootButton.whileHeld(new ShootCommand(shooter, magazine, operator));   
-        //JoystickButton zeroHoodButton = new JoystickButton(driver, XboxController.Button.kA.value);
-        //zeroHoodButton.whenPressed(new ZeroCommand(shooter, Shooter.EDeviceType.Hood));
+
+        JoystickAnalogButton shootButton = new JoystickAnalogButton(operator, XboxController.Axis.kRightTrigger.value, .5);
+        shootButton.whileHeld(new ShootCommand(shooter, magazine));   
+
+        JoystickButton zeroHoodButton = new JoystickButton(driver, XboxController.Button.kA.value);
+        zeroHoodButton.whenPressed(new ZeroCommand(shooter, Shooter.EDeviceType.Hood));
 
         //JoystickButton angleFinderButton = new JoystickButton(operator, XboxController.Button.kX.value);
         // modify these values as needed

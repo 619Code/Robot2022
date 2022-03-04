@@ -64,6 +64,8 @@ public class Shooter extends SubsystemBase {
         // turretMotor.restoreFactoryDefaults();
         hoodMotor.restoreFactoryDefaults();
 
+        shooterMotor.setIdleMode(IdleMode.kCoast);
+
         hoodSwitch = hoodMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
         hoodSwitch.enableLimitSwitch(true);
         // turretSwitch = turretMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
@@ -83,7 +85,7 @@ public class Shooter extends SubsystemBase {
         shooterPID.setP(Constants.SHOOTER_KP);
         shooterPID.setI(Constants.SHOOTER_KI);
         shooterPID.setD(Constants.SHOOTER_KD);
-        shooterPID.setOutputRange(0, 1);
+        shooterPID.setOutputRange(-1, 0);
 
         hoodPID = hoodMotor.getPIDController();
         hoodPID.setP(Constants.HOOD_KP);
@@ -94,13 +96,14 @@ public class Shooter extends SubsystemBase {
 
     public void shoot(double speed) {
         shooterVelocity = shooterEncoder.getVelocity();
-        shooterSetPoint = Constants.SHOOTER_MAX_RPM * speed;
+        shooterSetPoint = Constants.SHOOTER_MAX_RPM * -speed;
         shooterPID.setReference(shooterSetPoint, CANSparkMax.ControlType.kVelocity);
     }
 
     public void setShooterSpeedByRPM(double speed) {
-        shooterSetPoint = speed;
-        shooterPID.setReference(shooterSetPoint, CANSparkMax.ControlType.kVelocity);
+        /*shooterSetPoint = -speed;
+        shooterPID.setReference(shooterSetPoint, CANSparkMax.ControlType.kVelocity);*/
+        shooterMotor.set(-0.5);
     }
 
     public boolean AtHoodZeroPoint() {

@@ -20,11 +20,13 @@ public class IntakeCommand extends CommandBase {
     }
 
     @Override
-    public void initialize() {}
+    public void initialize() {
+        intake.lowerIntake();
+    }
 
     @Override
     public void execute() {
-        if(!States.isMagFull){
+        /*if(!States.isMagFull){
             intake.lowerIntake();
             intake.spinIntake(0.6);
             States.isMagFull = magazine.isFull();
@@ -32,13 +34,15 @@ public class IntakeCommand extends CommandBase {
             intake.raiseIntake();
             intake.spinIntake(0);
             magazine.intakeBalls();
-        }
+        }*/
+        intake.spinIntake(0.6);
+        magazine.intakeBalls();
     }
 
     @Override
     public void end(boolean isInterrupted) {
         intake.raiseIntake();
         intake.spinIntake(0);
-        magazine.intakeBalls();
+        magazine.stopAll();
     }
 }

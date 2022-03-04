@@ -15,12 +15,13 @@ public class Intake extends SubsystemBase {
     public Solenoid wrist;
 
     public Intake() {
-        intakeMotor = new CANSparkMax(4, MotorType.kBrushless);; 
-        //wrist = new Solenoid(Constants.INTAKE_MODULE_TYPE, Constants.INTAKE_SOLENOID);
+        intakeMotor = new CANSparkMax(Constants.LOADING_MOTOR, MotorType.kBrushless);
+        wrist = new Solenoid(Constants.INTAKE_MODULE_TYPE, Constants.INTAKE_SOLENOID);
     }
 
     public void spinIntake(double percent) {
-        intakeMotor.set(.3);
+        intakeMotor.set(percent);
+    }
     }
 
     public boolean isLowered(){
