@@ -17,12 +17,12 @@ public class TestAutoCommand extends CommandBase {
     @Override
     public void execute() {
         endTimer.start();
-        drive.curve(0.3, 0, false);
+        drive.curve(-0.4, 0, false);
     }
 
     @Override
     public boolean isFinished() {
-        return endTimer.hasElapsed(5);
+        return endTimer.hasElapsed(4);
     }
 
     @Override

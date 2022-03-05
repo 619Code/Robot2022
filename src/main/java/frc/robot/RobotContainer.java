@@ -127,8 +127,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return null;
-        //return (new TestAutoCommand(drive));
+        return (new TestAutoCommand(drive));
         //return new ParallelCommandGroup(new TestAutoCommand(drive), new ZeroCommandSimple(shooter, Shooter.EDeviceType.Hood));
    }
 }
