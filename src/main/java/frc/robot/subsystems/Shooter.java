@@ -64,6 +64,9 @@ public class Shooter extends SubsystemBase implements Loggable {
 
     @Log
     private double hoodMotorValue;
+
+    @Log
+    private double adjustedPoint;
     
     // private SparkMaxPIDController turretPID;
     // private double turretSetPoint;
@@ -182,7 +185,8 @@ public class Shooter extends SubsystemBase implements Loggable {
             adjustedPoint = Math.min(this.hoodMaxOutput, newPoint);
 
         System.out.println("NewHoodPID:" + newPoint);
-        this.hoodSetPoint = newPoint;
+        this.hoodSetPoint = hoodSetPoint;
+        this.adjustedPoint = adjustedPoint;
         this.hoodMotor.set(adjustedPoint);
     }
 

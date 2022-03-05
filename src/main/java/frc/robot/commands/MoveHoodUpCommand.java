@@ -2,11 +2,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.EDeviceType;
 
 // Testing command for testing the hood angle functionality
 public class MoveHoodUpCommand extends CommandBase{
 
     private Shooter shooter;
+    private double finalHoodAngle;
 
     public MoveHoodUpCommand(Shooter shooter) {
         this.shooter = shooter;
@@ -15,8 +17,14 @@ public class MoveHoodUpCommand extends CommandBase{
 
     @Override
     public void execute() {
-        System.out.println("HoodUpTo:" + (this.shooter.getHoodAngle()-5));
-        this.shooter.setAngle(Shooter.EDeviceType.Hood, this.shooter.getHoodAngle()-5);
+        this.finalHoodAngle =  (this.shooter.getHoodAngle()-5);
+        System.out.println("HoodUpTo:" + this.finalHoodAngle);
+        this.shooter.setAngle(Shooter.EDeviceType.Hood, this.finalHoodAngle);
+    }
+
+    public boolean isFinished()
+    {
+        return Math.abs(this.shooter.getAngle(EDeviceType.Hood)/this.finalHoodAngle - 1) < 0.05;
     }
 
     @Override
