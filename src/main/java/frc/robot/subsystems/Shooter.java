@@ -133,13 +133,16 @@ public class Shooter extends SubsystemBase implements Loggable {
 
     public void periodic(){
         double hoodPosRots = hoodMotor.getEncoder().getPosition();
-        hoodPosError = ownPIDHoodSetPointRot - hoodPosError;
-        if(Math.abs(hoodPosError)<1 || (hoodPosRots > Constants.MAXIMUM_HOOD_ANGLE_REV && hoodPosError > 0)){
+        hoodPosError = ownPIDHoodSetPointRot - hoodPosRots;
+        hoodMotorDutyCycle = (hoodPosError< 0) ? hoodMinOutput : hoodMaxOutput;
+
+        if(hoodPosRots > Constants.MAXIMUM_HOOD_ANGLE_REV && hoodMotorDutyCycle > 0){
             hoodMotorDutyCycle = 0;
-        } else {
-            hoodMotorDutyCycle = hoodPosError * this.hoodP;
         }
-        //this.hoodMotor.set(hoodMotorDutyCycle);
+        if(Math.abs(hoodPosError) < 1){
+            hoodMotorDutyCycle = 0;
+        }
+        this.hoodMotor.set(hoodMotorDutyCycle);
     }
 
     public void setShooterSpeedByRPM(double speed) {
@@ -184,7 +187,7 @@ public class Shooter extends SubsystemBase implements Loggable {
     // }
 
     public void setHoodAngle(double trajectoryAngle) { //add limit switch stuff
-        ownPIDHoodSetPointRot = trajectoryAngle/Constants.HOOD_DEGREES_PER_REV;
+        ownPIDHoodSetPointRot = (Constants.BASE_HOOD_ANGLE-trajectoryAngle)/Constants.HOOD_DEGREES_PER_REV;
     }
 
     // public void setTurretAngle(double angle) { //add limit switch stuff
@@ -302,5 +305,9 @@ public class Shooter extends SubsystemBase implements Loggable {
     @Config(defaultValueNumeric = Constants.HOOD_MAX_OUTPUT)
     public void setHoodMaxOutput(double value) {
         this.hoodMaxOutput = (float)value;
+    }
+    @Config(defaultValueNumeric = 0)
+    public void setHoodSetPoint(double value) {
+        this.ownPIDHoodSetPointRot = value;
     }
 }

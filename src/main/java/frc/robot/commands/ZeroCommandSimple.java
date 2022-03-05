@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Shooter;
 
 public class ZeroCommandSimple extends CommandBase {
@@ -29,11 +30,15 @@ public class ZeroCommandSimple extends CommandBase {
     public void execute() {
         System.out.println("TRYING TO MOVE HOOD!!!");
         System.out.println("HoodSwitch:" + this.shooter.AtHoodZeroPoint());
-        this.shooter.moveHood(-.05);
+        this.shooter.moveHood(-.1);
     }
 
     public void end(boolean isInterrupted){
-        this.shooter.SetZeroPoint(deviceType);        
+        this.shooter.SetZeroPoint(deviceType);
+        if(deviceType == Shooter.EDeviceType.Hood)
+        {
+            this.shooter.setHoodAngle(Constants.BASE_HOOD_ANGLE);
+        }
         System.out.println("END!!!");
     }
 
