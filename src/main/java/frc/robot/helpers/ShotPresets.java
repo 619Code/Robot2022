@@ -53,4 +53,6 @@ public class ShotPresets implements Loggable {
         LOW_GOAL_SHOT = new Shot(true, LOW_GOAL_RPM, LOW_GOAL_ANGLE, 1);
     }*/
     public static final Shot TARMAC_SHOT = new Shot(true, TARMAC_RPM, TARMAC_ANGLE, 1, false);
+    public static final Shot TARMAC_HELPER_SHOT = new Shot(true, TARMAC_RPM, TARMAC_ANGLE, 1, true);
+    
 }
