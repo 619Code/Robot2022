@@ -3,12 +3,9 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.*;
-import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import io.github.oblarg.oblog.Loggable;
@@ -31,8 +28,12 @@ public class Shooter extends SubsystemBase implements Loggable {
     private double shooterP;
     private double shooterI;
     private double shooterD;
-    private double shooterMinOutput = -1;
-    private double shooterMaxOutput = 0;
+    
+    private double hoodP;
+    private double hoodI;
+    private double hoodD;
+    private float hoodMinOutput = -0.2f;
+    private float hoodMaxOutput = 0.2f;
 
     private CANSparkMax shooterMotor;
     // private CANSparkMax turretMotor;
@@ -41,9 +42,7 @@ public class Shooter extends SubsystemBase implements Loggable {
     private RelativeEncoder shooterEncoder;
     // private RelativeEncoder turretEncoder;
     private RelativeEncoder hoodEncoder;
-
-
-    private SparkMaxPIDController shooterPID;
+    
     private double shooterSetPoint;
     
     @Log
@@ -55,18 +54,23 @@ public class Shooter extends SubsystemBase implements Loggable {
     @Log
     private double velocityConversionFactor;
 
-    private SparkMaxPIDController hoodPID;
+    @Log
     private double hoodSetPoint;
-    private double hoodAngle;
-    
-    //private SparkMaxLimitSwitch hoodSwitch;
 
+    @Log
+    private double hoodAngle;
+
+    @Log
+    private double hoodMotorValue;
+    
     // private SparkMaxPIDController turretPID;
     // private double turretSetPoint;
     // private double turretAngle;
     // private SparkMaxLimitSwitch turretSwitch;
 
     private SparkMaxLimitSwitch hoodSwitch;
+
+    private PIDController hoodOnboardPID;
 
     public Shooter() {
         shooterMotor = new CANSparkMax(Constants.SHOOT_MOTOR, MotorType.kBrushless);
@@ -101,8 +105,8 @@ public class Shooter extends SubsystemBase implements Loggable {
 
         // turretMotor.setSoftLimit(SoftLimitDirection.kForward, 0.0f);
         // turretMotor.setSoftLimit(SoftLimitDirection.kReverse, 0.0f);
-        hoodMotor.setSoftLimit(SoftLimitDirection.kForward, 0.0f);
-        hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, 0.0f);
+        hoodMotor.setSoftLimit(SoftLimitDirection.kForward, (float)Constants.HOOD_MIN_OUTPUT);
+        hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, (float)Constants.HOOD_MAX_OUTPUT);
     }
 
     public void initPIDs() {
@@ -112,32 +116,16 @@ public class Shooter extends SubsystemBase implements Loggable {
         this.shooterD = Constants.SHOOTER_KD;
 
         this.shooterOnboardPID = new PIDController(this.shooterP, this.shooterI, this.shooterD);
-                
-        // shooterPID = shooterMotor.getPIDController();
-        // shooterPID.setP(this.shooterP);
-        // shooterPID.setI(this.shooterI);
-        // shooterPID.setD(this.shooterD);
-        // shooterPID.setOutputRange(this.shooterMinOutput, this.shooterMaxOutput);
-
-        hoodPID = hoodMotor.getPIDController();
-        hoodPID.setP(Constants.HOOD_KP);
-        hoodPID.setI(Constants.HOOD_KI);
-        hoodPID.setD(Constants.HOOD_KD);
-        hoodPID.setOutputRange(-0.1, 0.1);
+        this.hoodOnboardPID = new PIDController(Constants.HOOD_KP, Constants.HOOD_KI, Constants.HOOD_KD);
     }
 
     public void shoot(double speed) {
         shooterVelocity = shooterEncoder.getVelocity();
-        shooterSetPoint = Constants.SHOOTER_MAX_RPM * -speed;
-        shooterPID.setReference(shooterSetPoint, CANSparkMax.ControlType.kVelocity);
+        this.shooterMotor.set(speed);
+        //shooterPID.setReference(shooterSetPoint, CANSparkMax.ControlType.kVelocity);
     }
 
     public void setShooterSpeedByRPM(double speed) {
-        // shooterPID = shooterMotor.getPIDController();
-        // shooterPID.setP(this.shooterP);
-        // shooterPID.setI(this.shooterI);
-        // shooterPID.setD(this.shooterD);
-        // shooterPID.setOutputRange(this.shooterMinOutput, this.shooterMaxOutput);
         shooterOnboardPID.setP(this.shooterP);
         shooterOnboardPID.setI(this.shooterI);
         shooterOnboardPID.setD(this.shooterD);
@@ -152,6 +140,7 @@ public class Shooter extends SubsystemBase implements Loggable {
         this.velocityConversionFactor = this.shooterEncoder.getVelocityConversionFactor();
     }
 
+    // Hood switch right now never report pressed :(
     public boolean AtHoodZeroPoint() {
         //System.out.println(this.hoodSwitch.isPressed());
         return this.hoodSwitch.isPressed();
@@ -159,9 +148,9 @@ public class Shooter extends SubsystemBase implements Loggable {
         // return !hoodDistanceSensor.get();
     }
 
+    // Since hood switch always is zero we check for the velocity to be 0 to stop
     public boolean atHoodZeroPointRPM() {
         double velocity = this.hoodEncoder.getVelocity();
-        //System.out.println(velocity);
         return velocity == 0.0;
     }
 
@@ -177,10 +166,22 @@ public class Shooter extends SubsystemBase implements Loggable {
     //     this.turretEncoder.setPosition(0);
     // }
 
-    public void setHoodAngle(double angle) { //add limit switch stuff
-        hoodAngle = Constants.MINIMUM_HOOD_ANGLE + hoodEncoder.getPosition() * Constants.HOOD_DEGREES_PER_REV;
-        hoodSetPoint = (angle - Constants.MINIMUM_HOOD_ANGLE) / Constants.HOOD_DEGREES_PER_REV;
-        hoodPID.setReference(hoodSetPoint, CANSparkMax.ControlType.kPosition);
+    public void setHoodAngle(double trajectoryAngle) { //add limit switch stuff
+        hoodOnboardPID.setP(this.hoodP);
+        hoodOnboardPID.setI(this.hoodI);
+        hoodOnboardPID.setD(this.hoodD);
+        hoodAngle = this.getHoodAngle();        
+        hoodSetPoint = (Constants.BASE_HOOD_ANGLE-trajectoryAngle) / Constants.HOOD_DEGREES_PER_REV;
+        var newPoint = this.hoodOnboardPID.calculate(this.hoodEncoder.getPosition(), hoodSetPoint);
+        double adjustedPoint = 0;
+        if (newPoint < 0)
+            adjustedPoint = Math.max(this.hoodMinOutput, newPoint);
+        else
+            adjustedPoint = Math.min(this.hoodMaxOutput, newPoint);
+
+        System.out.println("NewHoodPID:" + newPoint);
+        this.hoodSetPoint = newPoint;
+        this.hoodMotor.set(adjustedPoint);
     }
 
     // public void setTurretAngle(double angle) { //add limit switch stuff
@@ -220,8 +221,9 @@ public class Shooter extends SubsystemBase implements Loggable {
             return 0.0;
     }
 
+    @Log
     public double getHoodAngle() {
-        return Constants.MINIMUM_HOOD_ANGLE + hoodEncoder.getPosition() * Constants.HOOD_DEGREES_PER_REV;
+        return Constants.BASE_HOOD_ANGLE + (hoodEncoder.getPosition() * Constants.HOOD_DEGREES_PER_REV);
     }
 
     // public double getTurretAngle() {
@@ -272,5 +274,30 @@ public class Shooter extends SubsystemBase implements Loggable {
     @Config(defaultValueNumeric = Constants.SHOOTER_MAX_OUTPUT)
     public void setShooterMaxOutput(double value) {
         this.shooterMaxOutput = value;
+    }
+
+    @Config(defaultValueNumeric = Constants.HOOD_KP)
+    public void setHoodP(double value) {
+        this.hoodP = value;
+    }
+
+    @Config(defaultValueNumeric = Constants.HOOD_KI)
+    public void setHoodI(double value) {
+        this.hoodI = value;
+    }
+
+    @Config(defaultValueNumeric = Constants.HOOD_KD)
+    public void setHoodD(double value) {
+        this.hoodD = value;
+    }
+
+    @Config(defaultValueNumeric = Constants.HOOD_MIN_OUTPUT )
+    public void setHoodMinOutput(double value) {
+        this.hoodMinOutput = (float)value;
+    }
+
+    @Config(defaultValueNumeric = Constants.HOOD_MAX_OUTPUT)
+    public void setHoodMaxOutput(double value) {
+        this.hoodMaxOutput = (float)value;
     }
 }

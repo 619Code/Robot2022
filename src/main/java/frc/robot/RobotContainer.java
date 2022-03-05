@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.LoadShooterCommand;
 import frc.robot.commands.ManualClimbingCommand;
 import frc.robot.commands.MoveHoodUpCommand;
 import frc.robot.commands.RetractIntakeCommand;
@@ -88,7 +89,7 @@ public class RobotContainer {
 
         //limelight = new Limelight();
         shooter = new Shooter();
-        this.tuneShooterCommand = new TuneShooterCommand(shooter, magazine);
+        this.tuneShooterCommand = new TuneShooterCommand(shooter);
         shooter.setDefaultCommand(tuneShooterCommand);
 
         //joystickAnalogButton = new JoystickAnalogButton(operator, 3);
@@ -117,7 +118,8 @@ public class RobotContainer {
         // //new JoystickButton(primaryController, XboxController.Button.kX.value).cancelWhenPressed(ledCommand);
 
         JoystickAnalogButton shootButton = new JoystickAnalogButton(operator, XboxController.Axis.kRightTrigger.value, .5);
-        shootButton.whileHeld(new ShootCommand(shooter, magazine));   
+        //shootButton.whileHeld(new ShootCommand(shooter, magazine));
+        shootButton.whileHeld(new LoadShooterCommand(magazine));   
 
         JoystickButton zeroHoodButton = new JoystickButton(driver, XboxController.Button.kA.value);
         zeroHoodButton.whenPressed(new ZeroCommand(shooter, Shooter.EDeviceType.Hood));

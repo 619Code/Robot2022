@@ -25,7 +25,7 @@ public class ShotFinder {
             double bestAngle = 0;
             double bestVelocity = 0;
             double bestChanceOfSuccess = 0;
-            for(double angle = launchAngleToHoodAngle(Constants.MINIMUM_HOOD_ANGLE); angle <= launchAngleToHoodAngle(Constants.MAXIMUM_HOOD_ANGLE); angle += LAUNCH_ANGLE_STEP) {
+            for(double angle = launchAngleToHoodAngle(Constants.BASE_HOOD_ANGLE); angle <= launchAngleToHoodAngle(Constants.HIGH_HOOD_ANGLE); angle += LAUNCH_ANGLE_STEP) {
                 // calculate the velocity for that angle
                 launchVelocity = calculateVelocity(angle, distanceToGoal, Constants.TOP_HUB_HEIGHT);
                 // if we can't get that velocity, skip this angle
@@ -77,7 +77,7 @@ public class ShotFinder {
 
     private static double calculateChanceOfSuccess(double launchAngle, double launchVelocity){
         // in the future this can be improved but for now it just directly corresponds to hood angle
-        return map(launchAngleToHoodAngle(launchAngle), Constants.MINIMUM_HOOD_ANGLE, Constants.MAXIMUM_HOOD_ANGLE, 1, 0);
+        return map(launchAngleToHoodAngle(launchAngle), Constants.BASE_HOOD_ANGLE, Constants.HIGH_HOOD_ANGLE, 1, 0);
     }
 
     private static double map(double x, double in_min, double in_max, double out_min, double out_max) {

@@ -19,17 +19,19 @@ public final class Constants {
     // public static final double TARGET_TOLERANCE = 0;
 
     //Hood Angles from CAD
-    // 81 degrees 
-    // 53.5 degrees
+    // 81 degrees at 0 revs
+    // 53.5 degrees at 98 revs
+    // derees per rev = (81 - 53.5) / 98
+
+
 
     //Hood Constants
     //0 = 15 degrees
-    public static final double BASE_HOOD_ANGLE = 75;
-    public static final double HIGH_HOOD_ANGLE = 60;
-    public static final double MINIMUM_HOOD_ANGLE = 0;
-    public static final double MAXIMUM_HOOD_ANGLE = 98;
-    public static final double HOOD_DEGREES_PER_REV = 1;
-
+    public static final double BASE_HOOD_ANGLE = 81;
+    public static final double HIGH_HOOD_ANGLE = 53;
+    public static final double MINIMUM_HOOD_ANGLE_REV = 0;
+    public static final double MAXIMUM_HOOD_ANGLE_REV = 98;
+    public static final double HOOD_DEGREES_PER_REV = (BASE_HOOD_ANGLE - HIGH_HOOD_ANGLE) / MAXIMUM_HOOD_ANGLE_REV;
 
     //Ball Positions
     public static final int VERTICAL_POSITION = 0;
@@ -53,6 +55,9 @@ public final class Constants {
     public static final double HOOD_KP = 13.581;
     public static final double HOOD_KI = 0;
     public static final double HOOD_KD = 0.23237;
+    public static final double HOOD_MAX_OUTPUT = .2;
+    public static final double HOOD_MIN_OUTPUT = -.2;
+    
 
     //Turret PID
     // public static final int TURRET_KP = 0;

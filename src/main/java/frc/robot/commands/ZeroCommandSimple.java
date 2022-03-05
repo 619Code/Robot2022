@@ -6,16 +6,6 @@ import frc.robot.subsystems.Shooter;
 
 public class ZeroCommandSimple extends CommandBase {
 
-    public enum EZeroStages {
-        NotStarted,
-        TowardsHighSpeed,
-        BackingOff,
-        TowardsLowSpeed,
-        Zeroed
-    }
-
-    private EZeroStages zeroStage;
-    private double backOffAngle = 5;
     private Shooter.EDeviceType deviceType;
 
     private Timer endTimer;
@@ -23,41 +13,40 @@ public class ZeroCommandSimple extends CommandBase {
     private Shooter shooter;
     public ZeroCommandSimple(Shooter shooter, Shooter.EDeviceType deviceType)
     {
-        this.zeroStage = EZeroStages.NotStarted;
         this.deviceType = deviceType;
         this.shooter = shooter;
 
         this.endTimer = new Timer();
 
-        if (deviceType == Shooter.EDeviceType.Hood)
-            backOffAngle = 5;
-        else 
-            backOffAngle = 10;
-
         this.addRequirements(shooter);
-
     }
+
     public void initialize()
     {
         endTimer.reset();
     }
+
     public void execute() {
-        var newAngle = this.shooter.getAngle(this.deviceType) - 10;
-        this.shooter.setAngle(this.deviceType, newAngle);
-        //System.out.println("HoodZero:" + newAngle);
+        System.out.println("TRYING TO MOVE HOOD!!!");
+        System.out.println("HoodSwitch:" + this.shooter.AtHoodZeroPoint());
+        this.shooter.moveHood(-.05);
     }
 
     public void end(boolean isInterrupted){
-        this.shooter.SetZeroPoint(deviceType);
-        //System.out.println("END!!!");
-        this.shooter.setAngle(this.deviceType, 0);
+        this.shooter.SetZeroPoint(deviceType);        
+        System.out.println("END!!!");
     }
 
+    // Checking when things are finished by checking the velocity because
+    //  the stop switch never reports true :(
     public boolean isFinished(){
+        System.out.println("HoodSwitch:" + this.shooter.AtHoodZeroPoint());
+        this.shooter.AtZeroPoint(Shooter.EDeviceType.Hood);
         endTimer.start();
         if(!this.shooter.atHoodZeroPointRPM()) {
             endTimer.reset();
         }
         return endTimer.hasElapsed(1);
     }
+    
 }
