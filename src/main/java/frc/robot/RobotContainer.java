@@ -29,6 +29,7 @@ import frc.robot.commands.TuneShooterCommand;
 import frc.robot.commands.ZeroCommand;
 import frc.robot.commands.ZeroCommandSimple;
 import frc.robot.helpers.JoystickAnalogButton;
+import frc.robot.helpers.ShotPresets;
 import frc.robot.subsystems.*;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
@@ -113,8 +114,11 @@ public class RobotContainer {
         intakeUpButton.whileHeld(new RetractIntakeCommand(intake));
 
         // JoystickButton aimButton = new JoystickButton(operator, XboxController.Button.kB.value);
-        // aimButton.whileHeld(new AimCommand(shooter, drive, limelight, targetPID));
-        
+        // aimButton.whileHeld(new AimCommand(shooter, drive, limelight));
+        JoystickButton lowGoalButton = new JoystickButton(operator, XboxController.Button.kA.value);
+        lowGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, ShotPresets.LOW_GOAL_SHOT));
+        JoystickButton highGoalButton = new JoystickButton(operator, XboxController.Button.kY.value);
+        highGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, ShotPresets.HIGH_GOAL_SHOT));
         // RainbowLedCommand ledCommand = new RainbowLedCommand(ledStrip);
         // new JoystickButton(driver, XboxController.Button.kY.value).toggleWhenPressed(ledCommand);
         // //new JoystickButton(primaryController, XboxController.Button.kX.value).cancelWhenPressed(ledCommand);

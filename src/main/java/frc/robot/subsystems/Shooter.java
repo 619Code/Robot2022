@@ -229,7 +229,7 @@ public class Shooter extends SubsystemBase implements Loggable {
 
     @Log
     public double getHoodAngle() {
-        return Constants.BASE_HOOD_ANGLE + (hoodEncoder.getPosition() * Constants.HOOD_DEGREES_PER_REV);
+        return Constants.BASE_HOOD_ANGLE - (hoodEncoder.getPosition() * Constants.HOOD_DEGREES_PER_REV);
     }
 
     // public double getTurretAngle() {

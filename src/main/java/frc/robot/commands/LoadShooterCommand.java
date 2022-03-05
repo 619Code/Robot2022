@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.States;
 import frc.robot.subsystems.*;
 
 // Command made for testing the magazine
@@ -17,7 +18,13 @@ public class LoadShooterCommand extends CommandBase {
     public void initialize() {}
 
     public void execute() {
-        magazine.loadShooter();
+        System.out.print("LOADING SHOOTER");
+        System.out.print(States.isAiming);
+        System.out.print(States.isShooterReady);
+        System.out.println(States.currentShot.isValid);
+        if(States.isAiming && States.currentShot.isValid && States.isShooterReady){
+            magazine.loadShooter();
+        }
     }
 
     public boolean isFinished(boolean isInterrupted) {
