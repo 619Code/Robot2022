@@ -56,7 +56,7 @@ public class AimCommand extends CommandBase {
         //System.out.println("Distance: " + limelight.distance);
         if(true || States.isLocationValid) {
             // point the robot towards the target
-            //drive.curve(0, -targetPID.calculate(limelight.angleX, 0), false);
+            
             Shot shot;
             if(!presetShot.isValid){
                 shot = ShotFinder.getShot(limelight.distance);
@@ -71,6 +71,9 @@ public class AimCommand extends CommandBase {
                 shooter.setShooterSpeedByRPM(shot.rpm*1.1);
                 shooter.setAngle(Shooter.EDeviceType.Hood, shot.hoodAngle);
                 // TODO: set LED color by chance of success
+            }
+            if(shot.useLimelight){
+                drive.curve(0, -targetPID.calculate(limelight.angleX, 0), false);
             }
             // if the shooter is within 5 % of where it should be
             // and the hood is within 3% of where it should be
