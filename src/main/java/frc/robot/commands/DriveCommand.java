@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -21,6 +22,8 @@ public class DriveCommand extends CommandBase implements Loggable {
     private double rotation;
     private boolean isLowGear;
 
+    private SlewRateLimiter limiter;
+
     public DriveCommand(ShiftingWCD drive, XboxController controller) {
         this.drive = drive;
         this.controller = controller;
@@ -36,23 +39,18 @@ public class DriveCommand extends CommandBase implements Loggable {
         //System.out.println("Speed: " + throttle);
         //System.out.println("Rotation: " + rotation);
         drive.curve(throttle, rotation, isLowGear);
-
     }
 
     public void setVals() {
         throttle = (Math.abs(leftY) > Constants.JOYSTICK_DEADZONE) ? leftY : 0;
+        throttle = -throttle;
         rotation = (Math.abs(rightX) > Constants.JOYSTICK_DEADZONE) ? rightX : 0;
 
-        if (controller.getLeftTriggerAxis() > 0.5) {
-            isLowGear = true;
-        } else {
-            isLowGear = false;
-            if(controller.getRightTriggerAxis() < 0.5) {
-                throttle *= 0.5/Constants.SPEED_ADJUST;
-                rotation *= 0.5/Constants.SPEED_ADJUST;
-            }
+        isLowGear = false;
+        if(controller.getRightTriggerAxis() > 0.5) {
+            throttle *= 0.6/Constants.SPEED_ADJUST;
+            rotation *= 0.6/Constants.SPEED_ADJUST;
         }
-
     }
 
     @Override
