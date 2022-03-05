@@ -67,7 +67,8 @@ public class Shooter extends SubsystemBase implements Loggable {
 
     @Log
     private double adjustedPoint;
-    
+    @Log
+    private double ownPIDHoodSetPointRot, hoodMotorDutyCycle, hoodPosError;
     // private SparkMaxPIDController turretPID;
     // private double turretSetPoint;
     // private double turretAngle;
@@ -130,6 +131,17 @@ public class Shooter extends SubsystemBase implements Loggable {
         //shooterPID.setReference(shooterSetPoint, CANSparkMax.ControlType.kVelocity);
     }
 
+    public void periodic(){
+        double hoodPosRots = hoodMotor.getEncoder().getPosition();
+        hoodPosError = ownPIDHoodSetPointRot - hoodPosError;
+        if(Math.abs(hoodPosError)<1 || (hoodPosRots > Constants.MAXIMUM_HOOD_ANGLE_REV && hoodPosError > 0)){
+            hoodMotorDutyCycle = 0;
+        } else {
+            hoodMotorDutyCycle = hoodPosError * this.hoodP;
+        }
+        //this.hoodMotor.set(hoodMotorDutyCycle);
+    }
+
     public void setShooterSpeedByRPM(double speed) {
         shooterOnboardPID.setP(this.shooterP);
         shooterOnboardPID.setI(this.shooterI);
@@ -172,22 +184,7 @@ public class Shooter extends SubsystemBase implements Loggable {
     // }
 
     public void setHoodAngle(double trajectoryAngle) { //add limit switch stuff
-        hoodOnboardPID.setP(this.hoodP);
-        hoodOnboardPID.setI(this.hoodI);
-        hoodOnboardPID.setD(this.hoodD);
-        hoodAngle = this.getHoodAngle();        
-        hoodSetPoint = (Constants.BASE_HOOD_ANGLE-trajectoryAngle) / Constants.HOOD_DEGREES_PER_REV;
-        var newPoint = this.hoodOnboardPID.calculate(this.hoodEncoder.getPosition(), hoodSetPoint);
-        double adjustedPoint = 0;
-        if (newPoint < 0)
-            adjustedPoint = Math.max(this.hoodMinOutput, newPoint);
-        else
-            adjustedPoint = Math.min(this.hoodMaxOutput, newPoint);
-
-        System.out.println("NewHoodPID:" + newPoint);
-        this.hoodSetPoint = hoodSetPoint;
-        this.adjustedPoint = adjustedPoint;
-        this.hoodMotor.set(adjustedPoint);
+        ownPIDHoodSetPointRot = trajectoryAngle/Constants.HOOD_DEGREES_PER_REV;
     }
 
     // public void setTurretAngle(double angle) { //add limit switch stuff
