@@ -25,6 +25,8 @@ public class Shooter extends SubsystemBase implements Loggable {
     @Log
     private double currentVelocity = 0;
 
+    private double shooterMinOutput;
+    private double shooterMaxOutput;
     private double shooterP;
     private double shooterI;
     private double shooterD;
