@@ -35,6 +35,10 @@ public class Magazine extends SubsystemBase {
         backBeltMotor.set(-0.3);        
     }
 
+    public void outtakeBalls() {
+        backBeltMotor.set(0.3);
+    }
+
     public void loadShooter() {
         backBeltMotor.set(-0.3);
     }

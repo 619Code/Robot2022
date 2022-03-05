@@ -23,6 +23,7 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LoadShooterCommand;
 import frc.robot.commands.ManualClimbingCommand;
 import frc.robot.commands.MoveHoodUpCommand;
+import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.TuneShooterCommand;
@@ -109,6 +110,8 @@ public class RobotContainer {
     private void configureControls() {
         JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
         intakeButton.whileHeld(new IntakeCommand(intake, magazine));
+        JoystickAnalogButton outtakeButton = new JoystickAnalogButton(operator, XboxController.Axis.kLeftTrigger.value, .5);
+        outtakeButton.whileHeld(new OuttakeCommand(magazine));
         
         JoystickButton intakeUpButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
         intakeUpButton.whileHeld(new RetractIntakeCommand(intake));
