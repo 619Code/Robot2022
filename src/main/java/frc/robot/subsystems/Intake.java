@@ -18,7 +18,7 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         intakeMotor = new CANSparkMax(Constants.LOADING_MOTOR, MotorType.kBrushless);
-        wrist = new DoubleSolenoid(Constants.INTAKE_MODULE_TYPE, 1, 6);
+        wrist = new DoubleSolenoid(Constants.INTAKE_MODULE_TYPE, 7, 0);
     }
 
     public void spinIntake(double percent) {

@@ -79,8 +79,8 @@ public final class Constants {
 
     //Drive solenoids
     public static final int PCM_CAN_ID = 0;
-    public static final int DRIVE_SOLENOID_FORWARD = 0;
-    public static final int DRIVE_SOLENOID_BACK = 7;
+    public static final int DRIVE_SOLENOID_FORWARD = 1;
+    public static final int DRIVE_SOLENOID_BACK = 6;
 
     //Intake CAN
     public static final int LOADING_MOTOR = 4;
