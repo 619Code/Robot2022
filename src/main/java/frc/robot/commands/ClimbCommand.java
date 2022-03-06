@@ -14,7 +14,7 @@ public class ClimbCommand extends CommandBase {
     {
         this.controller = controller;
         this.climber = climber;
-        revLimit = 99; //change this
+        revLimit = 115; //change this
         this.addRequirements(climber);
     }
 

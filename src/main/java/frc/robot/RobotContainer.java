@@ -79,9 +79,9 @@ public class RobotContainer {
         operator = new XboxController(1);
 
         drive = new ShiftingWCD();
-        // driveCommand = new DriveCommand(drive, driver);
-        // drive.setDefaultCommand(driveCommand);
-        // drive.resetGyro();
+        driveCommand = new DriveCommand(drive, driver);
+        drive.setDefaultCommand(driveCommand);
+        drive.resetGyro();
 
         intake = new Intake();
         intake.raiseIntake();
