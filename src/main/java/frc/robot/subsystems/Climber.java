@@ -16,7 +16,7 @@ public class Climber extends SubsystemBase {
 
     PIDController winchPID;
     double winchSetpoint;
-    RelativeEncoder leftClimbEncoder;
+    public RelativeEncoder leftClimbEncoder;
 
     //DoubleSolenoid claws;
     //DoubleSolenoid arms;

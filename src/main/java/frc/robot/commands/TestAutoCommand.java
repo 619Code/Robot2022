@@ -7,10 +7,12 @@ import frc.robot.subsystems.ShiftingWCD;
 public class TestAutoCommand extends CommandBase {
     ShiftingWCD drive;
     Timer endTimer;
+    double time;
 
-    public TestAutoCommand(ShiftingWCD drive) {
+    public TestAutoCommand(ShiftingWCD drive, double time) {
         this.drive = drive;
         this.endTimer = new Timer();
+        this.time = time;
         addRequirements(drive);
     }
 
@@ -22,7 +24,7 @@ public class TestAutoCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return endTimer.hasElapsed(4);
+        return endTimer.hasElapsed(time);
     }
 
     @Override

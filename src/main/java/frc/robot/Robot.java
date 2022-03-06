@@ -13,7 +13,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         robotContainer = new RobotContainer();
-        Logger.configureLoggingAndConfig(robotContainer, false);
+        //Logger.configureLoggingAndConfig(robotContainer, false);
         States.currentShot = new Shot();
         States.currentShot.isValid = false;
     }

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommand;
@@ -88,13 +89,13 @@ public class RobotContainer {
 
         magazine = new Magazine();
         climber = new Climber();
-        var climbCommand = new ManualClimbingCommand(climber, operator );
+        var climbCommand = new ClimbCommand(climber, operator);
         climber.setDefaultCommand(climbCommand);
 
         //limelight = new Limelight();
         shooter = new Shooter();
-        this.tuneShooterCommand = new TuneShooterCommand(shooter);
-        shooter.setDefaultCommand(tuneShooterCommand);
+        //this.tuneShooterCommand = new TuneShooterCommand(shooter);
+        //shooter.setDefaultCommand(tuneShooterCommand);
 
         //joystickAnalogButton = new JoystickAnalogButton(operator, 3);
         
@@ -119,23 +120,26 @@ public class RobotContainer {
         // JoystickButton aimButton = new JoystickButton(operator, XboxController.Button.kB.value);
         // aimButton.whileHeld(new AimCommand(shooter, drive, limelight));
         JoystickButton lowGoalButton = new JoystickButton(operator, XboxController.Button.kA.value);
-        lowGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, ShotPresets.LOW_GOAL_SHOT));
+        lowGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, ShotPresets.LOW_GOAL_SHOT, false));
         JoystickButton highGoalButton = new JoystickButton(operator, XboxController.Button.kY.value);
-        highGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, ShotPresets.HIGH_GOAL_SHOT));
+        highGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, ShotPresets.HIGH_GOAL_SHOT, false));
         JoystickButton tarmacGoalButton = new JoystickButton(operator, XboxController.Button.kX.value);
-        tarmacGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, ShotPresets.TARMAC_SHOT));
+        tarmacGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, ShotPresets.TARMAC_SHOT, false));
         JoystickButton tarmacHelperButton = new JoystickButton(operator, XboxController.Button.kB.value);
-        tarmacHelperButton.whileHeld(new AimCommand(shooter, drive, limelight, ShotPresets.TARMAC_HELPER_SHOT));
+        tarmacHelperButton.whileHeld(new AimCommand(shooter, drive, limelight, ShotPresets.TARMAC_HELPER_SHOT, false));
+
+        JoystickButton climbCommandButton = new JoystickButton(operator, XboxController.Button.kBack.value);
+        climbCommandButton.whileHeld(new ManualClimbingCommand(climber, operator));
         // RainbowLedCommand ledCommand = new RainbowLedCommand(ledStrip);
         // new JoystickButton(driver, XboxController.Button.kY.value).toggleWhenPressed(ledCommand);
         // //new JoystickButton(primaryController, XboxController.Button.kX.value).cancelWhenPressed(ledCommand);
 
         JoystickAnalogButton shootButton = new JoystickAnalogButton(operator, XboxController.Axis.kRightTrigger.value, .5);
         //shootButton.whileHeld(new ShootCommand(shooter, magazine));
-        shootButton.whileHeld(new LoadShooterCommand(magazine));   
+        shootButton.whileHeld(new LoadShooterCommand(magazine, false));   
 
-        JoystickButton zeroHoodButton = new JoystickButton(driver, XboxController.Button.kA.value);
-        zeroHoodButton.whenPressed(new ZeroCommand(shooter, Shooter.EDeviceType.Hood));
+        //JoystickButton zeroHoodButton = new JoystickButton(driver, XboxController.Button.kA.value);
+        //zeroHoodButton.whenPressed(new ZeroCommand(shooter, Shooter.EDeviceType.Hood));
 
         //JoystickButton angleFinderButton = new JoystickButton(operator, XboxController.Button.kX.value);
         // modify these values as needed
@@ -143,15 +147,16 @@ public class RobotContainer {
         JoystickButton zeroHood = new JoystickButton(driver, XboxController.Button.kB.value);
         zeroHood.whenPressed(new ZeroCommandSimple(shooter, Shooter.EDeviceType.Hood));
 
-        JoystickButton xButton = new JoystickButton(driver, XboxController.Button.kX.value);
-        var moveHoodUpCommand = new MoveHoodUpCommand(shooter);
-        xButton.whileHeld(moveHoodUpCommand);
-
-
+        //JoystickButton xButton = new JoystickButton(driver, XboxController.Button.kX.value);
+        //var moveHoodUpCommand = new MoveHoodUpCommand(shooter);
+        //xButton.whileHeld(moveHoodUpCommand);
     }
 
     public Command getAutonomousCommand() {
-        return (new TestAutoCommand(drive));
-        //return new ParallelCommandGroup(new TestAutoCommand(drive), new ZeroCommandSimple(shooter, Shooter.EDeviceType.Hood));
+        //return (new TestAutoCommand(drive));
+        return new SequentialCommandGroup(
+        new ParallelCommandGroup(new TestAutoCommand(drive, 1), new ZeroCommandSimple(shooter, Shooter.EDeviceType.Hood)), 
+        new ParallelCommandGroup(new LoadShooterCommand(magazine, true), new AimCommand(shooter, drive, limelight, ShotPresets.HIGH_GOAL_SHOT, true)),
+        new TestAutoCommand(drive, 4));
    }
 }

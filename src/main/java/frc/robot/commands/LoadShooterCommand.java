@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.States;
 import frc.robot.subsystems.*;
@@ -9,8 +10,14 @@ public class LoadShooterCommand extends CommandBase {
 
     private Magazine magazine;
 
-    public LoadShooterCommand(Magazine magazine) {        
+    private boolean isAuto;
+    private Timer endTimer;
+
+    public LoadShooterCommand(Magazine magazine, boolean isAuto) {        
         this.magazine = magazine;
+        this.isAuto = isAuto;
+        this.endTimer = new Timer();
+
         addRequirements(magazine);
     }
 
@@ -28,7 +35,11 @@ public class LoadShooterCommand extends CommandBase {
     }
 
     public boolean isFinished(boolean isInterrupted) {
-        return magazine.isEmpty();
+        if(isAuto) {
+            return endTimer.hasElapsed(8);
+        } else {
+            return false;
+        }
     }
 
     public void end(boolean isInterrupted) {        

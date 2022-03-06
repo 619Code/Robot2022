@@ -9,6 +9,7 @@ import frc.robot.States;
 import frc.robot.helpers.Shot;
 import frc.robot.helpers.ShotFinder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -20,25 +21,31 @@ public class AimCommand extends CommandBase {
     private Shot presetShot;
 
     private PIDController targetPID = new PIDController(0, 0, 0);
+
+    private boolean isAuto;
+
+    private Timer endTimer;
     
-    public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub) {
+    public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub, boolean isAuto) {
         shooter = shooterSub;
         drive = driveSub;
         limelight = limelightSub;
         navx = drive.getNavx();
         this.presetShot = new Shot();
         this.presetShot.isValid = false;
+        this.isAuto = isAuto;
+        this.endTimer = new Timer();
         addRequirements(shooter);
         addRequirements(drive);
     }
 
-    public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub, PIDController PID) {
-        this(shooterSub, driveSub, limelightSub);
+    public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub, PIDController PID, boolean isAuto) {
+        this(shooterSub, driveSub, limelightSub, isAuto);
         this.targetPID = PID;
     }
 
-    public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub, Shot presetShot) {
-        this(shooterSub, driveSub, limelightSub);
+    public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub, Shot presetShot, boolean isAuto) {
+        this(shooterSub, driveSub, limelightSub, isAuto);
         this.presetShot = presetShot;
     }
 
@@ -96,9 +103,14 @@ public class AimCommand extends CommandBase {
             // TODO: Flash LEDs red or smth
             drive.curve(0, 0, false);
         }
-        
-        
+    }
 
+    public boolean isFinished() {
+        if(isAuto) {
+            return endTimer.hasElapsed(8);
+        } else {
+            return false;
+        }
     }
 
     public void end(boolean isInterrupted) {
