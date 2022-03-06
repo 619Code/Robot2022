@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.States;
 import frc.robot.subsystems.ShiftingWCD;
 
 public class TestAutoCommand extends CommandBase {
@@ -16,9 +17,17 @@ public class TestAutoCommand extends CommandBase {
         addRequirements(drive);
     }
 
+    public void initialize(){
+        endTimer.reset();
+        endTimer.start();
+    }
+
     @Override
     public void execute() {
-        endTimer.start();
+        if((!States.isInAuto)){
+            this.cancel();
+            return;
+        }
         drive.curve(-0.4, 0, false);
     }
 

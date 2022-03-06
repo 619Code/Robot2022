@@ -50,13 +50,19 @@ public class AimCommand extends CommandBase {
     }
 
     public void initialize() {
-        System.out.println("AIMCOMMAND INITIALIZED");
+        //System.out.println("AIMCOMMAND INITIALIZED");
         limelight.turnLightOn();
         States.isAiming = true;
         States.currentShot = presetShot;
+        endTimer.reset();
+        endTimer.start();
     }
 
     public void execute() {
+        if((!States.isInAuto) && isAuto){
+            this.cancel();
+            return;
+        }
         limelight.update();
         //System.out.println("angleX: " + limelight.angleX);
         //System.out.println("angleY: " + limelight.angleY);
@@ -106,7 +112,7 @@ public class AimCommand extends CommandBase {
     }
 
     public boolean isFinished() {
-        if(isAuto) {
+        if(States.isInAuto) {
             return endTimer.hasElapsed(8);
         } else {
             return false;
@@ -116,5 +122,6 @@ public class AimCommand extends CommandBase {
     public void end(boolean isInterrupted) {
         limelight.turnLightOff();
         States.isAiming = false;
+        shooter.setShooterSpeedByRPM(0);
     }
 }

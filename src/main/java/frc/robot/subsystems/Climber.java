@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
-    CANSparkMax leftClimber;
-    CANSparkMax rightClimber;
+    public CANSparkMax leftClimber;
+    public CANSparkMax rightClimber;
     MotorControllerGroup climberMotors;
 
     PIDController winchPID;

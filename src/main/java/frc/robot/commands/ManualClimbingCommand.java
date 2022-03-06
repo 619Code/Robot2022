@@ -33,5 +33,6 @@ public class ManualClimbingCommand extends CommandBase {
             moveRate = upDown * Constants.CLIMBER_UP_RATE;
 
         this.climber.ManualMove(moveRate);
+        //this.climber.leftClimber.set(moveRate);
     }
 }

@@ -154,9 +154,10 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         //return (new TestAutoCommand(drive));
-        return new SequentialCommandGroup(
+        /*return new SequentialCommandGroup(
         new ParallelCommandGroup(new TestAutoCommand(drive, 1), new ZeroCommandSimple(shooter, Shooter.EDeviceType.Hood)), 
         new ParallelCommandGroup(new LoadShooterCommand(magazine, true), new AimCommand(shooter, drive, limelight, ShotPresets.HIGH_GOAL_SHOT, true)),
-        new TestAutoCommand(drive, 4));
+        new TestAutoCommand(drive, 3));*/
+        return new TestAutoCommand(drive, 4);
    }
 }

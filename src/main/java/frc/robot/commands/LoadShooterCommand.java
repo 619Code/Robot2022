@@ -22,9 +22,16 @@ public class LoadShooterCommand extends CommandBase {
     }
 
     @Override
-    public void initialize() {}
+    public void initialize() {
+        endTimer.reset();
+        endTimer.start();
+    }
 
     public void execute() {
+        if((!States.isInAuto) && isAuto){
+            this.cancel();
+            return;
+        }
         System.out.print("LOADING SHOOTER");
         System.out.print(States.isAiming);
         System.out.print(States.isShooterReady);
@@ -35,7 +42,8 @@ public class LoadShooterCommand extends CommandBase {
     }
 
     public boolean isFinished(boolean isInterrupted) {
-        if(isAuto) {
+        if(States.isInAuto) {
+            System.out.println(endTimer.get());
             return endTimer.hasElapsed(8);
         } else {
             return false;
