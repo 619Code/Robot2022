@@ -41,7 +41,7 @@ public class LoadShooterCommand extends CommandBase {
         }
     }
 
-    public boolean isFinished(boolean isInterrupted) {
+    public boolean isFinished() {
         if(States.isInAuto) {
             System.out.println(endTimer.get());
             return endTimer.hasElapsed(8);

@@ -122,6 +122,6 @@ public class AimCommand extends CommandBase {
     public void end(boolean isInterrupted) {
         limelight.turnLightOff();
         States.isAiming = false;
-        shooter.setShooterSpeedByRPM(0);
+        shooter.stopAll();
     }
 }

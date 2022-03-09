@@ -32,7 +32,7 @@ public class TuneShooterCommand extends CommandBase implements Loggable {
         this.velocity = value;
     }
 
-    public boolean isFinished(boolean isInterrupted) {
+    public boolean isFinished() {
         return false;
     }
 

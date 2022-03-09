@@ -63,7 +63,7 @@ public class Magazine extends SubsystemBase {
     }
 
     public void stopAll() {
-        rollerMotor.set(0);
+        //rollerMotor.set(0);
         backBeltMotor.set(0);
     }
 }

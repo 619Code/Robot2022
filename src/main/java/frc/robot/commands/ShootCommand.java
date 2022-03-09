@@ -53,7 +53,7 @@ public class ShootCommand extends CommandBase {
         }
     }
 
-    public boolean isFinished(boolean isInterrupted) {
+    public boolean isFinished() {
         return magazine.isEmpty();
     }
 
