@@ -43,10 +43,9 @@ public class IntakeCommand extends CommandBase {
             intake.spinIntake(0.6);
             magazine.intakeBalls();
         } else {
-            if (intake.isLowered())
-                intake.raiseIntake();
+            //if (intake.isLowered())
+                //intake.raiseIntake();
                 
-            intake.spinIntake(0);
             magazine.stopAll();
         }
     }
