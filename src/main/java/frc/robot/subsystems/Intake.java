@@ -7,31 +7,33 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
-    private VictorSPX intakeMotor;
-    public Solenoid wrist;
+    private CANSparkMax intakeMotor;
+    public DoubleSolenoid wrist;
 
     public Intake() {
-        intakeMotor = new VictorSPX(21); 
-        wrist = new Solenoid(Constants.INTAKE_MODULE_TYPE, Constants.INTAKE_SOLENOID);
+        intakeMotor = new CANSparkMax(Constants.LOADING_MOTOR, MotorType.kBrushless);
+        wrist = new DoubleSolenoid(Constants.INTAKE_MODULE_TYPE, 7, 0);
     }
 
     public void spinIntake(double percent) {
-        intakeMotor.set(ControlMode.PercentOutput, percent);
+        intakeMotor.set(percent);
     }
 
     public boolean isLowered(){
-        return wrist.get();   
+        return wrist.get() == Value.kForward;   
     }
 
     public void raiseIntake() {
-        wrist.set(false);
+        wrist.set(Value.kReverse);
     }
 
     public void lowerIntake() {
-        wrist.set(true);
+        wrist.set(Value.kForward);
     }
 }

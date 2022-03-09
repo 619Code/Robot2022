@@ -26,7 +26,7 @@ public class ShootCommand extends CommandBase {
     public void initialize() {}
 
     public void execute() {
-        if(!States.isLocationValid){
+        /*if(!States.isLocationValid){
             return; 
             // TODO: blink LEDS
         }
@@ -34,15 +34,18 @@ public class ShootCommand extends CommandBase {
         if(!shot.isValid){
             return;
         }
-        fireBalls(shot.rpm, shot.hoodAngle);
+        fireBalls(shot.rpm, shot.hoodAngle);*/
+        fireBalls(100, 60);
     }
 
     public void fireBalls(double rpm, double hoodAngle) {
         shooter.setShooterSpeedByRPM(rpm);
-        shooter.setHoodAngle(hoodAngle);
+        //shooter.setHoodAngle(hoodAngle);
 
         boolean spedUp = Math.abs(shooter.getShooterRPM() / rpm) < 0.05; //velocity is within 5% of the goal
-        boolean hoodSet = Math.abs(shooter.getHoodAngle() - hoodAngle) < 0.03; //hood position is within 3% of the goal
+        //System.out.println(shooter.getShooterRPM());
+        //boolean hoodSet = Math.abs(shooter.getHoodAngle() - hoodAngle) < 0.03; //hood position is within 3% of the goal
+        boolean hoodSet = true;
         if(spedUp && hoodSet) {
             magazine.loadShooter();
         } else {
@@ -50,11 +53,11 @@ public class ShootCommand extends CommandBase {
         }
     }
 
-    public boolean isFinished(boolean isInterrupted) {
+    public boolean isFinished() {
         return magazine.isEmpty();
     }
 
-    protected void end() {
+    public void end(boolean isInterrupted) {
         shooter.stopAll();
         magazine.stopAll();
     }

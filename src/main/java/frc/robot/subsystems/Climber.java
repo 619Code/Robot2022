@@ -5,20 +5,18 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
-    CANSparkMax leftClimber;
-    CANSparkMax rightClimber;
+    public CANSparkMax leftClimber;
+    public CANSparkMax rightClimber;
     MotorControllerGroup climberMotors;
 
     PIDController winchPID;
     double winchSetpoint;
-    RelativeEncoder leftClimbEncoder;
+    public RelativeEncoder leftClimbEncoder;
 
     //DoubleSolenoid claws;
     //DoubleSolenoid arms;
@@ -31,6 +29,8 @@ public class Climber extends SubsystemBase {
 
         leftClimber = new CANSparkMax(Constants.CLIMBER_LEFT_MOTOR, CANSparkMax.MotorType.kBrushless);
         rightClimber = new CANSparkMax(Constants.CLIMBER_RIGHT_MOTOR, CANSparkMax.MotorType.kBrushless);
+        rightClimber.restoreFactoryDefaults();
+        leftClimber.restoreFactoryDefaults();
 
         rightClimber.setIdleMode(IdleMode.kBrake);
         leftClimber.setIdleMode(IdleMode.kBrake);

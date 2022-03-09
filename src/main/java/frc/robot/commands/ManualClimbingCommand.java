@@ -19,7 +19,7 @@ public class ManualClimbingCommand extends CommandBase {
 
     public void execute()
     {
-        var upDown = this.controller.getLeftY();
+        var upDown = -this.controller.getRightY();
         var moveRate = 0.0;
 
         //Dead zone
@@ -33,5 +33,6 @@ public class ManualClimbingCommand extends CommandBase {
             moveRate = upDown * Constants.CLIMBER_UP_RATE;
 
         this.climber.ManualMove(moveRate);
+        //this.climber.leftClimber.set(moveRate);
     }
 }

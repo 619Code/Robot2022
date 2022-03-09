@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.helpers.Shot;
 import io.github.oblarg.oblog.Logger;
 
 public class Robot extends TimedRobot {
@@ -12,7 +13,9 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         robotContainer = new RobotContainer();
-        Logger.configureLoggingAndConfig(robotContainer, false);
+        //Logger.configureLoggingAndConfig(robotContainer, false);
+        States.currentShot = new Shot();
+        States.currentShot.isValid = false;
     }
 
     @Override
@@ -31,6 +34,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        States.isInAuto = true;
         m_autonomousCommand = robotContainer.getAutonomousCommand();
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();
@@ -44,6 +48,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        States.isInAuto = false;
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
@@ -55,6 +60,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
+        States.isInAuto = false;
         CommandScheduler.getInstance().cancelAll();
     }
 

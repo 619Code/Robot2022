@@ -15,8 +15,8 @@ public class Magazine extends SubsystemBase {
     private CANSparkMax frontBeltMotor;
     private CANSparkMax backBeltMotor;
 
-    private BallPosition verticalPosition;
-    private BallPosition frontPosition;
+    public BallPosition verticalPosition;
+    public BallPosition frontPosition;
 
     private Timer endTimer;
 
@@ -25,21 +25,26 @@ public class Magazine extends SubsystemBase {
         backBeltMotor = new CANSparkMax(Constants.BACK_BELT_MOTOR, MotorType.kBrushless);
 
         verticalPosition = new BallPosition(Constants.VERTICAL_POSITION);
-        frontPosition = new BallPosition(Constants.FRONT_POSITION);
+        //frontPosition = new BallPosition(Constants.FRONT_POSITION);
 
         endTimer = new Timer();
     }
 
     public void intakeBalls() {
-        //do logic for this later
+        
+        backBeltMotor.set(-0.3);        
     }
 
-    public void loadShooter() {
+    public void outtakeBalls() {
         backBeltMotor.set(0.3);
     }
 
+    public void loadShooter() {
+        backBeltMotor.set(-0.3);
+    }
+
     public boolean isEmpty() {
-        boolean appearsEmpty = !this.verticalPosition.hasBall() && !this.frontPosition.hasBall();
+        /*boolean appearsEmpty = !this.verticalPosition.hasBall() && !this.frontPosition.hasBall();
         if(!appearsEmpty) {
             endTimer.reset();
             endTimer.start();
@@ -48,15 +53,17 @@ public class Magazine extends SubsystemBase {
             return true;
         } else {
             return false;
-        }
+        }*/
+        return false;
     }
 
     public boolean isFull() {
-        return this.verticalPosition.hasBall() && this.frontPosition.hasBall();
+        //return this.verticalPosition.hasBall() && this.frontPosition.hasBall();
+        return true;
     }
 
     public void stopAll() {
-        rollerMotor.set(0);
+        //rollerMotor.set(0);
         backBeltMotor.set(0);
     }
 }

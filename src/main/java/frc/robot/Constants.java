@@ -3,6 +3,9 @@ package frc.robot;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import frc.robot.helpers.Shot;
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 
 public final class Constants {
     //Drive CANs
@@ -18,10 +21,20 @@ public final class Constants {
     // public static final double TURRET_DEGREES_PER_REV = 0;
     // public static final double TARGET_TOLERANCE = 0;
 
+    //Hood Angles from CAD
+    // 81 degrees at 0 revs
+    // 53.5 degrees at 98 revs
+    // derees per rev = (81 - 53.5) / 98
+
+
+
     //Hood Constants
-    public static final double MINIMUM_HOOD_ANGLE = 0;
-    public static final double MAXIMUM_HOOD_ANGLE = 90;
-    public static final double HOOD_DEGREES_PER_REV = 1;
+    //0 = 15 degrees
+    public static final double BASE_HOOD_ANGLE = 81;
+    public static final double HIGH_HOOD_ANGLE = 53;
+    public static final double MINIMUM_HOOD_ANGLE_REV = 0;
+    public static final double MAXIMUM_HOOD_ANGLE_REV = 98;
+    public static final double HOOD_DEGREES_PER_REV = (BASE_HOOD_ANGLE - HIGH_HOOD_ANGLE) / MAXIMUM_HOOD_ANGLE_REV;
 
     //Ball Positions
     public static final int VERTICAL_POSITION = 0;
@@ -33,15 +46,21 @@ public final class Constants {
     public static final int SHOOT_MOTOR = 15; 
 
     //Shooter PID
-    public static final int SHOOTER_KP = 0;
-    public static final int SHOOTER_KI = 0;
-    public static final int SHOOTER_KD = 0;
-    public static final double SHOOTER_MAX_RPM = 0;
+    //public static final double SHOOTER_KP = 0.65508;
+    public static final double SHOOTER_KP = .445;
+    public static final double SHOOTER_KI = 0.0;
+    public static final double SHOOTER_KD = 0.0;
+    public static final double SHOOTER_MAX_RPM = 5000;
+    public static final double SHOOTER_MAX_OUTPUT = 0;
+    public static final double SHOOTER_MIN_OUTPUT = -1;
 
     //Hood PID
     public static final double HOOD_KP = 13.581;
     public static final double HOOD_KI = 0;
     public static final double HOOD_KD = 0.23237;
+    public static final double HOOD_MAX_OUTPUT = .2;
+    public static final double HOOD_MIN_OUTPUT = -.2;
+    
 
     //Turret PID
     // public static final int TURRET_KP = 0;
@@ -51,7 +70,7 @@ public final class Constants {
     //Drive constants
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(5.827); //meters
     public static final int NEO_LIMIT = 45; //amps
-    public static final double SPEED_ADJUST = 0.8; //how much to adjust speed of drive
+    public static final double SPEED_ADJUST = 0.4; //how much to adjust speed of drive
     public static final double DRIVE_RATIO_HIGH = (9.0/66.0) * (40.0/44.0); // gear ratio for high gear
     public static final double DRIVE_RATIO_LOW = (9.0/66.0) * (24.0/60.0); // gear ratio for low gear
     public static final double TRACK_WIDTH = Units.inchesToMeters(23); //distance between wheels in meters
@@ -60,8 +79,8 @@ public final class Constants {
 
     //Drive solenoids
     public static final int PCM_CAN_ID = 0;
-    public static final int DRIVE_SOLENOID_FORWARD = 0;
-    public static final int DRIVE_SOLENOID_BACK = 7;
+    public static final int DRIVE_SOLENOID_FORWARD = 1;
+    public static final int DRIVE_SOLENOID_BACK = 6;
 
     //Intake CAN
     public static final int LOADING_MOTOR = 4;
@@ -107,8 +126,8 @@ public final class Constants {
     public static boolean kLeftEncoderReversed = false;
 
     // Climber constants
-    public static final int CLIMBER_LEFT_MOTOR = 7; // CAN ID
-    public static final int CLIMBER_RIGHT_MOTOR = 6; // CAN ID
+    public static final int CLIMBER_LEFT_MOTOR = 6; // CAN ID
+    public static final int CLIMBER_RIGHT_MOTOR = 7; // CAN ID
     public static final int CLIMBER_SOLENOID_CLAW_OPEN = 2; // PCM ID
     public static final int CLIMBER_SOLENOID_CLAW_CLOSE = 3; // PCM ID
     public static final int CLIMBER_SOLENOID_ARM_UP = 5; // PCM ID
