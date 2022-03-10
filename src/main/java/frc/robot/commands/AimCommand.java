@@ -36,7 +36,9 @@ public class AimCommand extends CommandBase {
         this.isAuto = isAuto;
         this.endTimer = new Timer();
         addRequirements(shooter);
-        addRequirements(drive);
+        if(presetShot.useLimelight){
+            addRequirements(drive);
+        }
     }
 
     public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub, PIDController PID, boolean isAuto) {
@@ -56,6 +58,9 @@ public class AimCommand extends CommandBase {
         States.currentShot = presetShot;
         endTimer.reset();
         endTimer.start();
+        if(presetShot.useLimelight){
+            drive.curve(0, 0, false);
+        }
     }
 
     public void execute() {

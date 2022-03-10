@@ -27,14 +27,14 @@ public class Magazine extends SubsystemBase {
         backBeltMotor.setIdleMode(IdleMode.kBrake);
         
         verticalPosition = new BallPosition(Constants.VERTICAL_POSITION);
-        //frontPosition = new BallPosition(Constants.FRONT_POSITION);
+        frontPosition = new BallPosition(Constants.FRONT_POSITION);
 
         endTimer = new Timer();
     }
 
     public void intakeBalls() {
         
-        backBeltMotor.set(-0.3);        
+        backBeltMotor.set(-0.2);        
     }
 
     public void outtakeBalls() {

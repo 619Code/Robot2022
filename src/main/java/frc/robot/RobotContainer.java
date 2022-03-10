@@ -138,8 +138,8 @@ public class RobotContainer {
         //shootButton.whileHeld(new ShootCommand(shooter, magazine));
         shootButton.whileHeld(new LoadShooterCommand(magazine, false));   
 
-        //JoystickButton zeroHoodButton = new JoystickButton(driver, XboxController.Button.kA.value);
-        //zeroHoodButton.whenPressed(new ZeroCommand(shooter, Shooter.EDeviceType.Hood));
+        JoystickButton zeroHoodButton = new JoystickButton(driver, XboxController.Button.kA.value);
+        zeroHoodButton.whenPressed(new ZeroCommand(shooter, Shooter.EDeviceType.Hood));
 
         //JoystickButton angleFinderButton = new JoystickButton(operator, XboxController.Button.kX.value);
         // modify these values as needed
