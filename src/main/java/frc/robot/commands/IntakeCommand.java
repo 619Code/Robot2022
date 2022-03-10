@@ -39,7 +39,8 @@ public class IntakeCommand extends CommandBase {
         intake.spinIntake(0.6);
         if (!intake.isLowered())
             intake.lowerIntake();
-        System.out.println("Ball in mag? " + (magazine.verticalPosition.hasBall() ? "yes" : "no"));
+        //System.out.println("Ball in mag? " + (magazine.verticalPosition.hasBall() ? "yes" : "no"));
+        //System.out.println("Lowering intake! Intake is " + (intake.isLowered() ? "low" : "high"));
         if(!magazine.verticalPosition.hasBall()) {
             magazine.intakeBalls();
         } else {

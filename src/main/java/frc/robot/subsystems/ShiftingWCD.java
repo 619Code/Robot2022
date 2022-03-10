@@ -129,8 +129,8 @@ public class ShiftingWCD extends SubsystemBase implements Loggable{
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        double leftVelocity = (leftEncoder.getVelocity() / Constants.DRIVE_RATIO_HIGH) * (Constants.WHEEL_DIAMETER / 60);
-        double rightVelocity = (rightEncoder.getVelocity() / Constants.DRIVE_RATIO_HIGH) * (Constants.WHEEL_DIAMETER / 60);
+        double leftVelocity = (leftEncoder.getVelocity() * Constants.DRIVE_RATIO_HIGH) * (Constants.WHEEL_DIAMETER * Math.PI) * (1/60);
+        double rightVelocity = (rightEncoder.getVelocity() * Constants.DRIVE_RATIO_HIGH) * (Constants.WHEEL_DIAMETER * Math.PI) * (1/60);
         return new DifferentialDriveWheelSpeeds(leftVelocity, rightVelocity);
     }
 
@@ -153,6 +153,10 @@ public class ShiftingWCD extends SubsystemBase implements Loggable{
     public void resetEncoders() {
         this.leftEncoder.setPosition(0.0);
         this.rightEncoder.setPosition(0.0);
+    }
+
+    public double getLeftPosition() {
+        return (leftEncoder.getPosition() * Constants.DRIVE_RATIO_HIGH) * (Constants.WHEEL_DIAMETER * Math.PI);
     }
 
 

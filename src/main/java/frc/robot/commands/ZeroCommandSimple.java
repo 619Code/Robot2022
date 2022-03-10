@@ -28,8 +28,8 @@ public class ZeroCommandSimple extends CommandBase {
     }
 
     public void execute() {
-        System.out.println("TRYING TO MOVE HOOD!!!");
-        System.out.println("HoodSwitch:" + this.shooter.AtHoodZeroPoint());
+        //System.out.println("TRYING TO MOVE HOOD!!!");
+        //System.out.println("HoodSwitch:" + this.shooter.AtHoodZeroPoint());
         this.shooter.moveHood(-.1);
     }
 
@@ -39,13 +39,13 @@ public class ZeroCommandSimple extends CommandBase {
         {
             this.shooter.setHoodAngle(Constants.BASE_HOOD_ANGLE);
         }
-        System.out.println("END!!!");
+        //System.out.println("END!!!");
     }
 
     // Checking when things are finished by checking the velocity because
     //  the stop switch never reports true :(
     public boolean isFinished(){
-        System.out.println("HoodSwitch:" + this.shooter.AtHoodZeroPoint());
+        //System.out.println("HoodSwitch:" + this.shooter.AtHoodZeroPoint());
         this.shooter.AtZeroPoint(Shooter.EDeviceType.Hood);
         endTimer.start();
         if(!this.shooter.atHoodZeroPointRPM()) {
