@@ -38,7 +38,7 @@ public final class Constants {
 
     //Ball Positions
     public static final int VERTICAL_POSITION = 0;
-    public static final int FRONT_POSITION = 0;
+    public static final int FRONT_POSITION = 4;
 
     //Turret CANs
     // public static final int TURRET_MOTOR = 20; //temp value

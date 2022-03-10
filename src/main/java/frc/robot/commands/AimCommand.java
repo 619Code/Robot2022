@@ -30,7 +30,9 @@ public class AimCommand extends CommandBase {
         this.presetShot = new Shot();
         this.presetShot.isValid = false;
         addRequirements(shooter);
-        addRequirements(drive);
+        if(presetShot.useLimelight){
+            addRequirements(drive);
+        }
     }
 
     public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub, PIDController PID) {
@@ -48,6 +50,10 @@ public class AimCommand extends CommandBase {
         limelight.turnLightOn();
         States.isAiming = true;
         States.currentShot = presetShot;
+
+        if(presetShot.useLimelight){
+            drive.curve(0, 0, false);
+        }
     }
 
     public void execute() {

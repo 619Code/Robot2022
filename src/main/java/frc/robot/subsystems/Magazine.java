@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -23,16 +24,17 @@ public class Magazine extends SubsystemBase {
     public Magazine() {
         rollerMotor = new CANSparkMax(Constants.ROLLER_MOTOR, MotorType.kBrushless);
         backBeltMotor = new CANSparkMax(Constants.BACK_BELT_MOTOR, MotorType.kBrushless);
-
+        backBeltMotor.setIdleMode(IdleMode.kBrake);
+        
         verticalPosition = new BallPosition(Constants.VERTICAL_POSITION);
-        //frontPosition = new BallPosition(Constants.FRONT_POSITION);
+        frontPosition = new BallPosition(Constants.FRONT_POSITION);
 
         endTimer = new Timer();
     }
 
     public void intakeBalls() {
         
-        backBeltMotor.set(-0.3);        
+        backBeltMotor.set(-0.2);        
     }
 
     public void outtakeBalls() {
