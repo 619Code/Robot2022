@@ -7,33 +7,28 @@ import frc.robot.subsystems.ShiftingWCD;
 
 public class TestAutoCommand extends CommandBase {
     ShiftingWCD drive;
-    Timer endTimer;
-    double time;
+    double goal;
 
-    public TestAutoCommand(ShiftingWCD drive, double time) {
+    public TestAutoCommand(ShiftingWCD drive, double goal) {
         this.drive = drive;
-        this.endTimer = new Timer();
-        this.time = time;
+        this.goal = goal;
+        drive.resetEncoders();
         addRequirements(drive);
     }
 
     public void initialize(){
-        endTimer.reset();
-        endTimer.start();
+        drive.resetEncoders();
     }
 
     @Override
     public void execute() {
-        if((!States.isInAuto)){
-            this.cancel();
-            return;
-        }
+        System.out.println(drive.getLeftPosition());
         drive.curve(-0.4, 0, false);
     }
 
     @Override
     public boolean isFinished() {
-        return endTimer.hasElapsed(time);
+        return -drive.getLeftPosition() >= goal;
     }
 
     @Override
