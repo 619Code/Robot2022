@@ -21,31 +21,25 @@ public class AimCommand extends CommandBase {
     private Shot presetShot;
 
     private PIDController targetPID = new PIDController(0, 0, 0);
-
-    private boolean isAuto;
-
-    private Timer endTimer;
     
-    public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub, boolean isAuto) {
+    public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub) {
         shooter = shooterSub;
         drive = driveSub;
         limelight = limelightSub;
         navx = drive.getNavx();
         this.presetShot = new Shot();
         this.presetShot.isValid = false;
-        this.isAuto = isAuto;
-        this.endTimer = new Timer();
         addRequirements(shooter);
         addRequirements(drive);
     }
 
-    public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub, PIDController PID, boolean isAuto) {
-        this(shooterSub, driveSub, limelightSub, isAuto);
+    public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub, PIDController PID) {
+        this(shooterSub, driveSub, limelightSub);
         this.targetPID = PID;
     }
 
-    public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub, Shot presetShot, boolean isAuto) {
-        this(shooterSub, driveSub, limelightSub, isAuto);
+    public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub, Shot presetShot) {
+        this(shooterSub, driveSub, limelightSub);
         this.presetShot = presetShot;
     }
 
@@ -54,15 +48,9 @@ public class AimCommand extends CommandBase {
         limelight.turnLightOn();
         States.isAiming = true;
         States.currentShot = presetShot;
-        endTimer.reset();
-        endTimer.start();
     }
 
     public void execute() {
-        if((!States.isInAuto) && isAuto){
-            this.cancel();
-            return;
-        }
         limelight.update();
         //System.out.println("angleX: " + limelight.angleX);
         //System.out.println("angleY: " + limelight.angleY);
@@ -90,14 +78,14 @@ public class AimCommand extends CommandBase {
             }
             // if the shooter is within 5 % of where it should be
             // and the hood is within 3% of where it should be
-            System.out.print("SHOOTER READINESS: ");
+            /*System.out.print("SHOOTER READINESS: ");
             System.out.print(Math.abs(Math.abs(shooter.getShooterRPM())/shot.rpm - 1));
             System.out.print(", TARGET HOOD ANGLE: ");
             System.out.print(shot.hoodAngle);
             System.out.print(" ");
             System.out.print(shooter.getHoodAngle());
             System.out.print(" ");
-            System.out.println(Math.abs(shooter.getHoodAngle()/shot.hoodAngle - 1));
+            System.out.println(Math.abs(shooter.getHoodAngle()/shot.hoodAngle - 1));*/
             if(Math.abs(Math.abs(shooter.getShooterRPM())/shot.rpm - 1) < 0.1 && Math.abs(shooter.getHoodAngle()/shot.hoodAngle - 1) < 0.03){
                 States.isShooterReady = true;
             } else {
@@ -112,11 +100,7 @@ public class AimCommand extends CommandBase {
     }
 
     public boolean isFinished() {
-        if(States.isInAuto) {
-            return endTimer.hasElapsed(8);
-        } else {
-            return false;
-        }
+        return false;
     }
 
     public void end(boolean isInterrupted) {

@@ -36,7 +36,7 @@ public class IntakeCommand extends CommandBase {
             magazine.intakeBalls();
         }*/
         //System.out.println(magazine.verticalPosition.hasBall());
-        System.out.println("Lowering intake! Intake is " + (intake.isLowered() ? "low" : "high"));
+        //System.out.println("Lowering intake! Intake is " + (intake.isLowered() ? "low" : "high"));
         if(!magazine.verticalPosition.hasBall()) {
             if (!intake.isLowered())
                 intake.lowerIntake();
