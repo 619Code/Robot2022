@@ -25,6 +25,12 @@ public class Shooter extends SubsystemBase implements Loggable {
     @Log
     private double currentVelocity = 0;
 
+    @Log.Graph
+    private double motorGain;
+
+    @Log.Graph
+    private double shooterPidResult;
+
     private double shooterMinOutput;
     private double shooterMaxOutput;
     private double shooterP;
@@ -47,7 +53,7 @@ public class Shooter extends SubsystemBase implements Loggable {
     
     private double shooterSetPoint;
     
-    @Log
+    @Log.Graph
     private double shooterVelocity;
 
     @Log
@@ -67,12 +73,11 @@ public class Shooter extends SubsystemBase implements Loggable {
 
     @Log
     private double adjustedPoint;
+    
     @Log
-    private double ownPIDHoodSetPointRot, hoodMotorDutyCycle, hoodPosError;
-    // private SparkMaxPIDController turretPID;
-    // private double turretSetPoint;
-    // private double turretAngle;
-    // private SparkMaxLimitSwitch turretSwitch;
+    private double ownPIDHoodSetPointRot;
+    private double hoodMotorDutyCycle;
+    private double hoodPosError;
 
     private SparkMaxLimitSwitch hoodSwitch;
 
@@ -154,8 +159,12 @@ public class Shooter extends SubsystemBase implements Loggable {
         //shooterPID.setReference(shooterSetPoint, CANSparkMax.ControlType.kVelocity);
         var newTarget = shooterOnboardPID.calculate(this.shooterEncoder.getVelocity(), speed);
         var newRate = Math.max(Constants.SHOOTER_MIN_OUTPUT, newTarget/Constants.SHOOTER_MAX_RPM * -1);
+        this.shooterPidResult = newTarget;
+        // var newRate = Math.max(Constants.SHOOTER_MIN_OUTPUT, newTarget);
+        this.motorGain = newRate;
         this.shooterMotor.set(newRate);
         this.currentVelocity = this.shooterEncoder.getVelocity();
+        this.shooterVelocity = this.currentVelocity;
         this.shooterCountsPerRevolution = shooterEncoder.getCountsPerRevolution();
         this.velocityConversionFactor = this.shooterEncoder.getVelocityConversionFactor();
     }
@@ -257,56 +266,56 @@ public class Shooter extends SubsystemBase implements Loggable {
             // this.SetTurretZeroPoint();
     }
 
-    @Config(defaultValueNumeric = Constants.SHOOTER_KP)
+    @Config(defaultValueNumeric = Constants.SHOOTER_KP, rowIndex = 0, columnIndex = 0)
     public void setShooterP(double value) {
         this.shooterP = value;
     }
 
-    @Config(defaultValueNumeric = Constants.SHOOTER_KI)
+    @Config(defaultValueNumeric = Constants.SHOOTER_KI, rowIndex = 1, columnIndex = 0)
     public void setShooterI(double value) {
         this.shooterI = value;
     }
 
-    @Config(defaultValueNumeric = Constants.SHOOTER_KD)
+    @Config(defaultValueNumeric = Constants.SHOOTER_KD, rowIndex = 2, columnIndex = 0)
     public void setShooterD(double value) {
         this.shooterD = value;
     }
 
-    @Config(defaultValueNumeric = Constants.SHOOTER_MIN_OUTPUT)
+    @Config(defaultValueNumeric = Constants.SHOOTER_MIN_OUTPUT, rowIndex = 3, columnIndex = 0)
     public void setShooterMinOutput(double value) {
         this.shooterMinOutput = value;
     }
 
-    @Config(defaultValueNumeric = Constants.SHOOTER_MAX_OUTPUT)
+    @Config(defaultValueNumeric = Constants.SHOOTER_MAX_OUTPUT, rowIndex = 4, columnIndex = 0)
     public void setShooterMaxOutput(double value) {
         this.shooterMaxOutput = value;
     }
-
-    @Config(defaultValueNumeric = Constants.HOOD_KP)
+    
+    @Config(defaultValueNumeric = Constants.HOOD_KP, rowIndex = 0, columnIndex = 1)
     public void setHoodP(double value) {
         this.hoodP = value;
     }
 
-    @Config(defaultValueNumeric = Constants.HOOD_KI)
+    @Config(defaultValueNumeric = Constants.HOOD_KI, rowIndex = 1, columnIndex = 1)
     public void setHoodI(double value) {
         this.hoodI = value;
     }
 
-    @Config(defaultValueNumeric = Constants.HOOD_KD)
+    @Config(defaultValueNumeric = Constants.HOOD_KD, rowIndex = 2, columnIndex = 1)
     public void setHoodD(double value) {
         this.hoodD = value;
     }
 
-    @Config(defaultValueNumeric = Constants.HOOD_MIN_OUTPUT )
+    @Config(defaultValueNumeric = Constants.HOOD_MIN_OUTPUT, rowIndex = 3, columnIndex = 1 )
     public void setHoodMinOutput(double value) {
         this.hoodMinOutput = (float)value;
     }
 
-    @Config(defaultValueNumeric = Constants.HOOD_MAX_OUTPUT)
+    @Config(defaultValueNumeric = Constants.HOOD_MAX_OUTPUT, rowIndex = 4, columnIndex = 1)
     public void setHoodMaxOutput(double value) {
         this.hoodMaxOutput = (float)value;
     }
-    @Config(defaultValueNumeric = 0)
+    @Config(defaultValueNumeric = 0, rowIndex = 5, columnIndex = 1)
     public void setHoodSetPoint(double value) {
         this.ownPIDHoodSetPointRot = value;
     }

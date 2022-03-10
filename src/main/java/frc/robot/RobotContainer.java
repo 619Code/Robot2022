@@ -94,8 +94,8 @@ public class RobotContainer {
 
         //limelight = new Limelight();
         shooter = new Shooter();
-        //this.tuneShooterCommand = new TuneShooterCommand(shooter);
-        //shooter.setDefaultCommand(tuneShooterCommand);
+        this.tuneShooterCommand = new TuneShooterCommand(shooter);
+        shooter.setDefaultCommand(tuneShooterCommand);
 
         //joystickAnalogButton = new JoystickAnalogButton(operator, 3);
         
