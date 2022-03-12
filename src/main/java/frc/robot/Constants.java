@@ -70,7 +70,7 @@ public final class Constants {
     //Drive constants
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(5.827); //meters
     public static final int NEO_LIMIT = 45; //amps
-    public static final double SPEED_ADJUST = 0.4; //how much to adjust speed of drive
+    public static final double SPEED_ADJUST = 0.6; //how much to adjust speed of drive
     public static final double DRIVE_RATIO_HIGH = (10.0/66.0) * (40.0/44.0); // gear ratio for high gear
     public static final double DRIVE_RATIO_LOW = (10.0/66.0) * (24.0/60.0); // gear ratio for low gear
     public static final double TRACK_WIDTH = Units.inchesToMeters(23); //distance between wheels in meters
@@ -138,8 +138,8 @@ public final class Constants {
     public static final double CLIMBER_WINCH_I = 0; // I constant for winch PID
     public static final double CLIMBER_WINCH_D = 0.02; // D constant for winch PID
     public static final int HOOD_DISTANCE_SENSOR = 1;
-    public static final double CLIMBER_UP_RATE = .3;
-    public static final double CLIMBER_DOWN_RATE = .3;
+    public static final double CLIMBER_UP_RATE = .75;
+    public static final double CLIMBER_DOWN_RATE = .75;
 
     // Shot finding constants
     public static final double GRAVITY = 9.81; // m/s^2
