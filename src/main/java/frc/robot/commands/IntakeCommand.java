@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.States;
 import frc.robot.subsystems.Intake;
@@ -7,42 +8,44 @@ import frc.robot.subsystems.Magazine;
 
 public class IntakeCommand extends CommandBase {
 
-    //private XboxController controller;
     private Intake intake;
     private Magazine magazine;
     //private boolean armDown;
 
+    private Timer backTimer;
+    private Timer frontTimer;
+
     public IntakeCommand(Intake intake, Magazine magazine) {
         this.intake = intake;
         this.magazine = magazine;
+
+        this.backTimer = new Timer();
+        this.frontTimer = new Timer();
 
         addRequirements(intake, magazine);
     }
 
     @Override
     public void initialize() {
-        //intake.lowerIntake();
     }
 
     @Override
     public void execute() {
-        /*if(!States.isMagFull){
+        intake.spinIntake(0.6);
+        if (!intake.isLowered()) {
             intake.lowerIntake();
-            intake.spinIntake(0.6);
-            States.isMagFull = magazine.isFull();
-        } else {
-            intake.raiseIntake();
-            intake.spinIntake(0);
-            magazine.intakeBalls();
-        }*/
-        //System.out.println(magazine.verticalPosition.hasBall());
-        intake.spinIntake(0.8);
-        if (!intake.isLowered())
-            intake.lowerIntake();
-        //System.out.println("Ball in mag? " + (magazine.verticalPosition.hasBall() ? "yes" : "no"));
-        //System.out.println("Lowering intake! Intake is " + (intake.isLowered() ? "low" : "high"));
+        }
+
         if(!magazine.verticalPosition.hasBall()) {
+            frontTimer.reset();
             magazine.intakeBalls();
+        } else if(magazine.frontPosition.hasBall()) {
+            frontTimer.start();
+            if(!frontTimer.hasElapsed(1)) {
+                magazine.intakeBalls();
+            } else {
+                magazine.stopAll();
+            }
         } else {
             magazine.stopAll();
         }

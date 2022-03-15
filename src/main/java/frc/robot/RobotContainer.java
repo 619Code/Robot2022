@@ -31,6 +31,7 @@ import frc.robot.commands.TuneShooterCommand;
 import frc.robot.commands.ZeroCommand;
 import frc.robot.commands.ZeroCommandSimple;
 import frc.robot.helpers.JoystickAnalogButton;
+import frc.robot.helpers.Shot;
 import frc.robot.helpers.ShotPresets;
 import frc.robot.subsystems.*;
 import io.github.oblarg.oblog.annotations.Config;
@@ -59,7 +60,7 @@ public class RobotContainer {
 
     //Commands
     @Log 
-    private TuneShooterCommand tuneShooterCommand;
+    private AimCommand tuneShooterCommand;
 
     @Log
     private DriveCommand driveCommand;
@@ -67,13 +68,14 @@ public class RobotContainer {
 
     @Log
     public Shooter shooter;
-    //private final LedStrip ledStrip;
+    private final LedStrip ledStrip;
 
     @Config.PIDController
     private PIDController targetPID;
-
+    
     public RobotContainer() {
-        //targetPID = new PIDController(0, 0, 0);
+
+        targetPID = new PIDController(Constants.AIMING_P, Constants.AIMING_I, Constants.AIMING_D);
 
         driver = new XboxController(0);
         operator = new XboxController(1);
@@ -92,18 +94,17 @@ public class RobotContainer {
         var climbCommand = new ClimbCommand(climber, operator);
         climber.setDefaultCommand(climbCommand);
 
-        //limelight = new Limelight();
-        shooter = new Shooter();
-        this.tuneShooterCommand = new TuneShooterCommand(shooter);
-        shooter.setDefaultCommand(tuneShooterCommand);
-
-        //joystickAnalogButton = new JoystickAnalogButton(operator, 3);
-        
         limelight = new Limelight(drive);
         limelight.turnLightOff();
 
-        //ledStrip = new LedStrip();
-        // ledStrip.setDefaultCommand(new RainbowLedCommand(ledStrip));
+        shooter = new Shooter();
+        this.tuneShooterCommand = new AimCommand(shooter, drive, limelight, new Shot(false, 0, 0, 0, true), targetPID);
+        //shooter.setDefaultCommand(tuneShooterCommand);
+
+        //joystickAnalogButton = new JoystickAnalogButton(operator, 3);
+
+        ledStrip = new LedStrip();
+        ledStrip.setDefaultCommand(new RainbowLedCommand(ledStrip));
 
         configureControls();
     }
@@ -126,10 +127,12 @@ public class RobotContainer {
         JoystickButton tarmacGoalButton = new JoystickButton(operator, XboxController.Button.kX.value);
         tarmacGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, ShotPresets.TARMAC_SHOT));
         JoystickButton tarmacHelperButton = new JoystickButton(operator, XboxController.Button.kB.value);
-        tarmacHelperButton.whileHeld(new AimCommand(shooter, drive, limelight, ShotPresets.TARMAC_HELPER_SHOT));
+        //tarmacHelperButton.whileHeld(new AimCommand(shooter, drive, limelight, new Shot(false, 0, 0, 0, true), targetPID));
+        tarmacHelperButton.whileHeld(tuneShooterCommand);
 
         JoystickButton climbCommandButton = new JoystickButton(operator, XboxController.Button.kBack.value);
         climbCommandButton.whileHeld(new ManualClimbingCommand(climber, operator));
+
         // RainbowLedCommand ledCommand = new RainbowLedCommand(ledStrip);
         // new JoystickButton(driver, XboxController.Button.kY.value).toggleWhenPressed(ledCommand);
         // //new JoystickButton(primaryController, XboxController.Button.kX.value).cancelWhenPressed(ledCommand);
