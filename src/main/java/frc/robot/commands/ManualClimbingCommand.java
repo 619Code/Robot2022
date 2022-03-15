@@ -28,9 +28,9 @@ public class ManualClimbingCommand extends CommandBase {
         }
 
         if (upDown < 0)
-            moveRate = upDown * Constants.CLIMBER_DOWN_RATE;
+            moveRate = upDown * 0.3;
         else 
-            moveRate = upDown * Constants.CLIMBER_UP_RATE;
+            moveRate = upDown * 0.3;
 
         this.climber.ManualMove(moveRate);
         //this.climber.leftClimber.set(moveRate);

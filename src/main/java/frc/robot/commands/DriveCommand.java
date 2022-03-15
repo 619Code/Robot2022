@@ -48,8 +48,7 @@ public class DriveCommand extends CommandBase implements Loggable {
 
         isLowGear = false;
         if(controller.getRightTriggerAxis() > 0.5) {
-            throttle *= 0.6/Constants.SPEED_ADJUST;
-            rotation *= 0.6/Constants.SPEED_ADJUST;
+            throttle *= 0.5;
         }
     }
 
