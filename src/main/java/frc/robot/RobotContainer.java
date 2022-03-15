@@ -39,6 +39,7 @@ import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.AimCommand;
 import frc.robot.commands.AngleFinderCommand;
+import frc.robot.commands.CavalierLedCommand;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.RainbowLedCommand;
@@ -104,7 +105,7 @@ public class RobotContainer {
         //joystickAnalogButton = new JoystickAnalogButton(operator, 3);
 
         ledStrip = new LedStrip();
-        ledStrip.setDefaultCommand(new RainbowLedCommand(ledStrip));
+        ledStrip.setDefaultCommand(new CavalierLedCommand(ledStrip));
 
         configureControls();
     }
