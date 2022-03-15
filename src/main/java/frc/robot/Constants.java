@@ -26,19 +26,17 @@ public final class Constants {
     // 53.5 degrees at 98 revs
     // derees per rev = (81 - 53.5) / 98
 
-
-
     //Hood Constants
     //0 = 15 degrees
     public static final double BASE_HOOD_ANGLE = 81;
-    public static final double HIGH_HOOD_ANGLE = 53;
+    public static final double HIGH_HOOD_ANGLE = 48;
     public static final double MINIMUM_HOOD_ANGLE_REV = 0;
-    public static final double MAXIMUM_HOOD_ANGLE_REV = 98;
+    public static final double MAXIMUM_HOOD_ANGLE_REV = 117;
     public static final double HOOD_DEGREES_PER_REV = (BASE_HOOD_ANGLE - HIGH_HOOD_ANGLE) / MAXIMUM_HOOD_ANGLE_REV;
 
     //Ball Positions
     public static final int VERTICAL_POSITION = 0;
-    public static final int FRONT_POSITION = 4;
+    public static final int FRONT_POSITION = 1;
 
     //Turret CANs
     // public static final int TURRET_MOTOR = 20; //temp value
@@ -54,6 +52,14 @@ public final class Constants {
     public static final double SHOOTER_MAX_OUTPUT = 0;
     public static final double SHOOTER_MIN_OUTPUT = -1;
 
+    //Shooter interpolation
+    public static final double DISTANCE_1 = 106;
+    public static final double RPM_1 = 3000;
+    public static final double ANGLE_1 = 67;
+    public static final double DISTANCE_2 = 205;
+    public static final double RPM_2 = 3800;
+    public static final double ANGLE_2 = 52;
+
     //Hood PID
     public static final double HOOD_KP = 13.581;
     public static final double HOOD_KI = 0;
@@ -61,11 +67,15 @@ public final class Constants {
     public static final double HOOD_MAX_OUTPUT = .2;
     public static final double HOOD_MIN_OUTPUT = -.2;
     
-
     //Turret PID
     // public static final int TURRET_KP = 0;
     // public static final int TURRET_KI = 0;
     // public static final int TURRET_KD = 0;
+
+    //Aiming PID
+    public static final double AIMING_P = 0.12;
+    public static final double AIMING_I = 0.0;
+    public static final double AIMING_D = 0.005;
 
     //Drive constants
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(5.827); //meters
@@ -98,15 +108,15 @@ public final class Constants {
     public static final double JOYSTICK_DEADZONE = 0.075;
   
     // Vision system
-    public static final double LIMELIGHT_HEIGHT = Units.inchesToMeters(22); // meters, altitude of LL on robot above ground
+    public static final double LIMELIGHT_HEIGHT = 29; // inches, altitude of LL on robot above ground
     public static final double LIMELIGHT_ANGLE = 30; // degrees, angle of LL above ground
-    public static final double TOP_HUB_HEIGHT = Units.inchesToMeters(97.5); // not actual field, using different values for testing Units.inchesToMeters(8+8*12); // meters, height of top of tape on top hub
-    public static final double TOP_HUB_RADIUS = Units.inchesToMeters((5+(3/8)+4*12)/2); // meters, outer radius of top hub
-    public static final double TARGET_THICKNESS = Units.inchesToMeters(2); // meters, thickness of target tape
+    public static final double TOP_HUB_HEIGHT = 104; //inches
+    public static final double TOP_HUB_RADIUS = (5+(3/8)+4*12)/2; // inches, accurate is (5+(3.0/8.0)+4*12)/2.0
+    public static final double TARGET_THICKNESS = 2; // inches, thickness of target tape
 
     // LED constants
-    public static final int LED_PWM_PORT = 0; // roboRIO PWM port
-    public static final int LED_STRIP_LENGTH = 25; // number of LEDs in the strip
+    public static final int LED_PWM_PORT = 9; // roboRIO PWM port
+    public static final int LED_STRIP_LENGTH = 100; // number of LEDs in the strip
 
     // Kinematics/Auto Constants
     public static final double ksVolts = 0.34791;
