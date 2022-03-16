@@ -30,7 +30,7 @@ public class ZeroCommandSimple extends CommandBase {
     public void execute() {
         //System.out.println("TRYING TO MOVE HOOD!!!");
         //System.out.println("HoodSwitch:" + this.shooter.AtHoodZeroPoint());
-        this.shooter.moveHood(-.1);
+        this.shooter.moveHood(-0.3);
     }
 
     public void end(boolean isInterrupted){

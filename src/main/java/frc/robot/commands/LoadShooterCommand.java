@@ -21,14 +21,11 @@ public class LoadShooterCommand extends CommandBase {
     }
 
     public void execute() {
-        /*System.out.print("LOADING SHOOTER");
-        System.out.print(States.isAiming);
-        System.out.print(States.isShooterReady);
-        System.out.println(States.currentShot.isValid);*/
-        /*if(States.isAiming && States.currentShot.isValid && States.isShooterReady){
-            magazine.loadShooter();
-        }*/
-        magazine.loadShooter();
+        if(States.isShooterReady) {
+            magazine.intakeBalls();
+        } else {
+            magazine.stopAll();
+        }
     }
 
     public boolean isFinished(boolean isInterrupted) {

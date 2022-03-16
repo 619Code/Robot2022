@@ -25,15 +25,11 @@ public class Magazine extends SubsystemBase {
         frontPosition = new BallPosition(Constants.FRONT_POSITION);
     }
 
-    public void intakeBalls() {
-        backBeltMotor.set(-0.2);        
-    }
-
     public void outtakeBalls() {
         backBeltMotor.set(0.3);
     }
 
-    public void loadShooter() {
+    public void intakeBalls() {
         backBeltMotor.set(-0.3);
     }
 

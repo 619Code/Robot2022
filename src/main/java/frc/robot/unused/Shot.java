@@ -1,4 +1,4 @@
-package frc.robot.helpers;
+package frc.robot.unused;
 
 public class Shot {
     public boolean isValid;
@@ -7,12 +7,9 @@ public class Shot {
     public double chanceOfSuccess;
     public boolean useLimelight;
 
-    public Shot(boolean isValid, double rpm, double hoodAngle, double chanceOfSuccess, boolean useLimelight) {
-        this.isValid = isValid;
+    public Shot(double rpm, double hoodAngle) {
         this.rpm = rpm;
         this.hoodAngle = hoodAngle;
-        this.chanceOfSuccess = chanceOfSuccess;
-        this.useLimelight = useLimelight;
     }
 
     public Shot(){

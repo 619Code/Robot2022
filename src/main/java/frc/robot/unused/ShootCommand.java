@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.unused;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.Timer;
@@ -26,15 +26,6 @@ public class ShootCommand extends CommandBase {
     public void initialize() {}
 
     public void execute() {
-        /*if(!States.isLocationValid){
-            return; 
-            // TODO: blink LEDS
-        }
-        Shot shot = ShotFinder.getShot(States.distance);
-        if(!shot.isValid){
-            return;
-        }
-        fireBalls(shot.rpm, shot.hoodAngle);*/
         fireBalls(100, 60);
     }
 
@@ -47,7 +38,7 @@ public class ShootCommand extends CommandBase {
         //boolean hoodSet = Math.abs(shooter.getHoodAngle() - hoodAngle) < 0.03; //hood position is within 3% of the goal
         boolean hoodSet = true;
         if(spedUp && hoodSet) {
-            magazine.loadShooter();
+            magazine.intakeBalls();
         } else {
             magazine.stopAll();
         }

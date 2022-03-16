@@ -23,26 +23,23 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LoadShooterCommand;
 import frc.robot.commands.ManualClimbingCommand;
-import frc.robot.commands.MoveHoodUpCommand;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RetractIntakeCommand;
-import frc.robot.commands.ShootCommand;
+
 import frc.robot.commands.TuneShooterCommand;
-import frc.robot.commands.ZeroCommand;
 import frc.robot.commands.ZeroCommandSimple;
 import frc.robot.helpers.JoystickAnalogButton;
-import frc.robot.helpers.Shot;
-import frc.robot.helpers.ShotPresets;
 import frc.robot.subsystems.*;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.subsystems.Shooter;
+import frc.robot.unused.Shot;
+import frc.robot.unused.ShotPresets;
 import frc.robot.commands.AimCommand;
-import frc.robot.commands.AngleFinderCommand;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.CavalierLedCommand;
 import frc.robot.commands.RainbowLedCommand;
-import frc.robot.commands.MoveHoodUpCommand;
 import frc.robot.commands.TestAutoCommand;
 
 public class RobotContainer {
@@ -60,7 +57,7 @@ public class RobotContainer {
 
     //Commands
     @Log 
-    private AimCommand tuneShooterCommand;
+    private AimCommand aimCommand;
 
     @Log
     private DriveCommand driveCommand;
@@ -74,7 +71,6 @@ public class RobotContainer {
     private PIDController targetPID;
     
     public RobotContainer() {
-
         targetPID = new PIDController(Constants.AIMING_P, Constants.AIMING_I, Constants.AIMING_D);
 
         driver = new XboxController(0);
@@ -87,7 +83,6 @@ public class RobotContainer {
 
         intake = new Intake();
         intake.raiseIntake();
-        //retractIntake = new RetractIntakeCommand(intake);
 
         magazine = new Magazine();
         climber = new Climber();
@@ -98,13 +93,9 @@ public class RobotContainer {
         limelight.turnLightOff();
 
         shooter = new Shooter();
-        this.tuneShooterCommand = new AimCommand(shooter, drive, limelight, new Shot(false, 0, 0, 0, true), targetPID);
-        //shooter.setDefaultCommand(tuneShooterCommand);
-
-        //joystickAnalogButton = new JoystickAnalogButton(operator, 3);
 
         ledStrip = new LedStrip();
-        ledStrip.setDefaultCommand(new RainbowLedCommand(ledStrip));
+        ledStrip.setDefaultCommand(new CavalierLedCommand(ledStrip));
 
         configureControls();
     }
@@ -118,46 +109,33 @@ public class RobotContainer {
         JoystickButton intakeUpButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
         intakeUpButton.whileHeld(new RetractIntakeCommand(intake));
 
-        // JoystickButton aimButton = new JoystickButton(operator, XboxController.Button.kB.value);
-        // aimButton.whileHeld(new AimCommand(shooter, drive, limelight));
         JoystickButton lowGoalButton = new JoystickButton(operator, XboxController.Button.kA.value);
-        lowGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, ShotPresets.LOW_GOAL_SHOT));
+        lowGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, Constants.LOW_GOAL_ANGLE, Constants.LOW_GOAL_RPM));
+
         JoystickButton highGoalButton = new JoystickButton(operator, XboxController.Button.kY.value);
-        highGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, ShotPresets.HIGH_GOAL_SHOT));
-        JoystickButton tarmacGoalButton = new JoystickButton(operator, XboxController.Button.kX.value);
-        tarmacGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, ShotPresets.TARMAC_SHOT));
-        JoystickButton tarmacHelperButton = new JoystickButton(operator, XboxController.Button.kB.value);
-        //tarmacHelperButton.whileHeld(new AimCommand(shooter, drive, limelight, new Shot(false, 0, 0, 0, true), targetPID));
-        tarmacHelperButton.whileHeld(tuneShooterCommand);
+        highGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, Constants.HIGH_GOAL_ANGLE, Constants.HIGH_GOAL_RPM));
+
+        JoystickButton aimButton = new JoystickButton(operator, XboxController.Button.kB.value);
+        aimCommand = new AimCommand(shooter, drive, limelight);
+        aimButton.whileHeld(aimCommand);
 
         JoystickButton climbCommandButton = new JoystickButton(operator, XboxController.Button.kBack.value);
         climbCommandButton.whileHeld(new ManualClimbingCommand(climber, operator));
 
         // RainbowLedCommand ledCommand = new RainbowLedCommand(ledStrip);
         // new JoystickButton(driver, XboxController.Button.kY.value).toggleWhenPressed(ledCommand);
-        // //new JoystickButton(primaryController, XboxController.Button.kX.value).cancelWhenPressed(ledCommand);
+        // new JoystickButton(primaryController, XboxController.Button.kX.value).cancelWhenPressed(ledCommand);
 
         JoystickAnalogButton shootButton = new JoystickAnalogButton(operator, XboxController.Axis.kRightTrigger.value, .5);
-        //shootButton.whileHeld(new ShootCommand(shooter, magazine));
-        shootButton.whileHeld(new LoadShooterCommand(magazine));   
+        shootButton.whileHeld(new LoadShooterCommand(magazine));
 
-        JoystickButton zeroHoodButton = new JoystickButton(driver, XboxController.Button.kA.value);
-        zeroHoodButton.whenPressed(new ZeroCommand(shooter, Shooter.EDeviceType.Hood));
-
-        //JoystickButton angleFinderButton = new JoystickButton(operator, XboxController.Button.kX.value);
-        // modify these values as needed
-        //angleFinderButton.whenPressed(new AngleFinderCommand(shooter, Shooter.EDeviceType.Hood, true));
         JoystickButton zeroHood = new JoystickButton(driver, XboxController.Button.kB.value);
         zeroHood.whenPressed(new ZeroCommandSimple(shooter, Shooter.EDeviceType.Hood));
-
-        //JoystickButton xButton = new JoystickButton(driver, XboxController.Button.kX.value);
-        //var moveHoodUpCommand = new MoveHoodUpCommand(shooter);
-        //xButton.whileHeld(moveHoodUpCommand);
     }
 
     public Command getAutonomousCommand() {
         return new SequentialCommandGroup(
         new ParallelCommandGroup(new TestAutoCommand(drive, 4), new ZeroCommandSimple(shooter, Shooter.EDeviceType.Hood), new IntakeCommand(intake, magazine).withTimeout(8)),
-        new ParallelCommandGroup(new LoadShooterCommand(magazine), new AimCommand(shooter, drive, limelight, ShotPresets.LOW_GOAL_SHOT)).withTimeout(5));
+        new ParallelCommandGroup(new LoadShooterCommand(magazine), new AimCommand(shooter, drive, limelight)).withTimeout(5));
    }
 }

@@ -38,7 +38,6 @@ public class Limelight extends SubsystemBase {
             angleY = ty.getDouble(0);
             area = ta.getDouble(0);
             newDistance = getDistance();
-            States.isLocationValid = true;
 
             distanceLog = manageList(distanceLog, newDistance);
             distance = getListMedian(distanceLog, newDistance);
@@ -50,8 +49,6 @@ public class Limelight extends SubsystemBase {
             States.robotY = y;
             States.distance = distance;
 
-        } else {
-            States.isLocationValid = false;
         }
     }
 

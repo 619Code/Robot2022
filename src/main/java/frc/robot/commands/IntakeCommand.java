@@ -11,15 +11,12 @@ public class IntakeCommand extends CommandBase {
     private Intake intake;
     private Magazine magazine;
     //private boolean armDown;
-
-    private Timer backTimer;
     private Timer frontTimer;
 
     public IntakeCommand(Intake intake, Magazine magazine) {
         this.intake = intake;
         this.magazine = magazine;
 
-        this.backTimer = new Timer();
         this.frontTimer = new Timer();
 
         addRequirements(intake, magazine);
@@ -41,12 +38,13 @@ public class IntakeCommand extends CommandBase {
             magazine.intakeBalls();
         } else if(magazine.frontPosition.hasBall()) {
             frontTimer.start();
-            if(!frontTimer.hasElapsed(1)) {
+            if(!frontTimer.hasElapsed(0.25)) {
                 magazine.intakeBalls();
             } else {
                 magazine.stopAll();
             }
         } else {
+            frontTimer.reset();
             magazine.stopAll();
         }
     }

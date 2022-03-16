@@ -3,7 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import frc.robot.helpers.Shot;
+import frc.robot.unused.Shot;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -60,17 +60,19 @@ public final class Constants {
     public static final double RPM_2 = 3800;
     public static final double ANGLE_2 = 52;
 
+    //Shooter presets
+    public static final double LOW_GOAL_ANGLE = 66;
+    public static final double LOW_GOAL_RPM = 1700;
+
+    public static final double HIGH_GOAL_ANGLE = 81;
+    public static final double HIGH_GOAL_RPM = 2900;
+
     //Hood PID
     public static final double HOOD_KP = 13.581;
     public static final double HOOD_KI = 0;
     public static final double HOOD_KD = 0.23237;
     public static final double HOOD_MAX_OUTPUT = .2;
     public static final double HOOD_MIN_OUTPUT = -.2;
-    
-    //Turret PID
-    // public static final int TURRET_KP = 0;
-    // public static final int TURRET_KI = 0;
-    // public static final int TURRET_KD = 0;
 
     //Aiming PID
     public static final double AIMING_P = 0.12;

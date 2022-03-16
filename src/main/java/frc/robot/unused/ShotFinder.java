@@ -1,4 +1,4 @@
-package frc.robot.helpers;
+package frc.robot.unused;
 
 import frc.robot.Constants;
 import frc.robot.States;
@@ -10,7 +10,7 @@ public class ShotFinder {
         // this function calculates the rpm and hood angle needed for a shot gien the info in States
         Shot shot = new Shot();
         shot.isValid = false;
-        if(States.isLocationValid) {
+        if(true) {
             // given distance to goal and height of goal,
             // calculate a launch angle and velocity that will get the ball to the goal
             // and return the shot
