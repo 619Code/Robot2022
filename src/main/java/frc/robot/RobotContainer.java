@@ -86,13 +86,14 @@ public class RobotContainer {
         var climbCommand = new ClimbCommand(climber, operator);
         climber.setDefaultCommand(climbCommand);
 
-        limelight = new Limelight(drive);
-        limelight.turnLightOff();
+        
 
         shooter = new Shooter();
 
         ledStrip = new LedStrip();
-        ledStrip.setDefaultCommand(new CavalierLedCommand(ledStrip));
+
+        limelight = new Limelight(drive, ledStrip);
+        limelight.turnLightOff();
 
         configureControls();
     }

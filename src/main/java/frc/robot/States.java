@@ -10,4 +10,5 @@ public class States {
     public static Shot currentShot;
     public static boolean isShooterReady;
     public static boolean isInAuto;
+    public static boolean limelightUpdateLeds = true;
 }

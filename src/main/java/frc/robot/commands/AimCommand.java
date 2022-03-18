@@ -62,7 +62,6 @@ public class AimCommand extends CommandBase implements Loggable {
     }
 
     public void execute() {
-        limelight.update();
         spinupTimer.start();
 
         if(!preset) {
