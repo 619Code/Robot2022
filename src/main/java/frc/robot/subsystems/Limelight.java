@@ -68,6 +68,10 @@ public class Limelight extends SubsystemBase {
         }
     }
 
+    public boolean isInRange() {
+        return Math.abs(tx.getDouble(0)) < 1.2;
+    }
+
     public double getDistance() {
         double heightDiff = Constants.TOP_HUB_HEIGHT - Constants.LIMELIGHT_HEIGHT;
         double angle = Constants.LIMELIGHT_ANGLE + ty.getDouble(0);
@@ -79,7 +83,7 @@ public class Limelight extends SubsystemBase {
 
     public void turnLightOff() {
         //this.light.setNumber(1);
-        this.light.setNumber(3); //UNDO
+        this.light.setNumber(3);
     }
 
     public void turnLightOn() {

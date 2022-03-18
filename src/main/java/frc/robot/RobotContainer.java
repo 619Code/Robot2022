@@ -26,15 +26,12 @@ import frc.robot.commands.ManualClimbingCommand;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RetractIntakeCommand;
 
-import frc.robot.commands.TuneShooterCommand;
 import frc.robot.commands.ZeroCommandSimple;
 import frc.robot.helpers.JoystickAnalogButton;
 import frc.robot.subsystems.*;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.subsystems.Shooter;
-import frc.robot.unused.Shot;
-import frc.robot.unused.ShotPresets;
 import frc.robot.commands.AimCommand;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DriveCommand;
@@ -116,8 +113,8 @@ public class RobotContainer {
         highGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, Constants.HIGH_GOAL_ANGLE, Constants.HIGH_GOAL_RPM));
 
         JoystickButton aimButton = new JoystickButton(operator, XboxController.Button.kB.value);
-        aimCommand = new AimCommand(shooter, drive, limelight);
-        aimButton.whileHeld(aimCommand);
+        //aimCommand = new AimCommand(shooter, drive, limelight);
+        aimButton.whileHeld(new AimCommand(shooter, drive, limelight));
 
         JoystickButton climbCommandButton = new JoystickButton(operator, XboxController.Button.kBack.value);
         climbCommandButton.whileHeld(new ManualClimbingCommand(climber, operator));
@@ -135,7 +132,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         return new SequentialCommandGroup(
-        new ParallelCommandGroup(new TestAutoCommand(drive, 4), new ZeroCommandSimple(shooter, Shooter.EDeviceType.Hood), new IntakeCommand(intake, magazine).withTimeout(8)),
+        new ParallelCommandGroup(new TestAutoCommand(drive, 3.5), new ZeroCommandSimple(shooter, Shooter.EDeviceType.Hood), new IntakeCommand(intake, magazine).withTimeout(8)),
         new ParallelCommandGroup(new LoadShooterCommand(magazine), new AimCommand(shooter, drive, limelight)).withTimeout(5));
    }
 }

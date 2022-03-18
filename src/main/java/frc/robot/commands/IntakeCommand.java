@@ -44,7 +44,7 @@ public class IntakeCommand extends CommandBase {
                 magazine.stopAll();
             }
         } else {
-            frontTimer.reset();
+            //frontTimer.reset();
             magazine.stopAll();
         }
     }
