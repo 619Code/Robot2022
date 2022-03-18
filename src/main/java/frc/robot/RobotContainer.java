@@ -125,9 +125,9 @@ public class RobotContainer {
         // new JoystickButton(primaryController, XboxController.Button.kX.value).cancelWhenPressed(ledCommand);
 
         JoystickAnalogButton shootButton = new JoystickAnalogButton(operator, XboxController.Axis.kRightTrigger.value, .5);
-        shootButton.whileHeld(new LoadShooterCommand(magazine));
+        shootButton.whileHeld(new ParallelCommandGroup(new LoadShooterCommand(magazine), new RetractIntakeCommand(intake)));
 
-        JoystickButton zeroHood = new JoystickButton(driver, XboxController.Button.kB.value);
+        JoystickButton zeroHood = new JoystickButton(operator, XboxController.Button.kX.value);
         zeroHood.whenPressed(new ZeroCommandSimple(shooter, Shooter.EDeviceType.Hood));
     }
 

@@ -24,7 +24,11 @@ public class LoadShooterCommand extends CommandBase {
         if(States.isShooterReady) {
             magazine.intakeBalls();
         } else {
-            magazine.stopAll();
+            if(!magazine.verticalPosition.hasBall()) {
+                magazine.intakeBalls();
+            } else {
+                magazine.stopAll();
+            }
         }
     }
 

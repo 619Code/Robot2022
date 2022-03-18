@@ -33,8 +33,11 @@ public class IntakeCommand extends CommandBase {
             intake.lowerIntake();
         }
 
+        System.out.println(frontTimer.get());
+
         if(!magazine.verticalPosition.hasBall()) {
             frontTimer.reset();
+            frontTimer.stop();
             magazine.intakeBalls();
         } else if(magazine.frontPosition.hasBall()) {
             frontTimer.start();

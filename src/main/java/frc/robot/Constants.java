@@ -53,14 +53,21 @@ public final class Constants {
     public static final double SHOOTER_MIN_OUTPUT = -1;
 
     //Shooter interpolation
-    public static final double DISTANCE_1 = 106;
-    public static final double RPM_1 = 3000;
-    public static final double ANGLE_1 = 67;
-    public static final double DISTANCE_2 = 205;
-    public static final double RPM_2 = 3800;
-    public static final double ANGLE_2 = 52;
+    public static final double DISTANCE_CLOSE = 106;
+    public static final double RPM_CLOSE = 3000;
+    public static final double ANGLE_CLOSE = 67;
+
+    public static final double DISTANCE_MID = 149;
+    public static final double RPM_MID = 3350;
+    public static final double ANGLE_MID = 62;
+
+    public static final double DISTANCE_FAR = 205;
+    public static final double RPM_FAR = 3800;
+    public static final double ANGLE_FAR = 52;
 
     //Shooter presets
+    public static final double DISTANCE_PRESET = 69;
+
     public static final double LOW_GOAL_ANGLE = 66;
     public static final double LOW_GOAL_RPM = 1700;
 
