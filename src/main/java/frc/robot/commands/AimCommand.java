@@ -29,12 +29,16 @@ public class AimCommand extends CommandBase implements Loggable {
 
     private boolean preset = false;
 
+    private Timer spinupTimer;
+
     public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub) {
         shooter = shooterSub;
         drive = driveSub;
         limelight = limelightSub;
         navx = drive.getNavx();
+        this.spinupTimer = new Timer();
         addRequirements(shooter);
+        //System.out.println("Aim Command Created");
     }
 
     public AimCommand(Shooter shooterSub, ShiftingWCD driveSub, Limelight limelightSub, double angle, double velocity) {
@@ -47,6 +51,8 @@ public class AimCommand extends CommandBase implements Loggable {
     public void initialize() {
         //System.out.println("AIMCOMMAND INITIALIZED");
 
+        spinupTimer.reset();
+
         if(!preset) {
             limelight.turnLightOn();
             drive.curve(0, 0, false);
@@ -56,31 +62,45 @@ public class AimCommand extends CommandBase implements Loggable {
     }
 
     public void execute() {
-        limelight.update();
+        spinupTimer.start();
 
         if(!preset) {
-            tempVelocity = Constants.RPM_1 + (Constants.RPM_2 - Constants.RPM_1)/(Constants.DISTANCE_2 - Constants.DISTANCE_1) * (limelight.distance - Constants.DISTANCE_1);
-            tempAngle = Constants.ANGLE_1 + (Constants.ANGLE_2 - Constants.ANGLE_1)/(Constants.DISTANCE_2 - Constants.DISTANCE_1) * (limelight.distance - Constants.DISTANCE_1);
+            if(limelight.distance < (Constants.DISTANCE_CLOSE - 10)) { //very very close
+                //System.out.println("VERY CLOSE");
+                tempVelocity = Constants.HIGH_GOAL_RPM + (Constants.RPM_CLOSE - Constants.HIGH_GOAL_RPM)/(Constants.DISTANCE_CLOSE - Constants.DISTANCE_PRESET) * (limelight.distance - Constants.DISTANCE_PRESET);
+                tempAngle = Constants.HIGH_GOAL_ANGLE + (Constants.ANGLE_CLOSE - Constants.HIGH_GOAL_ANGLE)/(Constants.DISTANCE_CLOSE - Constants.DISTANCE_PRESET) * (limelight.distance - Constants.DISTANCE_PRESET);
+            } else if(limelight.distance < Constants.DISTANCE_MID) { //close to mid
+                //System.out.println("CLOSE");
+                tempVelocity = Constants.RPM_CLOSE + (Constants.RPM_MID - Constants.RPM_CLOSE)/(Constants.DISTANCE_MID - Constants.DISTANCE_CLOSE) * (limelight.distance - Constants.DISTANCE_CLOSE);
+                tempAngle = Constants.ANGLE_CLOSE + (Constants.ANGLE_MID - Constants.ANGLE_CLOSE)/(Constants.DISTANCE_MID - Constants.DISTANCE_CLOSE) * (limelight.distance - Constants.DISTANCE_CLOSE);
+            } else { //mid to far
+                //System.out.println("FAR");
+                tempVelocity = Constants.RPM_MID + (Constants.RPM_FAR - Constants.RPM_MID)/(Constants.DISTANCE_FAR - Constants.DISTANCE_MID) * (limelight.distance - Constants.DISTANCE_MID);
+                tempAngle = Constants.ANGLE_MID + (Constants.ANGLE_FAR - Constants.ANGLE_MID)/(Constants.DISTANCE_FAR - Constants.DISTANCE_MID) * (limelight.distance - Constants.DISTANCE_MID);
+            }
         }
         tempAngle = Math.max(tempAngle, Constants.HIGH_HOOD_ANGLE);
         tempAngle = Math.min(tempAngle, Constants.BASE_HOOD_ANGLE);
         
-        // System.out.println("Distance: " + limelight.distance);
+        //System.out.println("Distance: " + limelight.distance);
         // System.out.println("Velocity: " + tempVelocity);
         // System.out.println("Angle: " + tempAngle);
 
         shooter.setShooterSpeedByRPM(tempVelocity);
         shooter.setAngle(Shooter.EDeviceType.Hood, tempAngle);
 
-        System.out.println("Velocity (true): " + (-shooter.getShooterRPM()));
-        System.out.println("Velocity (goal): " + tempVelocity);
-        boolean shooterClose = Math.abs(shooter.getShooterRPM() + tempVelocity) < 200;
-        boolean hoodClose = Math.abs(shooter.getHoodAngle() - tempAngle) < 5;
-        if(shooterClose && hoodClose) {
+        //System.out.println("Velocity (true): " + (-shooter.getShooterRPM()));
+        //System.out.println("Velocity (goal): " + tempVelocity);
+        boolean shooterClose = Math.abs(shooter.getShooterRPM() + tempVelocity) < 200; //100;
+        boolean hoodClose = Math.abs(shooter.getHoodAngle() - tempAngle) < 3;
+
+        if((shooterClose && hoodClose) /*|| spinupTimer.hasElapsed(4)*/) {
             States.isShooterReady = true;
+        } else {
+            States.isShooterReady = false;
         }
 
-        if(!preset){
+        if(!preset && !limelight.isInRange()){
             rotation = -targetPID.calculate(limelight.angleX, 0);
             rotation = Math.min(rotation,0.6);
             rotation = Math.max(rotation,-0.6);
@@ -105,8 +125,10 @@ public class AimCommand extends CommandBase implements Loggable {
     }
 
     public void end(boolean isInterrupted) {
+        System.out.println("END!!!");
         States.isShooterReady = false;
         limelight.turnLightOff();
         shooter.stopAll();
+        spinupTimer.reset();
     }
 }

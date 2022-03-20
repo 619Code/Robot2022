@@ -53,14 +53,21 @@ public final class Constants {
     public static final double SHOOTER_MIN_OUTPUT = -1;
 
     //Shooter interpolation
-    public static final double DISTANCE_1 = 106;
-    public static final double RPM_1 = 3000;
-    public static final double ANGLE_1 = 67;
-    public static final double DISTANCE_2 = 205;
-    public static final double RPM_2 = 3800;
-    public static final double ANGLE_2 = 52;
+    public static final double DISTANCE_CLOSE = 106;
+    public static final double RPM_CLOSE = 3000;
+    public static final double ANGLE_CLOSE = 67;
+
+    public static final double DISTANCE_MID = 149;
+    public static final double RPM_MID = 3350;
+    public static final double ANGLE_MID = 62;
+
+    public static final double DISTANCE_FAR = 205;
+    public static final double RPM_FAR = 3800;
+    public static final double ANGLE_FAR = 52;
 
     //Shooter presets
+    public static final double DISTANCE_PRESET = 69;
+
     public static final double LOW_GOAL_ANGLE = 66;
     public static final double LOW_GOAL_RPM = 1700;
 
@@ -75,14 +82,14 @@ public final class Constants {
     public static final double HOOD_MIN_OUTPUT = -.2;
 
     //Aiming PID
-    public static final double AIMING_P = 0.12;
-    public static final double AIMING_I = 0.0;
-    public static final double AIMING_D = 0.005;
+    public static final double AIMING_P = 0.12; //0.15
+    public static final double AIMING_I = 0.00; //0.02
+    public static final double AIMING_D = 0.005; //0.01
 
     //Drive constants
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(5.827); //meters
     public static final int NEO_LIMIT = 45; //amps
-    public static final double SPEED_ADJUST = 0.6; //how much to adjust speed of drive
+    public static final double SPEED_ADJUST = 0.5; //how much to adjust speed of drive
     public static final double DRIVE_RATIO_HIGH = (10.0/66.0) * (40.0/44.0); // gear ratio for high gear
     public static final double DRIVE_RATIO_LOW = (10.0/66.0) * (24.0/60.0); // gear ratio for low gear
     public static final double TRACK_WIDTH = Units.inchesToMeters(23); //distance between wheels in meters

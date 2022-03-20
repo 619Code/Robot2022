@@ -16,11 +16,12 @@ public class Limelight extends SubsystemBase {
     public boolean hasTarget;
     private NetworkTable table;
     public ShiftingWCD drive;
+    private LedStrip ledStrip;
 
     private double newDistance;
     private ArrayList<Double> distanceLog = new ArrayList<Double>();
 
-    public Limelight(ShiftingWCD drive) {
+    public Limelight(ShiftingWCD drive, LedStrip ledStrip) {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         tx = table.getEntry("tx");
         ty = table.getEntry("ty");
@@ -28,6 +29,11 @@ public class Limelight extends SubsystemBase {
         tv = table.getEntry("tv");
         light = table.getEntry("ledMode");
         this.drive = drive;
+        this.ledStrip = ledStrip;
+    }
+
+    public void periodic(){
+        update();
     }
 
     public void update() {
@@ -50,6 +56,15 @@ public class Limelight extends SubsystemBase {
             States.distance = distance;
 
         }
+
+        if(States.limelightUpdateLeds) {
+            if(hasTarget) {
+                ledStrip.setWholeStripRGB(0, 0, 255);
+            } else {
+                ledStrip.setWholeStripRGB(255, 0, 0);
+            }
+            ledStrip.show();
+        }
     }
 
     private static ArrayList<Double> manageList(ArrayList<Double> list, double newDistance) {
@@ -68,6 +83,10 @@ public class Limelight extends SubsystemBase {
         }
     }
 
+    public boolean isInRange() {
+        return Math.abs(tx.getDouble(0)) < 1.2;
+    }
+
     public double getDistance() {
         double heightDiff = Constants.TOP_HUB_HEIGHT - Constants.LIMELIGHT_HEIGHT;
         double angle = Constants.LIMELIGHT_ANGLE + ty.getDouble(0);
@@ -79,7 +98,7 @@ public class Limelight extends SubsystemBase {
 
     public void turnLightOff() {
         //this.light.setNumber(1);
-        this.light.setNumber(3); //UNDO
+        this.light.setNumber(3);
     }
 
     public void turnLightOn() {
