@@ -19,20 +19,28 @@ public class ManualClimbingCommand extends CommandBase {
 
     public void execute()
     {
-        var upDown = -this.controller.getRightY();
-        var moveRate = 0.0;
+        double upDownLeft = -this.controller.getLeftY();
+        double upDownRight = -this.controller.getRightY();
+        double moveRateLeft = 0.0;
+        double moveRateRight = 0.0;
 
         //Dead zone
-        if (Math.abs(upDown) < 0.075) {
-            upDown = 0;
+        if (Math.abs(upDownLeft) < 0.075) {
+            upDownLeft = 0;
         }
-
-        if (upDown < 0)
-            moveRate = upDown * 0.3;
+        if (upDownLeft < 0)
+            moveRateLeft = upDownLeft * 0.3;
         else 
-            moveRate = upDown * 0.3;
+            moveRateLeft = upDownLeft * 0.3;
+        this.climber.leftClimber.set(moveRateLeft);
 
-        this.climber.ManualMove(moveRate);
-        //this.climber.leftClimber.set(moveRate);
+        if (Math.abs(upDownRight) < 0.075) {
+            upDownRight = 0;
+        }
+        if (upDownRight < 0)
+            moveRateRight = upDownRight * 0.3;
+        else 
+            moveRateRight = upDownRight * 0.3;
+        this.climber.rightClimber.set(moveRateRight);
     }
 }

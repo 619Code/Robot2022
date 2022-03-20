@@ -25,7 +25,7 @@ import frc.robot.commands.LoadShooterCommand;
 import frc.robot.commands.ManualClimbingCommand;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RetractIntakeCommand;
-
+import frc.robot.commands.SpinIntakeCommand;
 import frc.robot.commands.ZeroCommandSimple;
 import frc.robot.helpers.JoystickAnalogButton;
 import frc.robot.subsystems.*;
@@ -133,7 +133,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         return new SequentialCommandGroup(
-        new ParallelCommandGroup(new TestAutoCommand(drive, 3.5), new ZeroCommandSimple(shooter, Shooter.EDeviceType.Hood), new IntakeCommand(intake, magazine).withTimeout(8)),
-        new ParallelCommandGroup(new LoadShooterCommand(magazine), new AimCommand(shooter, drive, limelight)).withTimeout(5));
+        new ParallelCommandGroup(new TestAutoCommand(drive, 2.5), new ZeroCommandSimple(shooter, Shooter.EDeviceType.Hood), new IntakeCommand(intake, magazine).withTimeout(6)),
+        new ParallelCommandGroup(new SpinIntakeCommand(intake), new LoadShooterCommand(magazine), new AimCommand(shooter, drive, limelight)).withTimeout(8));
    }
 }
