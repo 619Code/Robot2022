@@ -10,8 +10,11 @@ public class LoadShooterCommand extends CommandBase {
 
     private Magazine magazine;
 
+    public double loadSpeed;
+
     public LoadShooterCommand(Magazine magazine) {        
         this.magazine = magazine;
+        loadSpeed = -0.8;
 
         addRequirements(magazine);
     }
@@ -22,10 +25,10 @@ public class LoadShooterCommand extends CommandBase {
 
     public void execute() {
         if(States.isShooterReady) {
-            magazine.intakeBalls();
+            magazine.intakeBalls(loadSpeed);
         } else {
             if(!magazine.verticalPosition.hasBall()) {
-                magazine.intakeBalls();
+                magazine.intakeBalls(loadSpeed);
             } else {
                 magazine.stopAll();
             }

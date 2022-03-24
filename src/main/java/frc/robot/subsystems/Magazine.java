@@ -29,8 +29,8 @@ public class Magazine extends SubsystemBase {
         backBeltMotor.set(0.3);
     }
 
-    public void intakeBalls() {
-        backBeltMotor.set(-0.3);
+    public void intakeBalls(double speed) {
+        backBeltMotor.set(speed);
     }
 
     public boolean isEmpty() {

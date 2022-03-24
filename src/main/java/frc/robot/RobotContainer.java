@@ -38,6 +38,7 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.commands.CavalierLedCommand;
 import frc.robot.commands.RainbowLedCommand;
 import frc.robot.commands.TestAutoCommand;
+import frc.robot.commands.TuneShooterCommand;
 
 public class RobotContainer {
 
@@ -59,10 +60,16 @@ public class RobotContainer {
     @Log
     private DriveCommand driveCommand;
     public Limelight limelight;
+    public ClimbCommand climbCommand;
+
+    public IntakeCommand intakeCommand;
 
     @Log
     public Shooter shooter;
     private final LedStrip ledStrip;
+
+    @Log(tabName = "Shooter")
+    public TuneShooterCommand tuneShooterCommand;
 
     @Config.PIDController
     private PIDController targetPID;
@@ -83,12 +90,12 @@ public class RobotContainer {
 
         magazine = new Magazine();
         climber = new Climber();
-        var climbCommand = new ClimbCommand(climber, operator);
+        climbCommand = new ClimbCommand(climber, operator);
         climber.setDefaultCommand(climbCommand);
 
-        
-
         shooter = new Shooter();
+        // tuneShooterCommand = new TuneShooterCommand(shooter);
+        // shooter.setDefaultCommand(tuneShooterCommand);
 
         ledStrip = new LedStrip();
 
@@ -100,7 +107,9 @@ public class RobotContainer {
 
     private void configureControls() {
         JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-        intakeButton.whileHeld(new IntakeCommand(intake, magazine));
+        intakeCommand = new IntakeCommand(intake, magazine);
+        intakeButton.whileHeld(intakeCommand);
+
         JoystickAnalogButton outtakeButton = new JoystickAnalogButton(operator, XboxController.Axis.kLeftTrigger.value, .5);
         outtakeButton.whileHeld(new OuttakeCommand(magazine));
         

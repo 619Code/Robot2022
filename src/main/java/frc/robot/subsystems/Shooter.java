@@ -6,6 +6,7 @@ import com.revrobotics.*;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import io.github.oblarg.oblog.Loggable;
@@ -15,6 +16,7 @@ import io.github.oblarg.oblog.annotations.Log;
 public class Shooter extends SubsystemBase implements Loggable {
 
     private PIDController shooterOnboardPID;
+    private SimpleMotorFeedforward shooterFeedforward;
 
     public enum EDeviceType
     {
@@ -36,6 +38,9 @@ public class Shooter extends SubsystemBase implements Loggable {
     private double shooterP;
     private double shooterI;
     private double shooterD;
+    private double shooterS;
+    private double shooterV;
+    private double shooterA;
     
     private double hoodP;
     private double hoodI;
@@ -105,29 +110,31 @@ public class Shooter extends SubsystemBase implements Loggable {
         hoodMotor.restoreFactoryDefaults();
 
         shooterMotor.setIdleMode(IdleMode.kCoast);
+        shooterMotor.setInverted(true);
 
         hoodSwitch = hoodMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
         hoodSwitch.enableLimitSwitch(true);
+        hoodMotor.setIdleMode(IdleMode.kBrake);
+        hoodMotor.setSoftLimit(SoftLimitDirection.kForward, (float)Constants.HOOD_MIN_OUTPUT);
+        hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, (float)Constants.HOOD_MAX_OUTPUT);
+
         // turretSwitch = turretMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
         // turretSwitch.enableLimitSwitch(true);
 
         // turretMotor.setIdleMode(IdleMode.kBrake);
-        hoodMotor.setIdleMode(IdleMode.kBrake);
-
-        // turretMotor.setSoftLimit(SoftLimitDirection.kForward, 0.0f);
-        // turretMotor.setSoftLimit(SoftLimitDirection.kReverse, 0.0f);
-        hoodMotor.setSoftLimit(SoftLimitDirection.kForward, (float)Constants.HOOD_MIN_OUTPUT);
-        hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, (float)Constants.HOOD_MAX_OUTPUT);
     }
 
     public void initPIDs() {
+        shooterP = Constants.SHOOTER_KP;
+        shooterI = Constants.SHOOTER_KI;
+        shooterD = Constants.SHOOTER_KD;
+        shooterS = Constants.SHOOTER_KS;
+        shooterV = Constants.SHOOTER_KV;
+        shooterA = Constants.SHOOTER_KA;
 
-        this.shooterP = Constants.SHOOTER_KP;
-        this.shooterI = Constants.SHOOTER_KI;
-        this.shooterD = Constants.SHOOTER_KD;
-
-        this.shooterOnboardPID = new PIDController(this.shooterP, this.shooterI, this.shooterD);
-        this.hoodOnboardPID = new PIDController(Constants.HOOD_KP, Constants.HOOD_KI, Constants.HOOD_KD);
+        shooterOnboardPID = new PIDController(shooterP, shooterI, shooterD);
+        shooterFeedforward = new SimpleMotorFeedforward(shooterS, shooterV, shooterA);
+        hoodOnboardPID = new PIDController(Constants.HOOD_KP, Constants.HOOD_KI, Constants.HOOD_KD);
     }
 
     public void shoot(double speed) {
@@ -151,22 +158,15 @@ public class Shooter extends SubsystemBase implements Loggable {
     }
 
     public void setShooterSpeedByRPM(double speed) {
-        shooterOnboardPID.setP(this.shooterP);
-        shooterOnboardPID.setI(this.shooterI);
-        shooterOnboardPID.setD(this.shooterD);
+        shooterOnboardPID.setP(shooterP);
+        shooterOnboardPID.setI(shooterI);
+        shooterOnboardPID.setD(shooterD);
 
-        shooterSetPoint = -speed;
-        //shooterPID.setReference(shooterSetPoint, CANSparkMax.ControlType.kVelocity);
-        var newTarget = shooterOnboardPID.calculate(this.shooterEncoder.getVelocity(), speed);
-        var newRate = Math.max(Constants.SHOOTER_MIN_OUTPUT, newTarget/Constants.SHOOTER_MAX_RPM * -1);
-        this.shooterPidResult = newTarget;
-        // var newRate = Math.max(Constants.SHOOTER_MIN_OUTPUT, newTarget);
-        this.motorGain = newRate;
-        this.shooterMotor.set(newRate);
-        this.currentVelocity = this.shooterEncoder.getVelocity();
-        this.shooterVelocity = this.currentVelocity;
-        this.shooterCountsPerRevolution = shooterEncoder.getCountsPerRevolution();
-        this.velocityConversionFactor = this.shooterEncoder.getVelocityConversionFactor();
+        speed = speed/60.0;
+
+        shooterMotor.setVoltage(shooterOnboardPID.calculate(speed) + shooterFeedforward.calculate(speed));
+
+        shooterVelocity = shooterEncoder.getVelocity();
     }
 
     // Hood switch right now never report pressed :(

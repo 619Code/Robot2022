@@ -38,7 +38,7 @@ public class ShootCommand extends CommandBase {
         //boolean hoodSet = Math.abs(shooter.getHoodAngle() - hoodAngle) < 0.03; //hood position is within 3% of the goal
         boolean hoodSet = true;
         if(spedUp && hoodSet) {
-            magazine.intakeBalls();
+            magazine.intakeBalls(-0.3);
         } else {
             magazine.stopAll();
         }

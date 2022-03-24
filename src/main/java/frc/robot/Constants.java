@@ -44,13 +44,15 @@ public final class Constants {
     public static final int SHOOT_MOTOR = 15; 
 
     //Shooter PID
-    //public static final double SHOOTER_KP = 0.65508;
-    public static final double SHOOTER_KP = .445;
+    public static final double SHOOTER_KP = 0.0028859;
     public static final double SHOOTER_KI = 0.0;
     public static final double SHOOTER_KD = 0.0;
-    public static final double SHOOTER_MAX_RPM = 5000;
-    public static final double SHOOTER_MAX_OUTPUT = 0;
-    public static final double SHOOTER_MIN_OUTPUT = -1;
+    public static final double SHOOTER_KS = 0.10279;
+    public static final double SHOOTER_KV = 0.12763;
+    public static final double SHOOTER_KA = 0.011411;
+    public static final double SHOOTER_MAX_RPM = 5600;
+    public static final double SHOOTER_MAX_OUTPUT = 1;
+    public static final double SHOOTER_MIN_OUTPUT = 0;
 
     //Shooter interpolation
     public static final double DISTANCE_CLOSE = 106;
