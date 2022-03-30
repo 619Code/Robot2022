@@ -29,6 +29,6 @@ public class MoveHoodUpCommand extends CommandBase{
 
     @Override
     public void end(boolean isInterrupted) {
-        this.shooter.moveHood(0);
+        this.shooter.move(Shooter.EDeviceType.Hood, 0);
     }
 }

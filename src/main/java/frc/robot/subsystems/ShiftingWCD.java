@@ -109,7 +109,7 @@ public class ShiftingWCD extends SubsystemBase implements Loggable{
     }
 
     public void setShift(boolean isLowGear) {
-        if (isLowGear) {
+        if (!isLowGear) {
             shifter.set(Value.kForward);
         } else {
             shifter.set(Value.kReverse);

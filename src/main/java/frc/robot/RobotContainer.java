@@ -15,8 +15,10 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator.ControlVectorList;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -32,6 +34,7 @@ import frc.robot.subsystems.*;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.EDeviceType;
 import frc.robot.commands.AimCommand;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DriveCommand;
@@ -66,17 +69,15 @@ public class RobotContainer {
 
     @Log
     public Shooter shooter;
-    private final LedStrip ledStrip;
+    private LedStrip ledStrip;
 
-    @Log(tabName = "Shooter")
+    @Log
     public TuneShooterCommand tuneShooterCommand;
 
     @Config.PIDController
     private PIDController targetPID;
     
     public RobotContainer() {
-        targetPID = new PIDController(Constants.AIMING_P, Constants.AIMING_I, Constants.AIMING_D);
-
         driver = new XboxController(0);
         operator = new XboxController(1);
 
@@ -94,8 +95,19 @@ public class RobotContainer {
         climber.setDefaultCommand(climbCommand);
 
         shooter = new Shooter();
+
         // tuneShooterCommand = new TuneShooterCommand(shooter);
         // shooter.setDefaultCommand(tuneShooterCommand);
+
+        // JoystickButton stopButton = new JoystickButton(operator, XboxController.Button.kX.value);
+        // Command stopCommand = new RunCommand(() -> shooter.move(EDeviceType.Turret, 0.0), shooter);
+        // stopButton.whenPressed(stopCommand);
+
+        // JoystickButton forwardButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+        // forwardButton.whenPressed(new RunCommand(() -> shooter.move(EDeviceType.Turret, 0.8), shooter));
+
+        // JoystickButton backButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+        // backButton.whenPressed(new RunCommand(() -> shooter.move(EDeviceType.Turret, -0.8), shooter));
 
         ledStrip = new LedStrip();
 
@@ -123,26 +135,21 @@ public class RobotContainer {
         highGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, Constants.HIGH_GOAL_ANGLE, Constants.HIGH_GOAL_RPM));
 
         JoystickButton aimButton = new JoystickButton(operator, XboxController.Button.kB.value);
-        //aimCommand = new AimCommand(shooter, drive, limelight);
         aimButton.whileHeld(new AimCommand(shooter, drive, limelight));
 
         JoystickButton climbCommandButton = new JoystickButton(operator, XboxController.Button.kBack.value);
         climbCommandButton.whileHeld(new ManualClimbingCommand(climber, operator));
 
-        // RainbowLedCommand ledCommand = new RainbowLedCommand(ledStrip);
-        // new JoystickButton(driver, XboxController.Button.kY.value).toggleWhenPressed(ledCommand);
-        // new JoystickButton(primaryController, XboxController.Button.kX.value).cancelWhenPressed(ledCommand);
-
         JoystickAnalogButton shootButton = new JoystickAnalogButton(operator, XboxController.Axis.kRightTrigger.value, .5);
         shootButton.whileHeld(new ParallelCommandGroup(new LoadShooterCommand(magazine), new RetractIntakeCommand(intake)));
 
         JoystickButton zeroHood = new JoystickButton(operator, XboxController.Button.kX.value);
-        zeroHood.whenPressed(new ZeroCommandSimple(shooter, Shooter.EDeviceType.Hood));
+        zeroHood.whenPressed(new ZeroCommandSimple(shooter));
     }
 
     public Command getAutonomousCommand() {
         return new SequentialCommandGroup(
-        new ParallelCommandGroup(new TestAutoCommand(drive, 2.5), new ZeroCommandSimple(shooter, Shooter.EDeviceType.Hood), new IntakeCommand(intake, magazine).withTimeout(6)),
+        new ParallelCommandGroup(new TestAutoCommand(drive, 2.5), new ZeroCommandSimple(shooter), new IntakeCommand(intake, magazine).withTimeout(6)),
         new ParallelCommandGroup(new SpinIntakeCommand(intake), new LoadShooterCommand(magazine), new AimCommand(shooter, drive, limelight)).withTimeout(8));
    }
 }

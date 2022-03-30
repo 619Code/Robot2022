@@ -14,42 +14,41 @@ public final class Constants {
     public static final int LEFT_FOLLOWER_0 = 2;
     public static final int LEFT_FOLLOWER_1 = 3;
     public static final int RIGHT_FOLLOWER_0 = 10;
-    public static final int RIGHT_FOLLOWER_1 = 11;
+    public static final int RIGHT_FOLLOWER_1 = 12;
     
     //Turret Constants
-    // public static final double MINIMUM_TURRET_ANGLE = 0;
-    // public static final double TURRET_DEGREES_PER_REV = 0;
-    // public static final double TARGET_TOLERANCE = 0;
-
-    //Hood Angles from CAD
-    // 81 degrees at 0 revs
-    // 53.5 degrees at 98 revs
-    // derees per rev = (81 - 53.5) / 98
+    public static final double MINIMUM_TURRET_ANGLE = -90;
+    public static final double MAXIMUM_TURRET_ANGLE = 90;
+    public static final double MAXIMUM_TURRET_ANGLE_REV = 500;
+    public static final double TURRET_DEGREES_PER_REV = (MAXIMUM_TURRET_ANGLE - MINIMUM_TURRET_ANGLE) / MAXIMUM_TURRET_ANGLE_REV;
+    public static final double TURRET_MIN_OUTPUT = -0.8;
+    public static final double TURRET_MAX_OUTPUT = 0.8;
 
     //Hood Constants
-    //0 = 15 degrees
     public static final double BASE_HOOD_ANGLE = 81;
-    public static final double HIGH_HOOD_ANGLE = 48;
-    public static final double MINIMUM_HOOD_ANGLE_REV = 0;
-    public static final double MAXIMUM_HOOD_ANGLE_REV = 117;
+    public static final double HIGH_HOOD_ANGLE = 43;
+    public static final double MAXIMUM_HOOD_ANGLE_REV = 202;
     public static final double HOOD_DEGREES_PER_REV = (BASE_HOOD_ANGLE - HIGH_HOOD_ANGLE) / MAXIMUM_HOOD_ANGLE_REV;
+    public static final double HOOD_MIN_OUTPUT = -0.2;
+    public static final double HOOD_MAX_OUTPUT = 0.2;
 
-    //Ball Positions
+    //Positions
     public static final int VERTICAL_POSITION = 0;
     public static final int FRONT_POSITION = 1;
+    public static final int TURRET_SWITCH = 3;
 
     //Turret CANs
-    // public static final int TURRET_MOTOR = 20; //temp value
-    public static final int HOOD_MOTOR = 16; 
-    public static final int SHOOT_MOTOR = 15; 
+    public static final int TURRET_MOTOR = 14; //UNDO (change to 14)
+    public static final int HOOD_MOTOR = 16; //UNDO (change to 16)
+    public static final int SHOOT_MOTOR = 15;
 
     //Shooter PID
-    public static final double SHOOTER_KP = 0.0028859;
+    public static final double SHOOTER_KP = 0.0023237;
     public static final double SHOOTER_KI = 0.0;
     public static final double SHOOTER_KD = 0.0;
-    public static final double SHOOTER_KS = 0.10279;
-    public static final double SHOOTER_KV = 0.12763;
-    public static final double SHOOTER_KA = 0.011411;
+    public static final double SHOOTER_KS = 0.18955;
+    public static final double SHOOTER_KV = 0.12861;
+    public static final double SHOOTER_KA = 0.0093339;
     public static final double SHOOTER_MAX_RPM = 5600;
     public static final double SHOOTER_MAX_OUTPUT = 1;
     public static final double SHOOTER_MIN_OUTPUT = 0;
@@ -76,13 +75,6 @@ public final class Constants {
     public static final double HIGH_GOAL_ANGLE = 81;
     public static final double HIGH_GOAL_RPM = 2900;
 
-    //Hood PID
-    public static final double HOOD_KP = 13.581;
-    public static final double HOOD_KI = 0;
-    public static final double HOOD_KD = 0.23237;
-    public static final double HOOD_MAX_OUTPUT = .2;
-    public static final double HOOD_MIN_OUTPUT = -.2;
-
     //Aiming PID
     public static final double AIMING_P = 0.12; //0.15
     public static final double AIMING_I = 0.00; //0.02
@@ -100,8 +92,8 @@ public final class Constants {
 
     //Drive solenoids
     public static final int PCM_CAN_ID = 0;
-    public static final int DRIVE_SOLENOID_FORWARD = 1;
-    public static final int DRIVE_SOLENOID_BACK = 6;
+    public static final int DRIVE_SOLENOID_FORWARD = 0;
+    public static final int DRIVE_SOLENOID_BACK = 7;
 
     //Intake CAN
     public static final int LOADING_MOTOR = 4;

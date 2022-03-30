@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import io.github.oblarg.oblog.Loggable;
@@ -33,27 +34,12 @@ public class Shooter extends SubsystemBase implements Loggable {
     @Log.Graph
     private double shooterPidResult;
 
-    private double shooterMinOutput;
-    private double shooterMaxOutput;
-    private double shooterP;
-    private double shooterI;
-    private double shooterD;
-    private double shooterS;
-    private double shooterV;
-    private double shooterA;
-    
-    private double hoodP;
-    private double hoodI;
-    private double hoodD;
-    private float hoodMinOutput = -0.2f;
-    private float hoodMaxOutput = 0.2f;
-
     private CANSparkMax shooterMotor;
-    // private CANSparkMax turretMotor;
+    private CANSparkMax turretMotor;
     private CANSparkMax hoodMotor;
 
     private RelativeEncoder shooterEncoder;
-    // private RelativeEncoder turretEncoder;
+    private RelativeEncoder turretEncoder;
     private RelativeEncoder hoodEncoder;
     
     private double shooterSetPoint;
@@ -68,9 +54,6 @@ public class Shooter extends SubsystemBase implements Loggable {
     private double velocityConversionFactor;
 
     @Log
-    private double hoodSetPoint;
-
-    @Log
     private double hoodAngle;
 
     @Log
@@ -80,33 +63,36 @@ public class Shooter extends SubsystemBase implements Loggable {
     private double adjustedPoint;
     
     @Log
-    private double ownPIDHoodSetPointRot;
-    private double hoodMotorDutyCycle;
-    private double hoodPosError;
+    private double hoodPosition;
+    private double hoodSetpoint;
+    private double hoodSpeed;
+    private double hoodError;
+
+    private double turretPosition;
+    private double turretSetpoint;
+    private double turretSpeed;
+    private double turretError;
 
     private SparkMaxLimitSwitch hoodSwitch;
-
-    private PIDController hoodOnboardPID;
+    private DigitalInput turretSwitch;
 
     public Shooter() {
         shooterMotor = new CANSparkMax(Constants.SHOOT_MOTOR, MotorType.kBrushless);
-        // turretMotor = new CANSparkMax(Constants.TURRET_MOTOR, MotorType.kBrushless);
+        turretMotor = new CANSparkMax(Constants.TURRET_MOTOR, MotorType.kBrushless);
         hoodMotor = new CANSparkMax(Constants.HOOD_MOTOR, MotorType.kBrushless);
 
         shooterEncoder = shooterMotor.getEncoder();
         shooterEncoder.setVelocityConversionFactor(1);
         hoodEncoder = hoodMotor.getEncoder();
-        // turretEncoder = turretMotor.getEncoder();
+        turretEncoder = turretMotor.getEncoder();
 
-        //hoodDistanceSensor = new DigitalInput(Constants.HOOD_DISTANCE_SENSOR);
-        //hoodSwitch = shooterMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
         initMotorSettings();
         initPIDs();
     }
 
     public void initMotorSettings() {
         shooterMotor.restoreFactoryDefaults();
-        // turretMotor.restoreFactoryDefaults();
+        turretMotor.restoreFactoryDefaults();
         hoodMotor.restoreFactoryDefaults();
 
         shooterMotor.setIdleMode(IdleMode.kCoast);
@@ -115,125 +101,126 @@ public class Shooter extends SubsystemBase implements Loggable {
         hoodSwitch = hoodMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
         hoodSwitch.enableLimitSwitch(true);
         hoodMotor.setIdleMode(IdleMode.kBrake);
+        hoodMotor.setInverted(true);
         hoodMotor.setSoftLimit(SoftLimitDirection.kForward, (float)Constants.HOOD_MIN_OUTPUT);
         hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, (float)Constants.HOOD_MAX_OUTPUT);
 
-        // turretSwitch = turretMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-        // turretSwitch.enableLimitSwitch(true);
-
-        // turretMotor.setIdleMode(IdleMode.kBrake);
+        turretSwitch = new DigitalInput(Constants.TURRET_SWITCH);
+        turretMotor.setIdleMode(IdleMode.kBrake);
+        turretMotor.setInverted(true);
     }
 
     public void initPIDs() {
-        shooterP = Constants.SHOOTER_KP;
-        shooterI = Constants.SHOOTER_KI;
-        shooterD = Constants.SHOOTER_KD;
-        shooterS = Constants.SHOOTER_KS;
-        shooterV = Constants.SHOOTER_KV;
-        shooterA = Constants.SHOOTER_KA;
-
-        shooterOnboardPID = new PIDController(shooterP, shooterI, shooterD);
-        shooterFeedforward = new SimpleMotorFeedforward(shooterS, shooterV, shooterA);
-        hoodOnboardPID = new PIDController(Constants.HOOD_KP, Constants.HOOD_KI, Constants.HOOD_KD);
+        shooterOnboardPID = new PIDController(Constants.SHOOTER_KP, Constants.SHOOTER_KI, Constants.SHOOTER_KD);
+        shooterFeedforward = new SimpleMotorFeedforward(Constants.SHOOTER_KS, Constants.SHOOTER_KV, Constants.SHOOTER_KA);
     }
+
+    // public void periodic() {
+    //     System.out.println(hoodEncoder.getPosition());
+    // }
 
     public void shoot(double speed) {
         shooterVelocity = shooterEncoder.getVelocity();
         this.shooterMotor.set(speed);
-        //shooterPID.setReference(shooterSetPoint, CANSparkMax.ControlType.kVelocity);
-    }
-
-    public void periodic(){
-        double hoodPosRots = hoodMotor.getEncoder().getPosition();
-        hoodPosError = ownPIDHoodSetPointRot - hoodPosRots;
-        hoodMotorDutyCycle = (hoodPosError< 0) ? hoodMinOutput : hoodMaxOutput;
-
-        if(hoodPosRots > Constants.MAXIMUM_HOOD_ANGLE_REV && hoodMotorDutyCycle > 0){
-            hoodMotorDutyCycle = 0;
-        }
-        if(Math.abs(hoodPosError) < 1){
-            hoodMotorDutyCycle = 0;
-        }
-        this.hoodMotor.set(hoodMotorDutyCycle);
     }
 
     public void setShooterSpeedByRPM(double speed) {
-        shooterOnboardPID.setP(shooterP);
-        shooterOnboardPID.setI(shooterI);
-        shooterOnboardPID.setD(shooterD);
-
         speed = speed/60.0;
-
         shooterMotor.setVoltage(shooterOnboardPID.calculate(speed) + shooterFeedforward.calculate(speed));
-
         shooterVelocity = shooterEncoder.getVelocity();
     }
-
-    // Hood switch right now never report pressed :(
-    public boolean AtHoodZeroPoint() {
-        //System.out.println(this.hoodSwitch.isPressed());
-        return this.hoodSwitch.isPressed();
-        // System.out.println(!hoodDistanceSensor.get());
-        // return !hoodDistanceSensor.get();
-    }
-
-    // Since hood switch always is zero we check for the velocity to be 0 to stop
-    public boolean atHoodZeroPointRPM() {
-        double velocity = this.hoodEncoder.getVelocity();
-        return velocity == 0.0;
-    }
-
-    // public boolean AtTurretZeroPoint() {
-    //     return this.turretSwitch.isPressed();
-    // }
-
-    public void SetHoodZeroPoint() {
-        this.hoodEncoder.setPosition(0);
-    }
-
-    // public void SetTurretZeroPoint() {
-    //     this.turretEncoder.setPosition(0);
-    // }
-
-    public void setHoodAngle(double trajectoryAngle) { //add limit switch stuff
-        ownPIDHoodSetPointRot = (Constants.BASE_HOOD_ANGLE-trajectoryAngle)/Constants.HOOD_DEGREES_PER_REV;
-    }
-
-    // public void setTurretAngle(double angle) { //add limit switch stuff
-    //     turretAngle = Constants.MINIMUM_TURRET_ANGLE + turretEncoder.getPosition() * Constants.TURRET_DEGREES_PER_REV;
-    //     turretSetPoint = (angle - Constants.MINIMUM_TURRET_ANGLE) / Constants.TURRET_DEGREES_PER_REV;
-    //     turretPID.setReference(turretSetPoint, CANSparkMax.ControlType.kPosition);
-    // }
 
     public double getShooterRPM() {
         shooterVelocity = shooterEncoder.getVelocity();
         return shooterVelocity;
     }
 
-    public void setAngle(EDeviceType deviceType, double angle)
-    {
-        if (deviceType == EDeviceType.Hood)
+    /////////////////////////////////////////////////////////////////
+
+    public void setAngle(EDeviceType deviceType, double angle) {
+        if (deviceType == EDeviceType.Hood) {
             this.setHoodAngle(angle);
-        // else
-        //     this.setTurretAngle(angle);
+        } else {
+            this.setTurretAngle(angle);
+        }
     }
 
-    public boolean AtZeroPoint(EDeviceType deviceType)
-    {
-        if (deviceType == EDeviceType.Hood)
+    public void setHoodAngle(double angle) {
+        hoodSetpoint = (Constants.BASE_HOOD_ANGLE - angle)/Constants.HOOD_DEGREES_PER_REV;
+        hoodPosition = hoodMotor.getEncoder().getPosition();
+        hoodError = hoodSetpoint - hoodPosition;
+        hoodSpeed = (hoodError < 0) ? Constants.HOOD_MIN_OUTPUT : Constants.HOOD_MAX_OUTPUT;
+
+        System.out.println("Hood setpoint: " + hoodSetpoint);
+        System.out.println("Hood position: " + hoodPosition);
+        System.out.println("Hood speed: " + hoodSpeed);
+
+        if(hoodPosition > Constants.MAXIMUM_HOOD_ANGLE_REV && hoodSpeed > 0){
+            hoodSpeed = 0;
+        } else if(hoodPosition < 0 && hoodSpeed < 0) {
+            hoodSpeed = 0;
+        }
+        if(Math.abs(hoodError) < 1) {
+            hoodSpeed = 0;
+        }
+        this.hoodMotor.set(hoodSpeed);
+    }
+
+    public void setTurretAngle(double angle) {
+        turretSetpoint = (angle - Constants.MINIMUM_TURRET_ANGLE) / Constants.TURRET_DEGREES_PER_REV;
+        turretPosition = turretEncoder.getPosition();
+        turretError = turretSetpoint - turretPosition;
+        turretSpeed = (turretError < 0) ? Constants.TURRET_MIN_OUTPUT : Constants.TURRET_MAX_OUTPUT;
+
+        System.out.println("Turret setpoint: " + turretSetpoint);
+        System.out.println("Turret position: " + turretPosition);
+        System.out.println("Turret speed: " + turretSpeed);
+        
+        if(turretPosition > Constants.MAXIMUM_TURRET_ANGLE_REV && hoodSpeed > 0){
+            turretSpeed = 0;
+        } else if(turretPosition < 0 && turretSpeed < 0) {
+            turretSpeed = 0;
+        }
+        if(Math.abs(turretError) < 1){
+            turretSpeed = 0;
+        }
+        this.turretMotor.set(turretSpeed);
+    }
+
+    /////////////////////////////////////////////////////////////////
+
+    public boolean atZeroPoint(EDeviceType deviceType) {
+        if(deviceType == EDeviceType.Hood) {
             return this.atHoodZeroPointRPM();
-        else
-            //return this.AtTurretZeroPoint();
-            return false;
+        } else {
+            return this.atTurretZeroPoint();
+        }
     }
 
-    public double getAngle(EDeviceType deviceType)
-    {
-        if (deviceType == EDeviceType.Hood)
-            return this.getHoodAngle();
-        else
-            //return this.getTurretAngle();
-            return 0.0;
+    public boolean atHoodZeroPoint() {
+        return this.hoodSwitch.isPressed();
+    }
+
+    public boolean atHoodZeroPointRPM() {
+        return this.hoodEncoder.getVelocity() == 0.0;
+    }
+
+    public boolean atTurretZeroPoint() {
+        return !this.turretSwitch.get();
+    }
+
+    public boolean AtTurretZeroPointRPM() {
+        return this.turretEncoder.getVelocity() == 0.0;
+    }
+
+    /////////////////////////////////////////////////////////////////
+
+    public double getAngle(EDeviceType deviceType) {
+        if (deviceType == EDeviceType.Hood) {
+            return getHoodAngle();
+        } else {
+            return getTurretAngle();
+        }
     }
 
     @Log
@@ -241,82 +228,35 @@ public class Shooter extends SubsystemBase implements Loggable {
         return Constants.BASE_HOOD_ANGLE - (hoodEncoder.getPosition() * Constants.HOOD_DEGREES_PER_REV);
     }
 
-    // public double getTurretAngle() {
-    //     return Constants.MINIMUM_TURRET_ANGLE + turretEncoder.getPosition() * Constants.TURRET_DEGREES_PER_REV;
-    // }
-
-    // public void moveTurret(double speed) {
-    //     turretMotor.set(speed);
-    // }
-
-    public void moveHood(double speed) {
-        hoodMotor.set(speed);
+    public double getTurretAngle() {
+        return Constants.MINIMUM_TURRET_ANGLE + turretEncoder.getPosition() * Constants.TURRET_DEGREES_PER_REV;
     }
+
+    /////////////////////////////////////////////////////////////////
+
+    public void move(EDeviceType deviceType, double speed) {
+        if (deviceType == EDeviceType.Hood) {
+            hoodMotor.set(speed);
+        } else {
+            turretMotor.set(speed);
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////
+
+    public void setZeroPoint(EDeviceType deviceType) {
+        if (deviceType == EDeviceType.Hood) {
+            hoodEncoder.setPosition(0);
+        } else {
+            turretEncoder.setPosition(0);
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////
 
     public void stopAll() {
         shoot(0);
-        // moveTurret(0);
-        moveHood(0);
-    }
-
-    public void SetZeroPoint(EDeviceType deviceType) {
-        if (deviceType == EDeviceType.Hood)
-            this.SetHoodZeroPoint();
-        // else
-            // this.SetTurretZeroPoint();
-    }
-
-    @Config(defaultValueNumeric = Constants.SHOOTER_KP, rowIndex = 0, columnIndex = 0)
-    public void setShooterP(double value) {
-        this.shooterP = value;
-    }
-
-    @Config(defaultValueNumeric = Constants.SHOOTER_KI, rowIndex = 1, columnIndex = 0)
-    public void setShooterI(double value) {
-        this.shooterI = value;
-    }
-
-    @Config(defaultValueNumeric = Constants.SHOOTER_KD, rowIndex = 2, columnIndex = 0)
-    public void setShooterD(double value) {
-        this.shooterD = value;
-    }
-
-    @Config(defaultValueNumeric = Constants.SHOOTER_MIN_OUTPUT, rowIndex = 3, columnIndex = 0)
-    public void setShooterMinOutput(double value) {
-        this.shooterMinOutput = value;
-    }
-
-    @Config(defaultValueNumeric = Constants.SHOOTER_MAX_OUTPUT, rowIndex = 4, columnIndex = 0)
-    public void setShooterMaxOutput(double value) {
-        this.shooterMaxOutput = value;
-    }
-    
-    @Config(defaultValueNumeric = Constants.HOOD_KP, rowIndex = 0, columnIndex = 1)
-    public void setHoodP(double value) {
-        this.hoodP = value;
-    }
-
-    @Config(defaultValueNumeric = Constants.HOOD_KI, rowIndex = 1, columnIndex = 1)
-    public void setHoodI(double value) {
-        this.hoodI = value;
-    }
-
-    @Config(defaultValueNumeric = Constants.HOOD_KD, rowIndex = 2, columnIndex = 1)
-    public void setHoodD(double value) {
-        this.hoodD = value;
-    }
-
-    @Config(defaultValueNumeric = Constants.HOOD_MIN_OUTPUT, rowIndex = 3, columnIndex = 1 )
-    public void setHoodMinOutput(double value) {
-        this.hoodMinOutput = (float)value;
-    }
-
-    @Config(defaultValueNumeric = Constants.HOOD_MAX_OUTPUT, rowIndex = 4, columnIndex = 1)
-    public void setHoodMaxOutput(double value) {
-        this.hoodMaxOutput = (float)value;
-    }
-    @Config(defaultValueNumeric = 0, rowIndex = 5, columnIndex = 1)
-    public void setHoodSetPoint(double value) {
-        this.ownPIDHoodSetPointRot = value;
+        move(EDeviceType.Hood, 0);
+        move(EDeviceType.Turret, 0);
     }
 }

@@ -44,19 +44,6 @@ public class Climber extends SubsystemBase {
         winchPID = new PIDController(Constants.CLIMBER_WINCH_P, Constants.CLIMBER_WINCH_I, Constants.CLIMBER_WINCH_D);
     }
 
-    // public void periodic(){
-    //     climberMotors.setVoltage(winchPID.calculate(leftClimber.getEncoder().getPosition(), winchSetpoint));
-    //     currentArmLength = leftClimber.getEncoder().getPosition() * Constants.CLIMB_WINCH_DIAMETER * Math.PI;
-    // }
-
-    // public void setClaw(DoubleSolenoid.Value value) {
-    //     claws.set(value);
-    // }
-
-    // public void setArmIsRaised(DoubleSolenoid.Value value) {
-    //     arms.set(value);
-    // }
-
     public void ManualMove(double power) {
         climberMotors.set(power);
     }

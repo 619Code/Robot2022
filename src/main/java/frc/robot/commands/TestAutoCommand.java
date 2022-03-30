@@ -22,7 +22,6 @@ public class TestAutoCommand extends CommandBase {
 
     @Override
     public void execute() {
-        System.out.println(drive.getLeftPosition());
         drive.curve(-0.4, 0, false);
     }
 

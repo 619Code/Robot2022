@@ -1,7 +1,5 @@
 {
   "SysId": {
-    "Analysis Type": "Drivetrain"
-    "Analysis Type": "General Mechanism",
-    "AnalyzerJSONLocation": "C:\\Users\\bskn1\\Downloads\\sysid_data20220120-183005.json"
+    "Analysis Type": "General Mechanism"
   }
 }

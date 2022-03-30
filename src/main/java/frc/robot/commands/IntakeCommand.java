@@ -45,8 +45,6 @@ public class IntakeCommand extends CommandBase implements Loggable {
             intake.lowerIntake();
         }
 
-        System.out.println(frontTimer.get());
-
         if(!magazine.verticalPosition.hasBall()) {
             frontTimer.reset();
             frontTimer.stop();

@@ -4,6 +4,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.ShiftingWCD;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.EDeviceType;
 import frc.robot.unused.Shot;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -102,11 +103,11 @@ public class AimCommand extends CommandBase implements Loggable {
 
         if(!preset && !limelight.isInRange()){
             rotation = -targetPID.calculate(limelight.angleX, 0);
-            rotation = Math.min(rotation,0.6);
-            rotation = Math.max(rotation,-0.6);
-            drive.curve(0, rotation, false);
+            rotation = Math.min(rotation,Constants.TURRET_MAX_OUTPUT);
+            rotation = Math.max(rotation,Constants.TURRET_MIN_OUTPUT);
+            shooter.move(EDeviceType.Turret, rotation);
         } else {
-            drive.curve(0, 0, false);
+            shooter.move(EDeviceType.Turret, 0);
         }
     }
 
@@ -125,7 +126,6 @@ public class AimCommand extends CommandBase implements Loggable {
     }
 
     public void end(boolean isInterrupted) {
-        System.out.println("END!!!");
         States.isShooterReady = false;
         limelight.turnLightOff();
         shooter.stopAll();

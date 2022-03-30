@@ -48,10 +48,10 @@ public class ZeroCommand extends CommandBase {
                 this.shooter.setAngle(this.deviceType, this.shooter.getAngle(this.deviceType) - 10);
                 break;
             case TowardsHighSpeed:
-                if(!shooter.AtZeroPoint(this.deviceType)){
+                if(!shooter.atZeroPoint(this.deviceType)){
                     this.shooter.setAngle(this.deviceType, this.shooter.getAngle(this.deviceType) - 10);
                 } else {
-                    this.shooter.SetZeroPoint(this.deviceType);
+                    this.shooter.setZeroPoint(this.deviceType);
                     this.shooter.setAngle(this.deviceType, 0);
                     this.zeroStage = EZeroStages.BackingOff;
                 }
@@ -64,10 +64,10 @@ public class ZeroCommand extends CommandBase {
                 }
                 break;
             case TowardsLowSpeed:
-                if(!shooter.AtZeroPoint(this.deviceType)){
+                if(!shooter.atZeroPoint(this.deviceType)){
                     this.shooter.setAngle(this.deviceType, shooter.getAngle(this.deviceType) - 1);
                 } else {
-                    this.shooter.SetZeroPoint(deviceType);
+                    this.shooter.setZeroPoint(deviceType);
                     this.shooter.setAngle(deviceType, 0);
                     this.zeroStage = EZeroStages.Zeroed;
                 }

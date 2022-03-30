@@ -15,13 +15,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
     private CANSparkMax intakeMotor;
-    public DoubleSolenoid wrist;
+    public Solenoid wrist;
 
     private Timer raiseTimer;
 
     public Intake() {
         intakeMotor = new CANSparkMax(Constants.LOADING_MOTOR, MotorType.kBrushless);
-        wrist = new DoubleSolenoid(Constants.INTAKE_MODULE_TYPE, 7, 0);
+        wrist = new Solenoid(Constants.INTAKE_MODULE_TYPE, 1);
         raiseTimer = new Timer();
     }
 
@@ -31,18 +31,18 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean isLowered(){
-        return wrist.get() == Value.kForward;   
+        return wrist.get();   
     }
 
     public void raiseIntake() {
         raiseTimer.start();
         if(raiseTimer.hasElapsed(1)) {
-            wrist.set(Value.kReverse);
+            wrist.set(false);
         }
     }
 
     public void lowerIntake() {
         raiseTimer.reset();
-        wrist.set(Value.kForward);
+        wrist.set(true);
     }
 }
