@@ -19,8 +19,8 @@ public class ManualClimbingCommand extends CommandBase {
 
     public void execute()
     {
-        double upDownLeft = -this.controller.getLeftY();
-        double upDownRight = -this.controller.getRightY();
+        double upDownLeft = this.controller.getLeftY();
+        double upDownRight = this.controller.getRightY();
         double moveRateLeft = 0.0;
         double moveRateRight = 0.0;
 

@@ -92,7 +92,7 @@ public class AimCommand extends CommandBase implements Loggable {
 
         //System.out.println("Velocity (true): " + (-shooter.getShooterRPM()));
         //System.out.println("Velocity (goal): " + tempVelocity);
-        boolean shooterClose = Math.abs(shooter.getShooterRPM() - tempVelocity) < 200; //100;
+        boolean shooterClose = Math.abs(shooter.getShooterRPM() - tempVelocity) < 200; //100
         boolean hoodClose = Math.abs(shooter.getHoodAngle() - tempAngle) < 3;
 
         if((shooterClose && hoodClose) /*|| spinupTimer.hasElapsed(4)*/) {
@@ -105,7 +105,16 @@ public class AimCommand extends CommandBase implements Loggable {
             rotation = -targetPID.calculate(limelight.angleX, 0);
             rotation = Math.min(rotation,Constants.TURRET_MAX_OUTPUT);
             rotation = Math.max(rotation,Constants.TURRET_MIN_OUTPUT);
+
+            if(shooter.checkLowerBound(rotation)) {
+                rotation = 0;
+            } else if(shooter.checkUpperBound(rotation)) {
+                rotation = 0;
+            }
+
             shooter.move(EDeviceType.Turret, rotation);
+        } else if(preset) {
+            shooter.setAngle(EDeviceType.Turret, 0);
         } else {
             shooter.move(EDeviceType.Turret, 0);
         }
@@ -122,6 +131,9 @@ public class AimCommand extends CommandBase implements Loggable {
     }
 
     public boolean isFinished() {
+        if(!States.zeroed) {
+            return true;
+        }
         return false;
     }
 

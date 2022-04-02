@@ -14,14 +14,15 @@ public class ClimbCommand extends CommandBase {
     {
         this.controller = controller;
         this.climber = climber;
-        revLimit = 115; //change this
+        revLimit = 145; //change this 115
         this.addRequirements(climber);
     }
 
     public void execute() {
+        System.out.println(-climber.leftClimbEncoder.getPosition());
         //System.out.println(climber.leftClimbEncoder.getPosition());
 
-        double upDown = -this.controller.getRightY();
+        double upDown = this.controller.getRightY();
         double moveRate = 0.0;
 
         //Dead zone
@@ -29,12 +30,12 @@ public class ClimbCommand extends CommandBase {
             upDown = 0;
         }
 
-        if (upDown < 0) {
+        if (upDown > 0) {
             moveRate = upDown * Constants.CLIMBER_DOWN_RATE;
-            moveRate = climber.leftClimbEncoder.getPosition() < -0.1 ? 0 : moveRate;
+            moveRate = -climber.leftClimbEncoder.getPosition() < -10 ? 0 : moveRate;
         } else {
             moveRate = upDown * Constants.CLIMBER_UP_RATE;
-            moveRate = climber.leftClimbEncoder.getPosition() >= revLimit ? 0 : moveRate;
+            moveRate = -climber.leftClimbEncoder.getPosition() >= revLimit ? 0 : moveRate;
         }
 
         this.climber.ManualMove(moveRate);
