@@ -151,9 +151,9 @@ public class Shooter extends SubsystemBase implements Loggable {
         hoodError = hoodSetpoint - hoodPosition;
         hoodSpeed = (hoodError < 0) ? Constants.HOOD_MIN_OUTPUT : Constants.HOOD_MAX_OUTPUT;
 
-        System.out.println("Hood setpoint: " + hoodSetpoint);
-        System.out.println("Hood position: " + hoodPosition);
-        System.out.println("Hood speed: " + hoodSpeed);
+        // System.out.println("Hood setpoint: " + hoodSetpoint);
+        // System.out.println("Hood position: " + hoodPosition);
+        // System.out.println("Hood speed: " + hoodSpeed);
 
         if(hoodPosition > Constants.MAXIMUM_HOOD_ANGLE_REV && hoodSpeed > 0){
             hoodSpeed = 0;
@@ -172,11 +172,11 @@ public class Shooter extends SubsystemBase implements Loggable {
         turretError = turretSetpoint - turretPosition;
         turretSpeed = (turretError < 0) ? Constants.TURRET_MIN_OUTPUT : Constants.TURRET_MAX_OUTPUT;
 
-        System.out.println("Turret setpoint: " + turretSetpoint);
-        System.out.println("Turret position: " + turretPosition);
-        System.out.println("Turret speed: " + turretSpeed);
+        // System.out.println("Turret setpoint: " + turretSetpoint);
+        // System.out.println("Turret position: " + turretPosition);
+        // System.out.println("Turret speed: " + turretSpeed);
         
-        if(turretPosition > Constants.MAXIMUM_TURRET_ANGLE_REV && hoodSpeed > 0){
+        if(turretPosition > Constants.MAXIMUM_TURRET_ANGLE_REV && turretSpeed > 0){
             turretSpeed = 0;
         } else if(turretPosition < 0 && turretSpeed < 0) {
             turretSpeed = 0;
@@ -234,12 +234,43 @@ public class Shooter extends SubsystemBase implements Loggable {
 
     /////////////////////////////////////////////////////////////////
 
+    public double getPosition(EDeviceType deviceType) {
+        if (deviceType == EDeviceType.Hood) {
+            return getHoodPosition();
+        } else {
+            return getTurretPosition();
+        }
+    }
+
+    public double getHoodPosition() {
+        return hoodEncoder.getPosition();
+    }
+
+    public double getTurretPosition() {
+        return turretEncoder.getPosition();
+    }
+
+    /////////////////////////////////////////////////////////////////
+
     public void move(EDeviceType deviceType, double speed) {
         if (deviceType == EDeviceType.Hood) {
             hoodMotor.set(speed);
         } else {
+            if(speed < 0 && atZeroPoint(EDeviceType.Turret)) {
+                speed = 0;
+            }
             turretMotor.set(speed);
         }
+    }
+
+    /////////////////////////////////////////////////////////////////
+
+    public boolean checkLowerBound(double rotation) {
+        return (rotation < 0 && getTurretPosition() < 0) || (rotation < 0 && atZeroPoint(EDeviceType.Turret));
+    }
+
+    public boolean checkUpperBound(double rotation) {
+        return rotation > 0 && getTurretPosition() > Constants.MAXIMUM_TURRET_ANGLE_REV;
     }
 
     /////////////////////////////////////////////////////////////////

@@ -15,25 +15,24 @@ public class Limelight extends SubsystemBase {
     public double angleX, angleY, area, distance;
     public boolean hasTarget;
     private NetworkTable table;
-    public ShiftingWCD drive;
     private LedStrip ledStrip;
 
     private double newDistance;
     private ArrayList<Double> distanceLog = new ArrayList<Double>();
 
-    public Limelight(ShiftingWCD drive, LedStrip ledStrip) {
+    public Limelight(LedStrip ledStrip) {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         tx = table.getEntry("tx");
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
         tv = table.getEntry("tv");
         light = table.getEntry("ledMode");
-        this.drive = drive;
         this.ledStrip = ledStrip;
     }
 
     public void periodic(){
         update();
+        //System.out.println(distance);
     }
 
     public void update() {
@@ -47,24 +46,14 @@ public class Limelight extends SubsystemBase {
 
             distanceLog = manageList(distanceLog, newDistance);
             distance = getListMedian(distanceLog, newDistance);
-            
-            double theta = drive.getAngle().getDegrees() + angleX;
-            double x = distance * Math.cos(Math.toRadians(theta));
-            double y = distance * Math.sin(Math.toRadians(theta));
-            States.robotX = x;
-            States.robotY = y;
-            States.distance = distance;
-
         }
 
-        if(States.limelightUpdateLeds) {
-            if(hasTarget) {
-                ledStrip.setWholeStripRGB(0, 0, 255);
-            } else {
-                ledStrip.setWholeStripRGB(255, 0, 0);
-            }
-            ledStrip.show();
+        if(hasTarget) {
+            ledStrip.setWholeStripRGB(0, 0, 255);
+        } else {
+            ledStrip.setWholeStripRGB(255, 0, 0);
         }
+        ledStrip.show();
     }
 
     private static ArrayList<Double> manageList(ArrayList<Double> list, double newDistance) {

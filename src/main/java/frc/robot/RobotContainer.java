@@ -25,8 +25,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LoadShooterCommand;
 import frc.robot.commands.ManualClimbingCommand;
+import frc.robot.commands.ManualMoveCommand;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RetractIntakeCommand;
+import frc.robot.commands.SearchCommand;
 import frc.robot.commands.SpinIntakeCommand;
 import frc.robot.commands.ZeroCommandSimple;
 import frc.robot.helpers.JoystickAnalogButton;
@@ -95,26 +97,17 @@ public class RobotContainer {
         climber.setDefaultCommand(climbCommand);
 
         shooter = new Shooter();
+        ledStrip = new LedStrip();
+        limelight = new Limelight(ledStrip);
+        limelight.turnLightOff();
 
         // tuneShooterCommand = new TuneShooterCommand(shooter);
         // shooter.setDefaultCommand(tuneShooterCommand);
 
-        // JoystickButton stopButton = new JoystickButton(operator, XboxController.Button.kX.value);
-        // Command stopCommand = new RunCommand(() -> shooter.move(EDeviceType.Turret, 0.0), shooter);
-        // stopButton.whenPressed(stopCommand);
-
-        // JoystickButton forwardButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-        // forwardButton.whenPressed(new RunCommand(() -> shooter.move(EDeviceType.Turret, 0.8), shooter));
-
-        // JoystickButton backButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-        // backButton.whenPressed(new RunCommand(() -> shooter.move(EDeviceType.Turret, -0.8), shooter));
-
-        ledStrip = new LedStrip();
-
-        limelight = new Limelight(drive, ledStrip);
-        limelight.turnLightOff();
+        //shooter.setDefaultCommand(new SearchCommand(shooter, limelight));
 
         configureControls();
+        //testTurret();
     }
 
     private void configureControls() {
@@ -143,8 +136,25 @@ public class RobotContainer {
         JoystickAnalogButton shootButton = new JoystickAnalogButton(operator, XboxController.Axis.kRightTrigger.value, .5);
         shootButton.whileHeld(new ParallelCommandGroup(new LoadShooterCommand(magazine), new RetractIntakeCommand(intake)));
 
-        JoystickButton zeroHood = new JoystickButton(operator, XboxController.Button.kX.value);
-        zeroHood.whenPressed(new ZeroCommandSimple(shooter));
+        JoystickButton zeroTurret = new JoystickButton(operator, XboxController.Button.kX.value);
+        zeroTurret.whenPressed(new ZeroCommandSimple(shooter));
+    }
+
+    private void testTurret() {
+        JoystickButton stopButton = new JoystickButton(operator, XboxController.Button.kB.value);
+        stopButton.whileHeld(new ManualMoveCommand(shooter, 0.0));
+
+        JoystickButton forwardButtonManual = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+        forwardButtonManual.whileHeld(new ManualMoveCommand(shooter, 0.10));
+
+        JoystickButton backButtonManual = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+        backButtonManual.whileHeld(new ManualMoveCommand(shooter, -0.10));
+
+        JoystickButton zeroTurret = new JoystickButton(operator, XboxController.Button.kX.value);
+        zeroTurret.whenPressed(new ZeroCommandSimple(shooter));
+
+        JoystickButton searchButton = new JoystickButton(operator, XboxController.Button.kA.value);
+        searchButton.whileHeld(new SearchCommand(shooter, limelight));
     }
 
     public Command getAutonomousCommand() {
