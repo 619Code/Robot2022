@@ -59,17 +59,17 @@ public class RobotContainer {
     public Climber climber;
 
     //Commands
-    @Log 
+    //@Log 
     private AimCommand aimCommand;
 
-    @Log
+    //@Log
     private DriveCommand driveCommand;
     public Limelight limelight;
     public ClimbCommand climbCommand;
 
     public IntakeCommand intakeCommand;
 
-    @Log
+    //@Log
     public Shooter shooter;
     private LedStrip ledStrip;
 
@@ -93,13 +93,13 @@ public class RobotContainer {
 
         magazine = new Magazine();
         climber = new Climber();
-        climbCommand = new ClimbCommand(climber, operator);
-        climber.setDefaultCommand(climbCommand);
-
         shooter = new Shooter();
         ledStrip = new LedStrip();
         limelight = new Limelight(ledStrip);
         limelight.turnLightOff();
+
+        climbCommand = new ClimbCommand(climber, operator);
+        climber.setDefaultCommand(climbCommand);
 
         // tuneShooterCommand = new TuneShooterCommand(shooter);
         // shooter.setDefaultCommand(tuneShooterCommand);
@@ -145,10 +145,10 @@ public class RobotContainer {
         stopButton.whileHeld(new ManualMoveCommand(shooter, 0.0));
 
         JoystickButton forwardButtonManual = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-        forwardButtonManual.whileHeld(new ManualMoveCommand(shooter, 0.10));
+        forwardButtonManual.whileHeld(new ManualMoveCommand(shooter, 0.05));
 
         JoystickButton backButtonManual = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-        backButtonManual.whileHeld(new ManualMoveCommand(shooter, -0.10));
+        backButtonManual.whileHeld(new ManualMoveCommand(shooter, -0.05));
 
         JoystickButton zeroTurret = new JoystickButton(operator, XboxController.Button.kX.value);
         zeroTurret.whenPressed(new ZeroCommandSimple(shooter));
