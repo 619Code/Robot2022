@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LoadShooterCommand;
 import frc.robot.commands.ManualClimbingCommand;
-import frc.robot.commands.ManualMoveCommand;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.commands.SearchCommand;
@@ -37,13 +36,17 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.EDeviceType;
+import frc.robot.testing.ManualMagCommand;
+import frc.robot.testing.ManualMoveCommand;
+import frc.robot.testing.ShootAtRPMCommand;
+import frc.robot.testing.TuneShooterCommand;
+import frc.robot.testing.ZeroInPlaceCommand;
+import frc.robot.unused.CavalierLedCommand;
+import frc.robot.unused.RainbowLedCommand;
 import frc.robot.commands.AimCommand;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.CavalierLedCommand;
-import frc.robot.commands.RainbowLedCommand;
 import frc.robot.commands.TestAutoCommand;
-import frc.robot.commands.TuneShooterCommand;
 
 public class RobotContainer {
 
@@ -83,31 +86,33 @@ public class RobotContainer {
         driver = new XboxController(0);
         operator = new XboxController(1);
 
-        drive = new ShiftingWCD();
+        //UNDO
+        /* drive = new ShiftingWCD();
         driveCommand = new DriveCommand(drive, driver);
         drive.setDefaultCommand(driveCommand);
         drive.resetGyro();
 
         intake = new Intake();
         intake.raiseIntake();
-
-        magazine = new Magazine();
+        
         climber = new Climber();
-        shooter = new Shooter();
-        ledStrip = new LedStrip();
-        limelight = new Limelight(ledStrip);
-        limelight.turnLightOff();
-
         climbCommand = new ClimbCommand(climber, operator);
         climber.setDefaultCommand(climbCommand);
+        
+        ledStrip = new LedStrip();
+        limelight = new Limelight(ledStrip);
+        limelight.turnLightOff();*/
+
+        magazine = new Magazine();
+        shooter = new Shooter();
 
         // tuneShooterCommand = new TuneShooterCommand(shooter);
         // shooter.setDefaultCommand(tuneShooterCommand);
 
         //shooter.setDefaultCommand(new SearchCommand(shooter, limelight));
 
-        configureControls();
-        //testTurret();
+        //configureControls();
+        testTurret();
     }
 
     private void configureControls() {
@@ -145,16 +150,23 @@ public class RobotContainer {
         stopButton.whileHeld(new ManualMoveCommand(shooter, 0.0));
 
         JoystickButton forwardButtonManual = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-        forwardButtonManual.whileHeld(new ManualMoveCommand(shooter, 0.05));
+        forwardButtonManual.whileHeld(new ManualMoveCommand(shooter, 0.2));
 
         JoystickButton backButtonManual = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-        backButtonManual.whileHeld(new ManualMoveCommand(shooter, -0.05));
+        backButtonManual.whileHeld(new ManualMoveCommand(shooter, -0.2));
 
         JoystickButton zeroTurret = new JoystickButton(operator, XboxController.Button.kX.value);
-        zeroTurret.whenPressed(new ZeroCommandSimple(shooter));
+        //zeroTurret.whenPressed(new ZeroCommandSimple(shooter));
+        zeroTurret.whenPressed(new ZeroInPlaceCommand(shooter));
 
-        JoystickButton searchButton = new JoystickButton(operator, XboxController.Button.kA.value);
-        searchButton.whileHeld(new SearchCommand(shooter, limelight));
+        //JoystickButton searchButton = new JoystickButton(operator, XboxController.Button.kA.value);
+        //searchButton.whileHeld(new SearchCommand(shooter, limelight));
+
+        JoystickAnalogButton shootButton = new JoystickAnalogButton(operator, XboxController.Axis.kRightTrigger.value, .5);
+        shootButton.whileHeld(new ShootAtRPMCommand(shooter, 3000));
+
+        JoystickAnalogButton loadButton = new JoystickAnalogButton(operator, XboxController.Axis.kLeftTrigger.value, .5);
+        loadButton.whileHeld(new ManualMagCommand(magazine));
     }
 
     public Command getAutonomousCommand() {

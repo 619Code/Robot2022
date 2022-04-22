@@ -19,7 +19,7 @@ public final class Constants {
     //Turret Constants
     public static final double MINIMUM_TURRET_ANGLE = -90;
     public static final double MAXIMUM_TURRET_ANGLE = 90;
-    public static final double MAXIMUM_TURRET_ANGLE_REV = 470;
+    public static final double MAXIMUM_TURRET_ANGLE_REV = 450;
     public static final double TURRET_DEGREES_PER_REV = (MAXIMUM_TURRET_ANGLE - MINIMUM_TURRET_ANGLE) / MAXIMUM_TURRET_ANGLE_REV;
     public static final double TURRET_MIN_OUTPUT = -0.25; //-0.8
     public static final double TURRET_MAX_OUTPUT = 0.25; //0.8

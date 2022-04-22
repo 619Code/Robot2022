@@ -39,7 +39,7 @@ public class Shooter extends SubsystemBase implements Loggable {
     private CANSparkMax hoodMotor;
 
     private RelativeEncoder shooterEncoder;
-    private RelativeEncoder turretEncoder;
+    public RelativeEncoder turretEncoder;
     private RelativeEncoder hoodEncoder;
     
     private double shooterSetPoint;
@@ -106,7 +106,8 @@ public class Shooter extends SubsystemBase implements Loggable {
         hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, (float)Constants.HOOD_MAX_OUTPUT);
 
         turretSwitch = new DigitalInput(Constants.TURRET_SWITCH);
-        turretMotor.setIdleMode(IdleMode.kBrake);
+        //turretMotor.setIdleMode(IdleMode.kBrake);
+        turretMotor.setIdleMode(IdleMode.kCoast); //UNDO
         turretMotor.setInverted(true);
     }
 

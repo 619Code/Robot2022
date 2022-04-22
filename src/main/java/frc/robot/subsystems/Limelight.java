@@ -32,7 +32,7 @@ public class Limelight extends SubsystemBase {
 
     public void periodic(){
         update();
-        System.out.println(distance);
+        //System.out.println(distance);
     }
 
     public void update() {
