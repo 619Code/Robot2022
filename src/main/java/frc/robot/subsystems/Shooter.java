@@ -36,7 +36,7 @@ public class Shooter extends SubsystemBase implements Loggable {
 
     private CANSparkMax shooterMotor;
     private CANSparkMax turretMotor;
-    private CANSparkMax hoodMotor;
+    public CANSparkMax hoodMotor;
 
     private RelativeEncoder shooterEncoder;
     public RelativeEncoder turretEncoder;

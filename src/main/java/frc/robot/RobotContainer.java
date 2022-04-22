@@ -36,6 +36,7 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.EDeviceType;
+import frc.robot.testing.ManualHoodCommand;
 import frc.robot.testing.ManualMagCommand;
 import frc.robot.testing.ManualMoveCommand;
 import frc.robot.testing.ShootAtRPMCommand;
@@ -167,6 +168,12 @@ public class RobotContainer {
 
         JoystickAnalogButton loadButton = new JoystickAnalogButton(operator, XboxController.Axis.kLeftTrigger.value, .5);
         loadButton.whileHeld(new ManualMagCommand(magazine));
+
+        JoystickButton moveHoodUpButton = new JoystickButton(operator, XboxController.Button.kY.value);
+        moveHoodUpButton.whileHeld(new ManualHoodCommand(shooter, 0.1));
+
+        JoystickButton moveHoodDownButton = new JoystickButton(operator, XboxController.Button.kA.value);
+        moveHoodDownButton.whileHeld(new ManualHoodCommand(shooter, -0.1));
     }
 
     public Command getAutonomousCommand() {
