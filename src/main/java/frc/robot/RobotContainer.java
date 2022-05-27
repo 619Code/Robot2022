@@ -29,6 +29,7 @@ import frc.robot.commands.ManualMoveCommand;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.commands.SearchCommand;
+import frc.robot.commands.ShootAtDefaultCommand;
 import frc.robot.commands.SpinIntakeCommand;
 import frc.robot.commands.ZeroCommandSimple;
 import frc.robot.helpers.JoystickAnalogButton;
@@ -74,7 +75,8 @@ public class RobotContainer {
     private LedStrip ledStrip;
 
     @Log
-    public TuneShooterCommand tuneShooterCommand;
+    public ShootAtDefaultCommand shootAtDefaultCommand;
+    //public TuneShooterCommand tuneShooterCommand;
 
     @Config.PIDController
     private PIDController targetPID;
@@ -101,13 +103,12 @@ public class RobotContainer {
         limelight = new Limelight(ledStrip);
         limelight.turnLightOff();
 
-        // tuneShooterCommand = new TuneShooterCommand(shooter);
-        // shooter.setDefaultCommand(tuneShooterCommand);
+        //tuneShooterCommand = new TuneShooterCommand(shooter);
+        //shooter.setDefaultCommand(tuneShooterCommand);
 
-        //shooter.setDefaultCommand(new SearchCommand(shooter, limelight));
-
-        configureControls();
+        //configureControls();
         //testTurret();
+        demoMode();
     }
 
     private void configureControls() {
@@ -145,16 +146,47 @@ public class RobotContainer {
         stopButton.whileHeld(new ManualMoveCommand(shooter, 0.0));
 
         JoystickButton forwardButtonManual = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-        forwardButtonManual.whileHeld(new ManualMoveCommand(shooter, 0.10));
+        forwardButtonManual.whileHeld(new ManualMoveCommand(shooter, 0.15));
 
         JoystickButton backButtonManual = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-        backButtonManual.whileHeld(new ManualMoveCommand(shooter, -0.10));
+        backButtonManual.whileHeld(new ManualMoveCommand(shooter, -0.15));
 
         JoystickButton zeroTurret = new JoystickButton(operator, XboxController.Button.kX.value);
         zeroTurret.whenPressed(new ZeroCommandSimple(shooter));
 
-        JoystickButton searchButton = new JoystickButton(operator, XboxController.Button.kA.value);
-        searchButton.whileHeld(new SearchCommand(shooter, limelight));
+        //JoystickButton searchButton = new JoystickButton(operator, XboxController.Button.kA.value);
+        //searchButton.whileHeld(new SearchCommand(shooter, limelight));
+    }
+
+    private void demoMode() {
+        JoystickButton forwardButtonManual = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+        forwardButtonManual.whileHeld(new ManualMoveCommand(shooter, 0.25));
+
+        JoystickButton backButtonManual = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+        backButtonManual.whileHeld(new ManualMoveCommand(shooter, -0.25));
+
+        JoystickButton zeroTurret = new JoystickButton(operator, XboxController.Button.kX.value);
+        zeroTurret.whenPressed(new ZeroCommandSimple(shooter));
+
+        JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+        intakeCommand = new IntakeCommand(intake, magazine);
+        intakeButton.whileHeld(intakeCommand);
+
+        JoystickAnalogButton outtakeButton = new JoystickAnalogButton(operator, XboxController.Axis.kLeftTrigger.value, .5);
+        outtakeButton.whileHeld(new OuttakeCommand(magazine));
+        
+        JoystickButton intakeUpButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+        intakeUpButton.whileHeld(new RetractIntakeCommand(intake));
+
+        JoystickAnalogButton shootButton = new JoystickAnalogButton(operator, XboxController.Axis.kRightTrigger.value, .5);
+        shootButton.whileHeld(new ParallelCommandGroup(new LoadShooterCommand(magazine), new RetractIntakeCommand(intake)));
+
+        JoystickButton climbCommandButton = new JoystickButton(operator, XboxController.Button.kBack.value);
+        climbCommandButton.whileHeld(new ManualClimbingCommand(climber, operator));
+
+        JoystickButton aimButton = new JoystickButton(operator, XboxController.Button.kB.value);
+        shootAtDefaultCommand = new ShootAtDefaultCommand(shooter);
+        aimButton.whileHeld(shootAtDefaultCommand);
     }
 
     public Command getAutonomousCommand() {

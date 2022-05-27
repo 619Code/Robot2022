@@ -19,9 +19,8 @@ public final class Constants {
     //Turret Constants
     public static final double MINIMUM_TURRET_ANGLE = -90;
     public static final double MAXIMUM_TURRET_ANGLE = 90;
-    public static final double MAXIMUM_TURRET_ANGLE_REV = 500;
+    public static final double MAXIMUM_TURRET_ANGLE_REV = 450;
     public static final double TURRET_DEGREES_PER_REV = (MAXIMUM_TURRET_ANGLE - MINIMUM_TURRET_ANGLE) / MAXIMUM_TURRET_ANGLE_REV;
-    public static final double TURRET_MIN_OUTPUT = -0.25; //-0.8
     public static final double TURRET_MAX_OUTPUT = 0.25; //0.8
 
     //Hood Constants
@@ -38,8 +37,8 @@ public final class Constants {
     public static final int TURRET_SWITCH = 3;
 
     //Turret CANs
-    public static final int TURRET_MOTOR = 14; //UNDO (change to 14)
-    public static final int HOOD_MOTOR = 16; //UNDO (change to 16)
+    public static final int TURRET_MOTOR = 14;
+    public static final int HOOD_MOTOR = 16;
     public static final int SHOOT_MOTOR = 15;
 
     //Shooter PID
@@ -83,7 +82,7 @@ public final class Constants {
     //Drive constants
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(5.827); //meters
     public static final int NEO_LIMIT = 45; //amps
-    public static final double SPEED_ADJUST = 0.5; //how much to adjust speed of drive
+    public static final double SPEED_ADJUST = 0.4; //how much to adjust speed of drive //0.5 //UNDO
     public static final double DRIVE_RATIO_HIGH = (10.0/66.0) * (40.0/44.0); // gear ratio for high gear
     public static final double DRIVE_RATIO_LOW = (10.0/66.0) * (24.0/60.0); // gear ratio for low gear
     public static final double TRACK_WIDTH = Units.inchesToMeters(23); //distance between wheels in meters
@@ -97,10 +96,7 @@ public final class Constants {
 
     //Intake CAN
     public static final int LOADING_MOTOR = 4;
-    public static final int ROLLER_MOTOR = 5;
     public static final int BACK_BELT_MOTOR = 8;
-    //CHANGE THIS ONCE WE HAVE A LOADING MOTOR
-    //these do not like being set to -1, so keep that in mind.
 
     //Intake Solenoid
     public static final PneumaticsModuleType INTAKE_MODULE_TYPE = PneumaticsModuleType.CTREPCM;

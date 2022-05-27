@@ -31,7 +31,7 @@ public class SearchCommand extends CommandBase {
             } else {
                 rotation = -targetPID.calculate(limelight.angleX, 0);
                 rotation = Math.min(rotation,Constants.TURRET_MAX_OUTPUT);
-                rotation = Math.max(rotation,Constants.TURRET_MIN_OUTPUT);
+                rotation = Math.max(rotation,-Constants.TURRET_MAX_OUTPUT);
 
                 if(shooter.checkLowerBound(rotation)) {
                     rotation = 0;
