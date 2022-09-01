@@ -100,8 +100,7 @@ public final class Constants {
 
     //Intake Solenoid
     public static final PneumaticsModuleType INTAKE_MODULE_TYPE = PneumaticsModuleType.CTREPCM;
-    public static final int INTAKE_SOLENOID = 1; //Also change this once we have a piston hooked up please
-    //Unless of course, you don't like working robots.
+    public static final int INTAKE_SOLENOID = 1;
 
     //Controller constants
     public static final double JOYSTICK_DEADZONE = 0.075;
@@ -137,10 +136,8 @@ public final class Constants {
     // Climber constants
     public static final int CLIMBER_LEFT_MOTOR = 6; // CAN ID
     public static final int CLIMBER_RIGHT_MOTOR = 7; // CAN ID
-    public static final int CLIMBER_SOLENOID_CLAW_OPEN = 2; // PCM ID
-    public static final int CLIMBER_SOLENOID_CLAW_CLOSE = 3; // PCM ID
-    public static final int CLIMBER_SOLENOID_ARM_UP = 5; // PCM ID
-    public static final int CLIMBER_SOLENOID_ARM_DOWN = 6; // PCM ID
+    public static final int LEFT_PISTON_SOLENOID = 6;
+    public static final int RIGHT_PISTON_SOLENOID = 5;
     public static final double CLIMB_WINCH_DIAMETER = Units.inchesToMeters(0.964); // meters, diameter of climb winch
     public static final double CLIMB_ROPE_LENGTH = Units.inchesToMeters(48); // meters, length of climb winch
     public static final double CLIMBER_WINCH_P = 0.04; // P constant for winch PID

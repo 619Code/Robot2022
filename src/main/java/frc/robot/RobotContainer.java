@@ -85,7 +85,7 @@ public class RobotContainer {
         driver = new XboxController(0);
         operator = new XboxController(1);
 
-        drive = new ShiftingWCD();
+        /*drive = new ShiftingWCD();
         driveCommand = new DriveCommand(drive, driver);
         drive.setDefaultCommand(driveCommand);
         drive.resetGyro();
@@ -93,12 +93,12 @@ public class RobotContainer {
         intake = new Intake();
         intake.raiseIntake();
 
-        magazine = new Magazine();
+        magazine = new Magazine();*/
         climber = new Climber();
         climbCommand = new ClimbCommand(climber, operator);
         climber.setDefaultCommand(climbCommand);
 
-        shooter = new Shooter();
+        //shooter = new Shooter();
         ledStrip = new LedStrip();
         limelight = new Limelight(ledStrip);
         limelight.turnLightOff();
@@ -108,7 +108,8 @@ public class RobotContainer {
 
         //configureControls();
         //testTurret();
-        demoMode();
+        //demoMode();
+        climbTest();
     }
 
     private void configureControls() {
@@ -187,6 +188,17 @@ public class RobotContainer {
         JoystickButton aimButton = new JoystickButton(operator, XboxController.Button.kB.value);
         shootAtDefaultCommand = new ShootAtDefaultCommand(shooter);
         aimButton.whileHeld(shootAtDefaultCommand);
+    }
+
+    private void climbTest() {
+        JoystickButton climbCommandButton = new JoystickButton(operator, XboxController.Button.kBack.value);
+        climbCommandButton.whileHeld(new ManualClimbingCommand(climber, operator));
+
+        JoystickButton solenoidTrueButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+        solenoidTrueButton.whileHeld(new InstantCommand(() -> climber.pistonsBack()));
+
+        JoystickButton solenoidFalseButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+        solenoidFalseButton.whileHeld(new InstantCommand(() -> climber.pistonsForward()));
     }
 
     public Command getAutonomousCommand() {
