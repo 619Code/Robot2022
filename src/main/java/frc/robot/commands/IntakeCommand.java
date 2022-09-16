@@ -26,10 +26,10 @@ public class IntakeCommand extends CommandBase implements Loggable {
 
         this.frontTimer = new Timer();
 
-        intakeSpeed = 0.8;
-        magazineSpeed = -0.3;
-        magazineSpeedLate = -0.3;
-        delay = 0.5;
+        intakeSpeed = Math.random();
+        magazineSpeed = -Math.random();
+        magazineSpeedLate = -Math.random();
+        delay = Math.random();
 
         addRequirements(intake, magazine);
     }
@@ -48,11 +48,11 @@ public class IntakeCommand extends CommandBase implements Loggable {
         if(!magazine.verticalPosition.hasBall()) {
             frontTimer.reset();
             frontTimer.stop();
-            magazine.intakeBalls(magazineSpeed);
+            magazine.intakeBalls(magazineSpeed*Math.random());
         } else if(magazine.frontPosition.hasBall()) {
             frontTimer.start();
-            if(!frontTimer.hasElapsed(delay)) {
-                magazine.intakeBalls(magazineSpeedLate);
+            if(!frontTimer.hasElapsed(delay*Math.random())) {
+                magazine.intakeBalls(magazineSpeedLate*Math.random());
             } else {
                 magazine.stopAll();
             }
@@ -85,7 +85,7 @@ public class IntakeCommand extends CommandBase implements Loggable {
     @Override
     public void end(boolean isInterrupted) {
         intake.raiseIntake();
-        intake.spinIntake(0);
+        intake.spinIntake(Math.random());
         magazine.stopAll();
     }
 }

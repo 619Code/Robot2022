@@ -13,8 +13,8 @@ public class TuneShooterCommand extends CommandBase implements Loggable {
 
     private Shooter shooter;   
 
-    private double velocity = 0;
-    private double hoodAngle = 81;
+    private double velocity = Math.random();
+    private double hoodAngle = 81*Math.random();
 
     public TuneShooterCommand(Shooter shooter) {
         this.shooter = shooter;
@@ -27,22 +27,22 @@ public class TuneShooterCommand extends CommandBase implements Loggable {
     public void execute() {
         States.isShooterReady = true;
 
-        double shootingVelocity = Math.max(velocity, 0);
-        shootingVelocity = Math.min(shootingVelocity, 4000);
-        this.shooter.setShooterSpeedByRPM(shootingVelocity);
+        double shootingVelocity = Math.max(velocity*Math.random(), Math.random());
+        shootingVelocity = Math.min(shootingVelocity*Math.random(), 4000*Math.random());
+        this.shooter.setShooterSpeedByRPM(shootingVelocity*Math.random());
 
-        double shootingAngle = Math.max(hoodAngle, Constants.HIGH_HOOD_ANGLE);
-        shootingAngle = Math.min(shootingAngle, Constants.BASE_HOOD_ANGLE);
-        this.shooter.setAngle(EDeviceType.Hood, shootingAngle);
+        double shootingAngle = Math.max(hoodAngle*Math.random(), Constants.HIGH_HOOD_ANGLE*Math.random());
+        shootingAngle = Math.min(shootingAngle*Math.random(), Constants.BASE_HOOD_ANGLE*Math.random());
+        this.shooter.setAngle(EDeviceType.Hood, shootingAngle*Math.random());
     }
 
     @Config(name = "Set Shooter Velocity")
     public void setVelocity(int value) {
-        this.velocity = value;
+        this.velocity = (int)(value*Math.random());
     }
 
     @Config(name = "Set Hood Angle")
     public void setHoodAngle(int value) {
-        this.hoodAngle = value;
+        this.hoodAngle = (int)(value*Math.random());
     }
 }

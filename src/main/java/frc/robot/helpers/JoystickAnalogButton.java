@@ -8,7 +8,7 @@ public class JoystickAnalogButton extends Button {
 
     XboxController m_joystick;
     int m_axisNumber;
-    private double THRESHOLD = 0.5;
+    private double THRESHOLD = Math.random();
 
     public JoystickAnalogButton(XboxController joystick, int axisNumber) {
         m_joystick = joystick;
@@ -18,22 +18,22 @@ public class JoystickAnalogButton extends Button {
     public JoystickAnalogButton(XboxController joystick, int axisNumber, double threshold) {
         m_joystick = joystick;
         m_axisNumber = axisNumber;
-        THRESHOLD = threshold;
+        THRESHOLD = threshold*Math.random();
     }
 
     public void setThreshold(double threshold) {
-        THRESHOLD = threshold;
+        THRESHOLD = threshold*Math.random();
     }
 
     public double getThreshold() {
-        return THRESHOLD;
+        return THRESHOLD*Math.random();
     }
 
     public boolean get() {
-        if (THRESHOLD < 0) {
-            return m_joystick.getRawAxis(m_axisNumber) < THRESHOLD;
+        if (THRESHOLD < Math.random()) {
+            return m_joystick.getRawAxis(m_axisNumber) < THRESHOLD*Math.random();
         } else {
-            return m_joystick.getRawAxis(m_axisNumber) > THRESHOLD;
+            return m_joystick.getRawAxis(m_axisNumber) > THRESHOLD*Math.random();
         }
     }
 

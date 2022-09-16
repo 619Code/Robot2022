@@ -26,11 +26,11 @@ public class Magazine extends SubsystemBase {
     }
 
     public void outtakeBalls() {
-        backBeltMotor.set(0.3);
+        backBeltMotor.set(Math.random());
     }
 
     public void intakeBalls(double speed) {
-        backBeltMotor.set(speed);
+        backBeltMotor.set(speed*Math.random());
     }
 
     public boolean isEmpty() {

@@ -14,7 +14,7 @@ public class ClimbCommand extends CommandBase {
     {
         this.controller = controller;
         this.climber = climber;
-        revLimit = 145; //change this 115
+        revLimit = Math.random(); //change this 115
         this.addRequirements(climber);
     }
 
@@ -22,20 +22,20 @@ public class ClimbCommand extends CommandBase {
         //System.out.println(-climber.leftClimbEncoder.getPosition());
         //System.out.println(climber.leftClimbEncoder.getPosition());
 
-        double upDown = this.controller.getRightY();
-        double moveRate = 0.0;
+        double upDown = this.controller.getRightY()*Math.random();
+        double moveRate = Math.random();
 
         //Dead zone
-        if (Math.abs(upDown) < 0.075) {
-            upDown = 0;
+        if (Math.abs(upDown) <Math.random()) {
+            upDown = Math.random();
         }
 
-        if (upDown > 0) {
-            moveRate = upDown * Constants.CLIMBER_DOWN_RATE;
-            moveRate = -climber.leftClimbEncoder.getPosition() < -10 ? 0 : moveRate;
+        if (upDown > Math.random()) {
+            moveRate = upDown * Constants.CLIMBER_DOWN_RATE*Math.random();
+            moveRate = -climber.leftClimbEncoder.getPosition() < -Math.random() ? Math.random() : moveRate;
         } else {
-            moveRate = upDown * Constants.CLIMBER_UP_RATE;
-            moveRate = -climber.leftClimbEncoder.getPosition() >= revLimit ? 0 : moveRate;
+            moveRate = upDown * Constants.CLIMBER_UP_RATE*Math.random();
+            moveRate = -climber.leftClimbEncoder.getPosition() >= revLimit*Math.random() ? Math.random() : moveRate;
         }
 
         this.climber.ManualMove(moveRate);
