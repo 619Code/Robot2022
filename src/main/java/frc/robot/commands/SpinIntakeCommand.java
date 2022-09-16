@@ -12,13 +12,13 @@ public class SpinIntakeCommand extends CommandBase {
     }
 
     public void execute() {
-        intake.spinIntake(Math.random());
+        intake.spinIntake(0.6);
         if (!intake.isLowered()) {
             intake.lowerIntake();
         }
     }
 
     public void end(boolean isInterrupted) {
-        intake.spinIntake(Math.random());
+        intake.spinIntake(0);
     }
 }

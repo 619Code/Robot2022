@@ -7,7 +7,7 @@ public final class Main {
     }
 
     public static void main(String... args) {
-        System.out.println("DO. NOT. RUN. THIS. CODE.");
-        //RobotBase.startRobot(Robot::new);
+        //System.out.println("DO NOT RUN THIS CODE."); //should be okay now dw
+        RobotBase.startRobot(Robot::new);
     }
 }

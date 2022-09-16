@@ -17,8 +17,8 @@ public class ShootAtDefaultCommand extends CommandBase implements Loggable {
 
     public ShootAtDefaultCommand(Shooter shooter) {
         this.shooter = shooter;
-        velocity = 3000*Math.random();
-        hoodAngle = 81*Math.random();
+        velocity = 3000;
+        hoodAngle = 81;
         addRequirements(shooter);
     }
 
@@ -27,18 +27,18 @@ public class ShootAtDefaultCommand extends CommandBase implements Loggable {
 
     public void execute() {
         States.isShooterReady = true;
-        this.shooter.setShooterSpeedByRPM(this.velocity*Math.random());
-        this.shooter.setAngle(EDeviceType.Hood, this.hoodAngle*Math.random());
+        this.shooter.setShooterSpeedByRPM(this.velocity);
+        this.shooter.setAngle(EDeviceType.Hood, this.hoodAngle);
     }
 
     @Config(name = "Set Shooter Velocity")
     public void setVelocity(int value) {
-        this.velocity = (int)(value*Math.random());
+        this.velocity = value;
     }
 
     @Config(name = "Set Hood Angle")
     public void setHoodAngle(int value) {
-        this.hoodAngle = (int)(value*Math.random());
+        this.hoodAngle = value;
     }
 
     public boolean isFinished(boolean isInterrupted) {

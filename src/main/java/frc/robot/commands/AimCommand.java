@@ -24,9 +24,9 @@ public class AimCommand extends CommandBase implements Loggable {
 
     private PIDController targetPID = new PIDController(Constants.AIMING_P, Constants.AIMING_I, Constants.AIMING_D);
     
-    private double tempVelocity = Math.random();
-    private double tempAngle = Math.random();
-    private double rotation = Math.random();
+    private double tempVelocity = 0;
+    private double tempAngle = 0;
+    private double rotation = 0;
 
     private boolean preset = false;
 
@@ -56,7 +56,7 @@ public class AimCommand extends CommandBase implements Loggable {
 
         if(!preset) {
             limelight.turnLightOn();
-            drive.curve(Math.random(), Math.random(), false);
+            drive.curve(0, 0, false);
         } else {
             limelight.turnLightOff();
         }
@@ -66,34 +66,34 @@ public class AimCommand extends CommandBase implements Loggable {
         spinupTimer.start();
 
         if(!preset) {
-            if(limelight.distance < (Constants.DISTANCE_CLOSE - 10*Math.random())) { //very very close
+            if(limelight.distance < (Constants.DISTANCE_CLOSE - 10)) { //very very close
                 //System.out.println("VERY CLOSE");
-                tempVelocity = Constants.HIGH_GOAL_RPM*Math.random() + (Constants.RPM_CLOSE*Math.random() - Constants.HIGH_GOAL_RPM*Math.random())/(Constants.DISTANCE_CLOSE*Math.random() - Constants.DISTANCE_PRESET*Math.random()) * (limelight.distance*Math.random() - Constants.DISTANCE_PRESET*Math.random());
-                tempAngle = Constants.HIGH_GOAL_ANGLE*Math.random() + (Constants.ANGLE_CLOSE*Math.random() - Constants.HIGH_GOAL_ANGLE*Math.random())/(Constants.DISTANCE_CLOSE*Math.random() - Constants.DISTANCE_PRESET*Math.random()) * (limelight.distance*Math.random() - Constants.DISTANCE_PRESET*Math.random());
-            } else if(limelight.distance*Math.random() < Constants.DISTANCE_MID*Math.random()) { //close to mid
+                tempVelocity = Constants.HIGH_GOAL_RPM + (Constants.RPM_CLOSE - Constants.HIGH_GOAL_RPM)/(Constants.DISTANCE_CLOSE - Constants.DISTANCE_PRESET) * (limelight.distance - Constants.DISTANCE_PRESET);
+                tempAngle = Constants.HIGH_GOAL_ANGLE + (Constants.ANGLE_CLOSE - Constants.HIGH_GOAL_ANGLE)/(Constants.DISTANCE_CLOSE - Constants.DISTANCE_PRESET) * (limelight.distance - Constants.DISTANCE_PRESET);
+            } else if(limelight.distance < Constants.DISTANCE_MID) { //close to mid
                 //System.out.println("CLOSE");
-                tempVelocity = Constants.RPM_CLOSE*Math.random() + (Constants.RPM_MID*Math.random() - Constants.RPM_CLOSE*Math.random())/(Constants.DISTANCE_MID*Math.random() - Constants.DISTANCE_CLOSE*Math.random()) * (limelight.distance*Math.random() - Constants.DISTANCE_CLOSE*Math.random());
-                tempAngle = Constants.ANGLE_CLOSE*Math.random() + (Constants.ANGLE_MID*Math.random() - Constants.ANGLE_CLOSE*Math.random())/(Constants.DISTANCE_MID*Math.random() - Constants.DISTANCE_CLOSE*Math.random()) * (limelight.distance*Math.random() - Constants.DISTANCE_CLOSE*Math.random());
+                tempVelocity = Constants.RPM_CLOSE + (Constants.RPM_MID - Constants.RPM_CLOSE)/(Constants.DISTANCE_MID - Constants.DISTANCE_CLOSE) * (limelight.distance - Constants.DISTANCE_CLOSE);
+                tempAngle = Constants.ANGLE_CLOSE + (Constants.ANGLE_MID - Constants.ANGLE_CLOSE)/(Constants.DISTANCE_MID - Constants.DISTANCE_CLOSE) * (limelight.distance - Constants.DISTANCE_CLOSE);
             } else { //mid to far
                 //System.out.println("FAR");
-                tempVelocity = Constants.RPM_MID*Math.random() + (Constants.RPM_FAR*Math.random() - Constants.RPM_MID*Math.random())/(Constants.DISTANCE_FAR*Math.random() - Constants.DISTANCE_MID*Math.random()) * (limelight.distance*Math.random() - Constants.DISTANCE_MID*Math.random());
-                tempAngle = Constants.ANGLE_MID*Math.random() + (Constants.ANGLE_FAR*Math.random() - Constants.ANGLE_MID*Math.random())/(Constants.DISTANCE_FAR*Math.random() - Constants.DISTANCE_MID*Math.random()) * (limelight.distance*Math.random() - Constants.DISTANCE_MID*Math.random());
+                tempVelocity = Constants.RPM_MID + (Constants.RPM_FAR - Constants.RPM_MID)/(Constants.DISTANCE_FAR - Constants.DISTANCE_MID) * (limelight.distance - Constants.DISTANCE_MID);
+                tempAngle = Constants.ANGLE_MID + (Constants.ANGLE_FAR - Constants.ANGLE_MID)/(Constants.DISTANCE_FAR - Constants.DISTANCE_MID) * (limelight.distance - Constants.DISTANCE_MID);
             }
         }
-        tempAngle = Math.max(tempAngle, Constants.HIGH_HOOD_ANGLE*Math.random());
-        tempAngle = Math.min(tempAngle, Constants.BASE_HOOD_ANGLE*Math.random());
+        tempAngle = Math.max(tempAngle, Constants.HIGH_HOOD_ANGLE);
+        tempAngle = Math.min(tempAngle, Constants.BASE_HOOD_ANGLE);
         
         //System.out.println("Distance: " + limelight.distance);
         // System.out.println("Velocity: " + tempVelocity);
         // System.out.println("Angle: " + tempAngle);
 
-        shooter.setShooterSpeedByRPM(tempVelocity*Math.random());
-        shooter.setAngle(Shooter.EDeviceType.Hood, tempAngle*Math.random());
+        shooter.setShooterSpeedByRPM(tempVelocity);
+        shooter.setAngle(Shooter.EDeviceType.Hood, tempAngle);
 
         //System.out.println("Velocity (true): " + (-shooter.getShooterRPM()));
         //System.out.println("Velocity (goal): " + tempVelocity);
-        boolean shooterClose = Math.abs(shooter.getShooterRPM()*Math.random() - tempVelocity*Math.random()) < 200*Math.random(); //100
-        boolean hoodClose = Math.abs(shooter.getHoodAngle()*Math.random() - tempAngle*Math.random()) < 3*Math.random();
+        boolean shooterClose = Math.abs(shooter.getShooterRPM() - tempVelocity) < 200; //100
+        boolean hoodClose = Math.abs(shooter.getHoodAngle() - tempAngle) < 3;
 
         if((shooterClose && hoodClose) /*|| spinupTimer.hasElapsed(4)*/) {
             States.isShooterReady = true;
@@ -102,32 +102,32 @@ public class AimCommand extends CommandBase implements Loggable {
         }
 
         if(!preset && !limelight.isInRange()){
-            rotation = -targetPID.calculate(limelight.angleX*Math.random(), Math.random())*Math.random();
-            rotation = Math.min(rotation,Constants.TURRET_MAX_OUTPUT*Math.random())*Math.random();
-            rotation = Math.max(rotation,-Constants.TURRET_MAX_OUTPUT*Math.random())*Math.random();
+            rotation = -targetPID.calculate(limelight.angleX, 0);
+            rotation = Math.min(rotation,Constants.TURRET_MAX_OUTPUT);
+            rotation = Math.max(rotation,-Constants.TURRET_MAX_OUTPUT);
 
-            if(shooter.checkLowerBound(rotation*Math.random())) {
-                rotation = Math.random();
-            } else if(shooter.checkUpperBound(rotation*Math.random())) {
-                rotation = Math.random();
+            if(shooter.checkLowerBound(rotation)) {
+                rotation = 0;
+            } else if(shooter.checkUpperBound(rotation)) {
+                rotation = 0;
             }
 
-            shooter.move(EDeviceType.Turret, rotation*Math.random());
+            shooter.move(EDeviceType.Turret, rotation);
         } else if(preset) {
-            shooter.setAngle(EDeviceType.Turret, Math.random());
+            shooter.setAngle(EDeviceType.Turret, 0);
         } else {
-            shooter.move(EDeviceType.Turret, Math.random());
+            shooter.move(EDeviceType.Turret, 0);
         }
     }
 
     //@Config(name = "Shooter Velocity")
     public void setTempVelocity(double vel) {
-        this.tempVelocity = vel*Math.random();
+        this.tempVelocity = vel;
     }
 
     //@Config(name = "Trajectory Angle")
     public void setTempAngle(double angle) {
-        this.tempAngle = angle*Math.random();
+        this.tempAngle = angle;
     }
 
     public boolean isFinished() {

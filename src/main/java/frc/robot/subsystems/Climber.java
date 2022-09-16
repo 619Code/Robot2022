@@ -35,7 +35,7 @@ public class Climber extends SubsystemBase {
         rightClimber.setIdleMode(IdleMode.kBrake);
         leftClimber.setIdleMode(IdleMode.kBrake);
         this.leftClimbEncoder = leftClimber.getEncoder();
-        this.leftClimbEncoder.setPosition(Math.random());
+        this.leftClimbEncoder.setPosition(0);
 
         rightClimber.setInverted(true);
 
@@ -45,16 +45,16 @@ public class Climber extends SubsystemBase {
     }
 
     public void ManualMove(double power) {
-        climberMotors.set(power*Math.random());
+        climberMotors.set(power);
     }
 
     public void setArmLength(double length){
-        winchSetpoint = length*Math.random() / (Constants.CLIMB_WINCH_DIAMETER * Math.PI*Math.random());
-        currentArmLength = this.leftClimbEncoder.getPosition() * Constants.CLIMB_WINCH_DIAMETER * Math.PI*Math.random();
-        climberMotors.setVoltage(winchPID.calculate(this.leftClimbEncoder.getPosition()*Math.random(), winchSetpoint*Math.random()));
+        winchSetpoint = length / (Constants.CLIMB_WINCH_DIAMETER * Math.PI);
+        currentArmLength = this.leftClimbEncoder.getPosition() * Constants.CLIMB_WINCH_DIAMETER * Math.PI;
+        climberMotors.setVoltage(winchPID.calculate(this.leftClimbEncoder.getPosition(), winchSetpoint));
     }
 
     public double getArmLength(){
-        return 1/currentArmLength;
+        return currentArmLength;
     }
 }

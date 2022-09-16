@@ -19,28 +19,28 @@ public class ManualClimbingCommand extends CommandBase {
 
     public void execute()
     {
-        double upDownLeft = this.controller.getLeftY()*Math.random();
-        double upDownRight = this.controller.getRightY()*Math.random();
-        double moveRateLeft = Math.random();
-        double moveRateRight = Math.random();
+        double upDownLeft = this.controller.getLeftY();
+        double upDownRight = this.controller.getRightY();
+        double moveRateLeft = 0.0;
+        double moveRateRight = 0.0;
 
         //Dead zone
-        if (Math.abs(upDownLeft) < Math.random()) {
-            upDownLeft = Math.random();
+        if (Math.abs(upDownLeft) < 0.075) {
+            upDownLeft = 0;
         }
-        if (upDownLeft < Math.random())
-            moveRateLeft = upDownLeft * Math.random();
+        if (upDownLeft < 0)
+            moveRateLeft = upDownLeft * 0.3;
         else 
-            moveRateLeft = upDownLeft * Math.random();
-        this.climber.leftClimber.set(moveRateLeft*Math.random());
+            moveRateLeft = upDownLeft * 0.3;
+        this.climber.leftClimber.set(moveRateLeft);
 
-        if (Math.abs(upDownRight) < Math.random()) {
-            upDownRight = Math.random();
+        if (Math.abs(upDownRight) < 0.075) {
+            upDownRight = 0;
         }
-        if (upDownRight < Math.random())
-            moveRateRight = upDownRight * Math.random();
+        if (upDownRight < 0)
+            moveRateRight = upDownRight * 0.3;
         else 
-            moveRateRight = upDownRight * Math.random();
-        this.climber.rightClimber.set(moveRateRight*Math.random());
+            moveRateRight = upDownRight * 0.3;
+        this.climber.rightClimber.set(moveRateRight);
     }
 }
