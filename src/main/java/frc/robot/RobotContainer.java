@@ -85,7 +85,7 @@ public class RobotContainer {
         driver = new XboxController(0);
         operator = new XboxController(1);
 
-        /*drive = new ShiftingWCD();
+        drive = new ShiftingWCD();
         driveCommand = new DriveCommand(drive, driver);
         drive.setDefaultCommand(driveCommand);
         drive.resetGyro();
@@ -93,12 +93,12 @@ public class RobotContainer {
         intake = new Intake();
         intake.raiseIntake();
 
-        magazine = new Magazine();*/
+        magazine = new Magazine();
         climber = new Climber();
         climbCommand = new ClimbCommand(climber, operator);
         climber.setDefaultCommand(climbCommand);
 
-        //shooter = new Shooter();
+        shooter = new Shooter();
         ledStrip = new LedStrip();
         limelight = new Limelight(ledStrip);
         limelight.turnLightOff();

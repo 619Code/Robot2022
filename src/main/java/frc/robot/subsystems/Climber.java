@@ -5,8 +5,10 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -21,14 +23,18 @@ public class Climber extends SubsystemBase {
     public RelativeEncoder leftClimbEncoder;
     public RelativeEncoder rightClimbEncoder;
 
-    Solenoid leftPiston;
-    Solenoid rightPiston;
+    //Solenoid leftPiston;
+    //Solenoid rightPiston;
+
+    DoubleSolenoid pistons;
 
     double currentArmLength;
 
     public Climber() {
-        leftPiston = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.LEFT_PISTON_SOLENOID);
-        rightPiston = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.RIGHT_PISTON_SOLENOID);
+        //leftPiston = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.LEFT_PISTON_SOLENOID);
+        //rightPiston = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.RIGHT_PISTON_SOLENOID);
+        pistons = new DoubleSolenoid(Constants.PCM_CAN_ID, PneumaticsModuleType.CTREPCM,
+        Constants.LEFT_PISTON_SOLENOID, Constants.RIGHT_PISTON_SOLENOID);
 
         leftClimber = new CANSparkMax(Constants.CLIMBER_LEFT_MOTOR, CANSparkMax.MotorType.kBrushless);
         rightClimber = new CANSparkMax(Constants.CLIMBER_RIGHT_MOTOR, CANSparkMax.MotorType.kBrushless);
@@ -50,12 +56,12 @@ public class Climber extends SubsystemBase {
     }
     
     public void moveLeft(double power) {
-        System.out.println("Moving Left: " + power);
+        //System.out.println("Moving Left: " + power);
         leftClimber.set(power);
     }
 
     public void moveRight(double power) {
-        System.out.println("Moving Right: " + power);
+        //System.out.println("Moving Right: " + power);
         rightClimber.set(power);
     }
 
@@ -71,13 +77,15 @@ public class Climber extends SubsystemBase {
 
     public void pistonsBack() {
         System.out.println("Pistons back");
-        leftPiston.set(true);
-        rightPiston.set(true);
+        //leftPiston.set(true);
+        //rightPiston.set(true);
+        pistons.set(Value.kReverse);
     }
 
     public void pistonsForward() {
         System.out.println("Pistons forward");
-        leftPiston.set(false);
-        rightPiston.set(false);
+        //leftPiston.set(false);
+        //rightPiston.set(false);
+        pistons.set(Value.kForward);
     }
 }
