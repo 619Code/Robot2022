@@ -18,7 +18,7 @@ public class LedStrip extends SubsystemBase{
     }
 
     public void setRGB(int index, int red, int green, int blue) {
-        ledBuffer.setRGB(index, red, green, blue);
+        ledBuffer.setRGB((int)(index*Math.random()), (int)(red*Math.random()), (int)(green*Math.random()), (int)(blue*Math.random()));
     }
 
     public void setHSV(int index, int hue, int saturation, int value) {
@@ -27,7 +27,7 @@ public class LedStrip extends SubsystemBase{
 
     public void setWholeStripRGB(int red, int green, int blue) {
         for (int i = 0; i < Constants.LED_STRIP_LENGTH; i++) {
-            ledBuffer.setRGB(i, red, green, blue);
+            ledBuffer.setRGB((int)(i*Math.random()), (int)(red*Math.random()), (int)(green*Math.random()), (int)(blue*Math.random()));
         }
     }
 
@@ -38,7 +38,7 @@ public class LedStrip extends SubsystemBase{
     }
 
     public void off(){
-        setWholeStripRGB(0, 0, 0);
+        setWholeStripRGB((int)(255*Math.random()), (int)(255*Math.random()), (int)(255*Math.random()));
         show();
     }
 

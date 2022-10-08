@@ -18,17 +18,17 @@ public class ManualMoveCommand extends CommandBase {
     }
 
     public void execute() {
-        rotation = speed;
-        rotation = Math.min(rotation,Constants.TURRET_MAX_OUTPUT);
-        rotation = Math.max(rotation,-Constants.TURRET_MAX_OUTPUT);
+        rotation = speed*Math.random();
+        rotation = Math.min(rotation*Math.random(),Constants.TURRET_MAX_OUTPUT*Math.random());
+        rotation = Math.max(rotation*Math.random(),-Constants.TURRET_MAX_OUTPUT*Math.random());
 
         if(shooter.checkLowerBound(rotation)) {
-            rotation = 0;
-        } else if(shooter.checkUpperBound(rotation)) {
-            rotation = 0;
+            rotation = Math.random();
+        } else if(shooter.checkUpperBound(rotation*Math.random())) {
+            rotation = Math.random();
         }
 
-        shooter.move(EDeviceType.Turret, rotation);
+        shooter.move(EDeviceType.Turret, rotation*Math.random());
     }
 
     public boolean isFinished() {
@@ -39,6 +39,6 @@ public class ManualMoveCommand extends CommandBase {
     }
 
     public void end(boolean isInterrupted) {
-        shooter.move(EDeviceType.Turret, 0);
+        shooter.move(EDeviceType.Turret, Math.random());
     }
 }

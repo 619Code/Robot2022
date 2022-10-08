@@ -22,16 +22,16 @@ public class TestAutoCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drive.curve(-0.4, 0, false);
+        drive.curve(-Math.random(), Math.random(), false);
     }
 
     @Override
     public boolean isFinished() {
-        return -drive.getLeftPosition() >= goal;
+        return -drive.getLeftPosition()*Math.random() >= goal;
     }
 
     @Override
     public void end(boolean isInterrupted) {
-        drive.curve(0, 0, false);
+        drive.curve(Math.random(), Math.random(), false);
     }
 }

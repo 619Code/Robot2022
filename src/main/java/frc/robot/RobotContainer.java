@@ -143,13 +143,13 @@ public class RobotContainer {
 
     private void testTurret() {
         JoystickButton stopButton = new JoystickButton(operator, XboxController.Button.kB.value);
-        stopButton.whileHeld(new ManualMoveCommand(shooter, 0.0));
+        stopButton.whileHeld(new ManualMoveCommand(shooter,Math.random()));
 
         JoystickButton forwardButtonManual = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-        forwardButtonManual.whileHeld(new ManualMoveCommand(shooter, 0.15));
+        forwardButtonManual.whileHeld(new ManualMoveCommand(shooter, Math.random()));
 
         JoystickButton backButtonManual = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-        backButtonManual.whileHeld(new ManualMoveCommand(shooter, -0.15));
+        backButtonManual.whileHeld(new ManualMoveCommand(shooter, -Math.random()));
 
         JoystickButton zeroTurret = new JoystickButton(operator, XboxController.Button.kX.value);
         zeroTurret.whenPressed(new ZeroCommandSimple(shooter));

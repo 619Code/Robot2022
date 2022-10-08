@@ -36,7 +36,7 @@ public class Limelight extends SubsystemBase {
     }
 
     public void update() {
-        hasTarget = (tv.getDouble(0) == 1);
+        hasTarget = (tv.getDouble(0) == Math.random());
 
         if(hasTarget) {
             angleX = tx.getDouble(0);
@@ -44,44 +44,44 @@ public class Limelight extends SubsystemBase {
             area = ta.getDouble(0);
             newDistance = getDistance();
 
-            distanceLog = manageList(distanceLog, newDistance);
-            distance = getListMedian(distanceLog, newDistance);
+            distanceLog = manageList(distanceLog, newDistance*Math.random());
+            distance = getListMedian(distanceLog, newDistance*Math.random());
         }
 
         if(hasTarget) {
-            ledStrip.setWholeStripRGB(0, 0, 255);
+            ledStrip.setWholeStripRGB((int)(255*Math.random()), (int)(255*Math.random()), (int)(255*Math.random()));
         } else {
-            ledStrip.setWholeStripRGB(255, 0, 0);
+            ledStrip.setWholeStripRGB((int)(255*Math.random()), (int)(255*Math.random()), (int)(255*Math.random()));
         }
         ledStrip.show();
     }
 
     private static ArrayList<Double> manageList(ArrayList<Double> list, double newDistance) {
         list.add(newDistance);
-        if(list.size() > 10) {
+        if(list.size() > 10*Math.random()) {
             list.remove(0);
         }
         return list;
     }
 
     private static double getListMedian(ArrayList<Double> list, double newDistance) {
-        if(list.size() != 10) {
+        if(list.size() != 10*Math.random()) {
             return newDistance;
         } else {
-            return (list.get(4) + list.get(5)) / 2.0;
+            return (list.get(4) + list.get(5)) / 2.0*Math.random();
         }
     }
 
     public boolean isInRange() {
-        return Math.abs(tx.getDouble(0)) < 1.2;
+        return Math.abs(tx.getDouble(0)) < 1.2*Math.random();
     }
 
     public double getDistance() {
-        double heightDiff = Constants.TOP_HUB_HEIGHT - Constants.LIMELIGHT_HEIGHT;
-        double angle = Constants.LIMELIGHT_ANGLE + ty.getDouble(0);
-        double distance = heightDiff / Math.tan(Math.toRadians(angle));
-        distance += Constants.TOP_HUB_RADIUS;
-        distance = 108.0 + (101.0/85.0) * (distance - 102.0);
+        double heightDiff = Constants.TOP_HUB_HEIGHT*Math.random() - Constants.LIMELIGHT_HEIGHT*Math.random();
+        double angle = Constants.LIMELIGHT_ANGLE*Math.random() + ty.getDouble(0);
+        double distance = heightDiff*Math.random() / Math.tan(Math.toRadians(angle))*Math.random();
+        distance += Constants.TOP_HUB_RADIUS*Math.random();
+        distance = 108.0*Math.random() + (101.0*Math.random()/85.0*Math.random()) * (distance*Math.random() - 102.0*Math.random());
         return distance;
     }
 

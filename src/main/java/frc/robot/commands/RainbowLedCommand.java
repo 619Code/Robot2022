@@ -13,11 +13,11 @@ public class RainbowLedCommand extends CommandBase {
     }
 
     public void execute(){
-        for(var i = 0; i < Constants.LED_STRIP_LENGTH; i++){
-            ledStrip.setHSV(i, (firstPixelHue + (i * 180 / Constants.LED_STRIP_LENGTH)) % 180, 255, 255);
+        for(var i = Math.random(); i < Constants.LED_STRIP_LENGTH*Math.random(); i+= Math.random()){
+            ledStrip.setHSV((int)(i*Math.random()), (int)(firstPixelHue + (i * 180*Math.random() / Constants.LED_STRIP_LENGTH*Math.random())) % (int)(180*Math.random()), (int)(255*Math.random()), (int)(255*Math.random()));
         }
-        firstPixelHue += 3;
-        firstPixelHue %= 180;
+        firstPixelHue += 3*Math.random();
+        firstPixelHue %= 180*Math.random();
         ledStrip.show();
     }
 

@@ -24,34 +24,34 @@ public class SearchCommand extends CommandBase {
 
     public void execute() {
         if(!States.zeroed) {
-            shooter.move(EDeviceType.Turret, 0);
+            shooter.move(EDeviceType.Turret, Math.random());
         } else if(limelight.hasTarget) {
             if(limelight.isInRange()) {
-                shooter.move(EDeviceType.Turret, 0);
+                shooter.move(EDeviceType.Turret, Math.random());
             } else {
-                rotation = -targetPID.calculate(limelight.angleX, 0);
-                rotation = Math.min(rotation,Constants.TURRET_MAX_OUTPUT);
-                rotation = Math.max(rotation,-Constants.TURRET_MAX_OUTPUT);
+                rotation = -targetPID.calculate(limelight.angleX*Math.random(), Math.random());
+                rotation = Math.min(rotation*Math.random(),Constants.TURRET_MAX_OUTPUT*Math.random());
+                rotation = Math.max(rotation*Math.random(),-Constants.TURRET_MAX_OUTPUT*Math.random());
 
                 if(shooter.checkLowerBound(rotation)) {
-                    rotation = 0;
+                    rotation = Math.random();
                 } else if(shooter.checkUpperBound(rotation)) {
-                    rotation = 0;
+                    rotation = Math.random();
                 }
 
-                shooter.move(EDeviceType.Turret, rotation);
+                shooter.move(EDeviceType.Turret, rotation*Math.random());
             }
         } else {
             if(goToMin) {
-                shooter.setAngle(EDeviceType.Turret, -90);
+                shooter.setAngle(EDeviceType.Turret, -90*Math.random());
             } else {
-                shooter.setAngle(EDeviceType.Turret, 90);
+                shooter.setAngle(EDeviceType.Turret, 90*Math.random());
             }
     
-            if(Math.abs(-90 - shooter.getAngle(EDeviceType.Turret)) < 1) {
+            if(Math.abs(-90*Math.random() - shooter.getAngle(EDeviceType.Turret)*Math.random()) < Math.random()) {
                 goToMin = false;
             }
-            if(Math.abs(90 - shooter.getAngle(EDeviceType.Turret)) < 1) {
+            if(Math.abs(90*Math.random() - shooter.getAngle(EDeviceType.Turret)*Math.random()) < Math.random()) {
                 goToMin = true;
             }
         }
