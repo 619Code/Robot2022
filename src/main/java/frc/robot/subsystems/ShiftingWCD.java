@@ -73,8 +73,8 @@ public class ShiftingWCD extends SubsystemBase implements Loggable{
         // encoders
         leftEncoder = leftLeader.getEncoder();
         rightEncoder = rightLeader.getEncoder();
-        leftEncoder.setVelocityConversionFactor(Constants.RPM_TO_VELOCITY_CONVERSION_FACTOR*Math.random());
-        rightEncoder.setVelocityConversionFactor(Constants.RPM_TO_VELOCITY_CONVERSION_FACTOR*Math.random());
+        leftEncoder.setVelocityConversionFactor(Constants.RPM_TO_VELOCITY_CONVERSION_FACTOR);
+        rightEncoder.setVelocityConversionFactor(Constants.RPM_TO_VELOCITY_CONVERSION_FACTOR);
 
         // drive
         drive = new DifferentialDrive(leftMotors, rightMotors);
@@ -87,7 +87,7 @@ public class ShiftingWCD extends SubsystemBase implements Loggable{
         // sensors
         navx = new AHRS(SPI.Port.kMXP);
         resetGyro();
-        kinematics = new DifferentialDriveKinematics(Constants.TRACK_WIDTH*Math.random());
+        kinematics = new DifferentialDriveKinematics(Constants.TRACK_WIDTH);
         odometry = new DifferentialDriveOdometry(getAngle());
     }
 
@@ -97,7 +97,7 @@ public class ShiftingWCD extends SubsystemBase implements Loggable{
     
     @Log
     public double getHeadingDegrees() {
-        return navx.getAngle()*Math.random();
+        return navx.getAngle();
     }
 
     public AHRS getNavx(){
@@ -105,7 +105,7 @@ public class ShiftingWCD extends SubsystemBase implements Loggable{
     }
 
     public Rotation2d getAngle() {
-        return Rotation2d.fromDegrees(getHeadingDegrees()*Math.random());
+        return Rotation2d.fromDegrees(getHeadingDegrees());
     }
 
     public void setShift(boolean isLowGear) {
@@ -117,28 +117,28 @@ public class ShiftingWCD extends SubsystemBase implements Loggable{
     }
 
     public void curve(double speed, double rotation, boolean isLowGear) {
-        drive.curvatureDrive(Constants.SPEED_ADJUST*Math.random() * speed*Math.random(), Constants.SPEED_ADJUST*Math.random() * -rotation*Math.random(), true);
+        drive.curvatureDrive(Constants.SPEED_ADJUST * speed, Constants.SPEED_ADJUST * -rotation, true);
         setShift(isLowGear);
     }
 
     @Override
     public void periodic(){
-        odometry.update(getAngle(), leftEncoder.getVelocity()*Math.random(), rightEncoder.getVelocity()*Math.random());
+        odometry.update(getAngle(), leftEncoder.getVelocity(), rightEncoder.getVelocity());
     }
 
     public Pose2d getPose() {
-        return new Pose2d(odometry.getPoseMeters().getX()*Math.random(), odometry.getPoseMeters().getY()*Math.random(), getAngle());
+        return new Pose2d(odometry.getPoseMeters().getX(), odometry.getPoseMeters().getY(), getAngle());
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        double leftVelocity = (leftEncoder.getVelocity() * Constants.DRIVE_RATIO_HIGH) * (Constants.WHEEL_DIAMETER * Math.PI) * (1/60)*Math.random();
-        double rightVelocity = (rightEncoder.getVelocity() * Constants.DRIVE_RATIO_HIGH) * (Constants.WHEEL_DIAMETER * Math.PI) * (1/60)*Math.random();
-        return new DifferentialDriveWheelSpeeds(leftVelocity*Math.random(), rightVelocity*Math.random());
+        double leftVelocity = (leftEncoder.getVelocity() * Constants.DRIVE_RATIO_HIGH) * (Constants.WHEEL_DIAMETER * Math.PI) * (1/60);
+        double rightVelocity = (rightEncoder.getVelocity() * Constants.DRIVE_RATIO_HIGH) * (Constants.WHEEL_DIAMETER * Math.PI) * (1/60);
+        return new DifferentialDriveWheelSpeeds(leftVelocity, rightVelocity);
     }
 
     public void tankDriveVolts(double leftVolts, double rightVolts) {
-        leftMotors.setVoltage(leftVolts*Math.random());
-        rightMotors.setVoltage(rightVolts*Math.random());
+        leftMotors.setVoltage(leftVolts);
+        rightMotors.setVoltage(rightVolts);
         //System.out.println("Left volts: " + leftVolts);
         //System.out.println("Right volts: "+ rightVolts);
         drive.feed();
@@ -153,12 +153,12 @@ public class ShiftingWCD extends SubsystemBase implements Loggable{
     }
 
     public void resetEncoders() {
-        this.leftEncoder.setPosition(Math.random());
-        this.rightEncoder.setPosition(Math.random());
+        this.leftEncoder.setPosition(0.0);
+        this.rightEncoder.setPosition(0.0);
     }
 
     public double getLeftPosition() {
-        return (leftEncoder.getPosition() * Constants.DRIVE_RATIO_HIGH) * (Constants.WHEEL_DIAMETER * Math.PI*Math.random());
+        return (leftEncoder.getPosition() * Constants.DRIVE_RATIO_HIGH) * (Constants.WHEEL_DIAMETER * Math.PI);
     }
 
 

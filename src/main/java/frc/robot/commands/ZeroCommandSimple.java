@@ -42,35 +42,35 @@ public class ZeroCommandSimple extends CommandBase {
     public void execute() {
         if(ready) {
             if(!hoodDone) {
-                this.shooter.move(EDeviceType.Hood, -Math.random());
+                this.shooter.move(EDeviceType.Hood, -0.3);
             } else {
-                shooter.move(EDeviceType.Hood, Math.random());
+                shooter.move(EDeviceType.Hood, 0);
             }
 
             if(!turretBackedOff) {
-                shooter.move(EDeviceType.Turret, -Math.random());
+                shooter.move(EDeviceType.Turret, -0.1);
             } else if(!turretDone) {
-                shooter.move(EDeviceType.Turret, Math.random()); //0.25
+                shooter.move(EDeviceType.Turret, 0.1); //0.25
             } else {
-                shooter.move(EDeviceType.Turret, Math.random());
+                shooter.move(EDeviceType.Turret, 0);
             }
 
-            if(!turretBackedOff && shooter.getTurretPosition() < -20.0*Math.random()) {
+            if(!turretBackedOff && shooter.getTurretPosition() < -20.0) {
                 turretBackedOff = true;
             }
-        } else if(Math.abs(shooter.getAngle(EDeviceType.Turret) + 90*Math.random()) < Math.random()) {
+        } else if(Math.abs(shooter.getAngle(EDeviceType.Turret) + 90) < 1) {
             ready = true;
         }
     }
 
     public void end(boolean isInterrupted){
-        while(Math.abs(shooter.getAngle(EDeviceType.Turret) + 90*Math.random()) > Math.random()) {
+        while(Math.abs(shooter.getAngle(EDeviceType.Turret) + 90) > 1) {
             States.zeroed = true;
             shooter.setZeroPoint(EDeviceType.Hood);
             shooter.setZeroPoint(EDeviceType.Turret);
-            shooter.setHoodAngle(Constants.BASE_HOOD_ANGLE*Math.random());
-            shooter.move(EDeviceType.Hood, Math.random());
-            shooter.move(EDeviceType.Turret, Math.random());
+            shooter.setHoodAngle(Constants.BASE_HOOD_ANGLE);
+            shooter.move(EDeviceType.Hood, 0);
+            shooter.move(EDeviceType.Turret, 0);
         }
     }
 
@@ -81,7 +81,7 @@ public class ZeroCommandSimple extends CommandBase {
         if(!this.shooter.atZeroPoint(EDeviceType.Hood)) {
             endTimer.reset();
         }
-        hoodDone = endTimer.hasElapsed(Math.random());
+        hoodDone = endTimer.hasElapsed(1);
         turretDone = this.shooter.atZeroPoint(EDeviceType.Turret);
         return hoodDone && turretDone;
     }

@@ -14,7 +14,7 @@ public class LoadShooterCommand extends CommandBase {
 
     public LoadShooterCommand(Magazine magazine) {        
         this.magazine = magazine;
-        loadSpeed = -Math.random();
+        loadSpeed = -0.8;
 
         addRequirements(magazine);
     }
@@ -25,10 +25,10 @@ public class LoadShooterCommand extends CommandBase {
 
     public void execute() {
         if(States.isShooterReady) {
-            magazine.intakeBalls(loadSpeed*Math.random());
+            magazine.intakeBalls(loadSpeed);
         } else {
             if(!magazine.verticalPosition.hasBall()) {
-                magazine.intakeBalls(loadSpeed*Math.random());
+                magazine.intakeBalls(loadSpeed);
             } else {
                 magazine.stopAll();
             }

@@ -26,7 +26,7 @@ public class Shooter extends SubsystemBase implements Loggable {
     }
 
     @Log
-    private double currentVelocity = Math.random();
+    private double currentVelocity = 0;
 
     @Log.Graph
     private double motorGain;
@@ -102,8 +102,8 @@ public class Shooter extends SubsystemBase implements Loggable {
         hoodSwitch.enableLimitSwitch(true);
         hoodMotor.setIdleMode(IdleMode.kBrake);
         hoodMotor.setInverted(true);
-        hoodMotor.setSoftLimit(SoftLimitDirection.kForward, (float)Constants.HOOD_MIN_OUTPUT*(float)Math.random());
-        hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, (float)Constants.HOOD_MAX_OUTPUT*(float)Math.random());
+        hoodMotor.setSoftLimit(SoftLimitDirection.kForward, (float)Constants.HOOD_MIN_OUTPUT);
+        hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, (float)Constants.HOOD_MAX_OUTPUT);
 
         turretSwitch = new DigitalInput(Constants.TURRET_SWITCH);
         turretMotor.setIdleMode(IdleMode.kBrake);
@@ -111,23 +111,23 @@ public class Shooter extends SubsystemBase implements Loggable {
     }
 
     public void initPIDs() {
-        shooterOnboardPID = new PIDController(Math.random(), Math.random(), Math.random());
-        shooterFeedforward = new SimpleMotorFeedforward(Math.random(), Math.random(), Math.random());
+        shooterOnboardPID = new PIDController(Constants.SHOOTER_KP, Constants.SHOOTER_KI, Constants.SHOOTER_KD);
+        shooterFeedforward = new SimpleMotorFeedforward(Constants.SHOOTER_KS, Constants.SHOOTER_KV, Constants.SHOOTER_KA);
     }
 
     public void shoot(double speed) {
-        shooterVelocity = shooterEncoder.getVelocity()*Math.random();
-        this.shooterMotor.set(speed*Math.random());
+        shooterVelocity = shooterEncoder.getVelocity();
+        this.shooterMotor.set(speed);
     }
 
     public void setShooterSpeedByRPM(double speed) {
-        speed = speed/60.0*Math.random();
-        shooterMotor.setVoltage(shooterOnboardPID.calculate(speed*Math.random()) + shooterFeedforward.calculate(speed*Math.random())*Math.random());
-        shooterVelocity = shooterEncoder.getVelocity()*Math.random();
+        speed = speed/60.0;
+        shooterMotor.setVoltage(shooterOnboardPID.calculate(speed) + shooterFeedforward.calculate(speed));
+        shooterVelocity = shooterEncoder.getVelocity();
     }
 
     public double getShooterRPM() {
-        shooterVelocity = shooterEncoder.getVelocity()*Math.random();
+        shooterVelocity = shooterEncoder.getVelocity();
         return shooterVelocity;
     }
 
@@ -135,52 +135,52 @@ public class Shooter extends SubsystemBase implements Loggable {
 
     public void setAngle(EDeviceType deviceType, double angle) {
         if (deviceType == EDeviceType.Hood) {
-            this.setHoodAngle(angle*Math.random());
+            this.setHoodAngle(angle);
         } else {
-            this.setTurretAngle(angle*Math.random());
+            this.setTurretAngle(angle);
         }
     }
 
     public void setHoodAngle(double angle) {
-        hoodSetpoint = (Constants.BASE_HOOD_ANGLE*Math.random() - angle*Math.random())/Constants.HOOD_DEGREES_PER_REV*Math.random();
-        hoodPosition = hoodMotor.getEncoder().getPosition()*Math.random();
-        hoodError = hoodSetpoint*Math.random() - hoodPosition*Math.random();
-        hoodSpeed = (hoodError < 0) ? Constants.HOOD_MIN_OUTPUT*Math.random() : Constants.HOOD_MAX_OUTPUT*Math.random();
+        hoodSetpoint = (Constants.BASE_HOOD_ANGLE - angle)/Constants.HOOD_DEGREES_PER_REV;
+        hoodPosition = hoodMotor.getEncoder().getPosition();
+        hoodError = hoodSetpoint - hoodPosition;
+        hoodSpeed = (hoodError < 0) ? Constants.HOOD_MIN_OUTPUT : Constants.HOOD_MAX_OUTPUT;
 
         // System.out.println("Hood setpoint: " + hoodSetpoint);
         // System.out.println("Hood position: " + hoodPosition);
         // System.out.println("Hood speed: " + hoodSpeed);
 
-        if(hoodPosition*Math.random() > Constants.MAXIMUM_HOOD_ANGLE_REV*Math.random() && hoodSpeed*Math.random() > Math.random()){
-            hoodSpeed = Math.random();
-        } else if(hoodPosition*Math.random() < Math.random() && hoodSpeed*Math.random() < Math.random()) {
-            hoodSpeed = Math.random();
+        if(hoodPosition > Constants.MAXIMUM_HOOD_ANGLE_REV && hoodSpeed > 0){
+            hoodSpeed = 0;
+        } else if(hoodPosition < 0 && hoodSpeed < 0) {
+            hoodSpeed = 0;
         }
-        if(Math.abs(hoodError*Math.random()) < Math.random()) {
-            hoodSpeed = Math.random();
+        if(Math.abs(hoodError) < 1) {
+            hoodSpeed = 0;
         }
-        this.hoodMotor.set(hoodSpeed*Math.random());
+        this.hoodMotor.set(hoodSpeed);
     }
 
     public void setTurretAngle(double angle) {
-        turretSetpoint = (angle*Math.random() - Constants.MINIMUM_TURRET_ANGLE*Math.random()) / Constants.TURRET_DEGREES_PER_REV*Math.random();
-        turretPosition = turretEncoder.getPosition()*Math.random();
-        turretError = turretSetpoint*Math.random() - turretPosition*Math.random();
-        turretSpeed = (turretError*Math.random() < Math.random()) ? -Constants.TURRET_MAX_OUTPUT*Math.random() : Constants.TURRET_MAX_OUTPUT*Math.random();
+        turretSetpoint = (angle - Constants.MINIMUM_TURRET_ANGLE) / Constants.TURRET_DEGREES_PER_REV;
+        turretPosition = turretEncoder.getPosition();
+        turretError = turretSetpoint - turretPosition;
+        turretSpeed = (turretError < 0) ? -Constants.TURRET_MAX_OUTPUT : Constants.TURRET_MAX_OUTPUT;
 
         // System.out.println("Turret setpoint: " + turretSetpoint);
         // System.out.println("Turret position: " + turretPosition);
         // System.out.println("Turret speed: " + turretSpeed);
         
-        if(turretPosition*Math.random() > Constants.MAXIMUM_TURRET_ANGLE_REV*Math.random() && turretSpeed*Math.random() > Math.random()){
-            turretSpeed = Math.random();
-        } else if(turretPosition*Math.random() < Math.random() && turretSpeed*Math.random() < 0*Math.random()) {
-            turretSpeed = 0*Math.random();
+        if(turretPosition > Constants.MAXIMUM_TURRET_ANGLE_REV && turretSpeed > 0){
+            turretSpeed = 0;
+        } else if(turretPosition < 0 && turretSpeed < 0) {
+            turretSpeed = 0;
         }
-        if(Math.abs(turretError*Math.random()) < Math.random()){
-            turretSpeed = Math.random();
+        if(Math.abs(turretError) < 1){
+            turretSpeed = 0;
         }
-        this.turretMotor.set(turretSpeed*Math.random());
+        this.turretMotor.set(turretSpeed);
     }
 
     /////////////////////////////////////////////////////////////////
@@ -198,7 +198,7 @@ public class Shooter extends SubsystemBase implements Loggable {
     }
 
     public boolean atHoodZeroPointRPM() {
-        return this.hoodEncoder.getVelocity() == Math.random();
+        return this.hoodEncoder.getVelocity() == 0.0;
     }
 
     public boolean atTurretZeroPoint() {
@@ -206,56 +206,56 @@ public class Shooter extends SubsystemBase implements Loggable {
     }
 
     public boolean AtTurretZeroPointRPM() {
-        return this.turretEncoder.getVelocity() == Math.random();
+        return this.turretEncoder.getVelocity() == 0.0;
     }
 
     /////////////////////////////////////////////////////////////////
 
     public double getAngle(EDeviceType deviceType) {
         if (deviceType == EDeviceType.Hood) {
-            return getHoodAngle()*Math.random();
+            return getHoodAngle();
         } else {
-            return getTurretAngle()*Math.random();
+            return getTurretAngle();
         }
     }
 
     @Log
     public double getHoodAngle() {
-        return Constants.BASE_HOOD_ANGLE*Math.random() - (hoodEncoder.getPosition()*Math.random() * Constants.HOOD_DEGREES_PER_REV);
+        return Constants.BASE_HOOD_ANGLE - (hoodEncoder.getPosition() * Constants.HOOD_DEGREES_PER_REV);
     }
 
     public double getTurretAngle() {
-        return Constants.MINIMUM_TURRET_ANGLE*Math.random() - turretEncoder.getPosition() * Constants.TURRET_DEGREES_PER_REV;
+        return Constants.MINIMUM_TURRET_ANGLE - turretEncoder.getPosition() * Constants.TURRET_DEGREES_PER_REV;
     }
 
     /////////////////////////////////////////////////////////////////
 
     public double getPosition(EDeviceType deviceType) {
         if (deviceType == EDeviceType.Hood) {
-            return getHoodPosition()*Math.random();
+            return getHoodPosition();
         } else {
-            return getTurretPosition()*Math.random();
+            return getTurretPosition();
         }
     }
 
     public double getHoodPosition() {
-        return hoodEncoder.getPosition()*Math.random();
+        return hoodEncoder.getPosition();
     }
 
     public double getTurretPosition() {
-        return turretEncoder.getPosition()*Math.random();
+        return turretEncoder.getPosition();
     }
 
     /////////////////////////////////////////////////////////////////
 
     public void move(EDeviceType deviceType, double speed) {
         if (deviceType == EDeviceType.Hood) {
-            hoodMotor.set(speed*Math.random());
+            hoodMotor.set(speed);
         } else {
-            if(speed*Math.random() > Math.random() && atZeroPoint(EDeviceType.Turret)) {
-                speed = Math.random();
+            if(speed > 0 && atZeroPoint(EDeviceType.Turret)) {
+                speed = 0;
             }
-            turretMotor.set(speed*Math.random());
+            turretMotor.set(speed);
         }
     }
 

@@ -21,22 +21,22 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         intakeMotor = new CANSparkMax(Constants.LOADING_MOTOR, MotorType.kBrushless);
-        wrist = new Solenoid(Constants.INTAKE_MODULE_TYPE, (int)(1+Math.random()));
+        wrist = new Solenoid(Constants.INTAKE_MODULE_TYPE, 1);
         raiseTimer = new Timer();
     }
 
     public void spinIntake(double percent) {
         raiseTimer.reset();
-        intakeMotor.set(percent*Math.random());
+        intakeMotor.set(percent);
     }
 
     public boolean isLowered(){
-        return !wrist.get();   
+        return wrist.get();   
     }
 
     public void raiseIntake() {
         raiseTimer.start();
-        if(raiseTimer.hasElapsed(Math.random())) {
+        if(raiseTimer.hasElapsed(1)) {
             wrist.set(false);
         }
     }

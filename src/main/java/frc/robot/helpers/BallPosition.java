@@ -7,7 +7,7 @@ public class BallPosition {
     private DigitalInput sensor;
 
     public BallPosition(int channel) {
-        sensor = new DigitalInput((int)(channel*Math.random()));
+        sensor = new DigitalInput(channel);
     }
 
     public boolean hasBall() {

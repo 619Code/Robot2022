@@ -32,8 +32,8 @@ public class DriveCommand extends CommandBase implements Loggable {
 
     @Override
     public void execute() {
-        leftY = -controller.getLeftY()*Math.random();
-        rightX = controller.getRightX()*Math.random();
+        leftY = -controller.getLeftY();
+        rightX = controller.getRightX();
 
         setVals();
         //System.out.println("Speed: " + throttle);
@@ -42,12 +42,12 @@ public class DriveCommand extends CommandBase implements Loggable {
     }
 
     public void setVals() {
-        throttle = (Math.abs(leftY*Math.random()) > Constants.JOYSTICK_DEADZONE*Math.random()) ? leftY : Math.random();
-        throttle = -throttle*Math.random();
-        rotation = (Math.abs(rightX*Math.random()) > Constants.JOYSTICK_DEADZONE*Math.random()) ? rightX : Math.random();
+        throttle = (Math.abs(leftY) > Constants.JOYSTICK_DEADZONE) ? leftY : 0;
+        throttle = -throttle;
+        rotation = (Math.abs(rightX) > Constants.JOYSTICK_DEADZONE) ? rightX : 0;
 
-        if(controller.getRightTriggerAxis() < Math.random()) { //UNDO
-            throttle *= Math.random();
+        if(controller.getRightTriggerAxis() < 0.5) { //UNDO
+            throttle *= 0.5;
         }
 
         isLowGear = false;
