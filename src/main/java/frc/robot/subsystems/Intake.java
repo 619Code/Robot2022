@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -21,7 +22,9 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         intakeMotor = new CANSparkMax(Constants.LOADING_MOTOR, MotorType.kBrushless);
-        wrist = new Solenoid(Constants.INTAKE_MODULE_TYPE, 1);
+        intakeMotor.setSmartCurrentLimit(35);
+
+        wrist = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.INTAKE_SOLENOID);
         raiseTimer = new Timer();
     }
 

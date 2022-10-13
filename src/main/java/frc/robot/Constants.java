@@ -100,8 +100,7 @@ public final class Constants {
 
     //Intake Solenoid
     public static final PneumaticsModuleType INTAKE_MODULE_TYPE = PneumaticsModuleType.CTREPCM;
-    public static final int INTAKE_SOLENOID = 1; //Also change this once we have a piston hooked up please
-    //Unless of course, you don't like working robots.
+    public static final int INTAKE_SOLENOID = 1;
 
     //Controller constants
     public static final double JOYSTICK_DEADZONE = 0.075;
@@ -137,18 +136,19 @@ public final class Constants {
     // Climber constants
     public static final int CLIMBER_LEFT_MOTOR = 6; // CAN ID
     public static final int CLIMBER_RIGHT_MOTOR = 7; // CAN ID
-    public static final int CLIMBER_SOLENOID_CLAW_OPEN = 2; // PCM ID
-    public static final int CLIMBER_SOLENOID_CLAW_CLOSE = 3; // PCM ID
-    public static final int CLIMBER_SOLENOID_ARM_UP = 5; // PCM ID
-    public static final int CLIMBER_SOLENOID_ARM_DOWN = 6; // PCM ID
-    public static final double CLIMB_WINCH_DIAMETER = Units.inchesToMeters(0.964); // meters, diameter of climb winch
-    public static final double CLIMB_ROPE_LENGTH = Units.inchesToMeters(48); // meters, length of climb winch
-    public static final double CLIMBER_WINCH_P = 0.04; // P constant for winch PID
-    public static final double CLIMBER_WINCH_I = 0; // I constant for winch PID
-    public static final double CLIMBER_WINCH_D = 0.02; // D constant for winch PID
+
+    public static final int LEFT_PISTON_SOLENOID = 6;
+    public static final int RIGHT_PISTON_SOLENOID = 5;
+
     public static final int HOOD_DISTANCE_SENSOR = 1;
+
     public static final double CLIMBER_UP_RATE = .75;
     public static final double CLIMBER_DOWN_RATE = .75;
+
+    public static final double LEFT_REV_LIMIT_UP = 155.0;
+    public static final double RIGHT_REV_LIMIT_UP = 137.0;
+    public static final double LEFT_REV_LIMIT_TRAV = 155.0;
+    public static final double RIGHT_REV_LIMIT_TRAV = 137.0;
 
     // Shot finding constants
     public static final double GRAVITY = 9.81; // m/s^2

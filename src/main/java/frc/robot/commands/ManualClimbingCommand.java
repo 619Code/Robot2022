@@ -24,23 +24,30 @@ public class ManualClimbingCommand extends CommandBase {
         double moveRateLeft = 0.0;
         double moveRateRight = 0.0;
 
-        //Dead zone
-        if (Math.abs(upDownLeft) < 0.075) {
-            upDownLeft = 0;
-        }
-        if (upDownLeft < 0)
-            moveRateLeft = upDownLeft * 0.3;
-        else 
-            moveRateLeft = upDownLeft * 0.3;
-        this.climber.leftClimber.set(moveRateLeft);
+        //System.out.println("Left rotations: " + climber.leftClimbEncoder.getPosition());
+        // System.out.println("Right rotations: " + climber.rightClimbEncoder.getPosition());
 
-        if (Math.abs(upDownRight) < 0.075) {
-            upDownRight = 0;
+        //Dead zone
+        if (Math.abs(upDownLeft) > 0.075) {
+            if (upDownLeft < 0) {
+                moveRateLeft = upDownLeft * 0.3;
+            } else {
+                moveRateLeft = upDownLeft * 0.3;
+            }
+            this.climber.moveLeft(moveRateLeft);
+        } else {
+            this.climber.moveLeft(0.0);
         }
-        if (upDownRight < 0)
-            moveRateRight = upDownRight * 0.3;
-        else 
-            moveRateRight = upDownRight * 0.3;
-        this.climber.rightClimber.set(moveRateRight);
+
+        if (Math.abs(upDownRight) > 0.075) {
+            if (upDownRight < 0) {
+                moveRateRight = upDownRight * 0.3;
+            } else {
+                moveRateRight = upDownRight * 0.3;
+            }
+            this.climber.moveRight(moveRateRight);
+        } else {
+            this.climber.moveRight(0.0);
+        }
     }
 }

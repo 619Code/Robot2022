@@ -8,36 +8,41 @@ import frc.robot.subsystems.Climber;
 public class ClimbCommand extends CommandBase {
     Climber climber;
     private XboxController controller;
-    double revLimit;
 
     public ClimbCommand(Climber climber, XboxController controller)
     {
         this.controller = controller;
         this.climber = climber;
-        revLimit = 145; //change this 115
         this.addRequirements(climber);
     }
 
     public void execute() {
-        //System.out.println(-climber.leftClimbEncoder.getPosition());
-        //System.out.println(climber.leftClimbEncoder.getPosition());
+        System.out.println("Left rotations: " + (-climber.leftClimbEncoder.getPosition()));
+        System.out.println("Right rotations: " + (-climber.rightClimbEncoder.getPosition()));
 
         double upDown = this.controller.getRightY();
-        double moveRate = 0.0;
+        double leftMoveRate = 0.0;
+        double rightMoveRate = 0.0;
 
         //Dead zone
-        if (Math.abs(upDown) < 0.075) {
-            upDown = 0;
-        }
-
-        if (upDown > 0) {
-            moveRate = upDown * Constants.CLIMBER_DOWN_RATE;
-            moveRate = -climber.leftClimbEncoder.getPosition() < -10 ? 0 : moveRate;
+        if (Math.abs(upDown) > 0.075) {
+            if (upDown > 0) {
+                leftMoveRate = upDown * Constants.CLIMBER_DOWN_RATE;
+                rightMoveRate = upDown * Constants.CLIMBER_DOWN_RATE * (climber.getRightClimbLimit() / climber.getLeftClimbLimit());
+                leftMoveRate = -climber.leftClimbEncoder.getPosition() < -15 ? 0 : leftMoveRate;
+                rightMoveRate = -climber.rightClimbEncoder.getPosition() < -15 ? 0 : rightMoveRate;
+            } else {
+                leftMoveRate = upDown * Constants.CLIMBER_UP_RATE;
+                rightMoveRate = upDown * Constants.CLIMBER_UP_RATE * (climber.getRightClimbLimit() / climber.getLeftClimbLimit());
+                //leftMoveRate = -climber.leftClimbEncoder.getPosition() >= climber.getLeftClimbLimit() ? 0 : leftMoveRate; //UNDO
+                //rightMoveRate = -climber.rightClimbEncoder.getPosition() >= climber.getRightClimbLimit() ? 0 : rightMoveRate; //UNDO
+            }
+    
+            this.climber.moveLeft(leftMoveRate);
+            this.climber.moveRight(rightMoveRate);
         } else {
-            moveRate = upDown * Constants.CLIMBER_UP_RATE;
-            moveRate = -climber.leftClimbEncoder.getPosition() >= revLimit ? 0 : moveRate;
+            this.climber.moveLeft(0.0);
+            this.climber.moveRight(0.0);
         }
-
-        this.climber.ManualMove(moveRate);
     }
 }

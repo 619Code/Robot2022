@@ -95,6 +95,10 @@ public class Shooter extends SubsystemBase implements Loggable {
         turretMotor.restoreFactoryDefaults();
         hoodMotor.restoreFactoryDefaults();
 
+        shooterMotor.setSmartCurrentLimit(35);
+        turretMotor.setSmartCurrentLimit(35);
+        hoodMotor.setSmartCurrentLimit(35);
+
         shooterMotor.setIdleMode(IdleMode.kCoast);
         shooterMotor.setInverted(true);
 

@@ -20,6 +20,7 @@ public class Magazine extends SubsystemBase {
     public Magazine() {
         backBeltMotor = new CANSparkMax(Constants.BACK_BELT_MOTOR, MotorType.kBrushless);
         backBeltMotor.setIdleMode(IdleMode.kBrake);
+        backBeltMotor.setSmartCurrentLimit(35);
         
         verticalPosition = new BallPosition(Constants.VERTICAL_POSITION);
         frontPosition = new BallPosition(Constants.FRONT_POSITION);
