@@ -30,7 +30,6 @@ import frc.robot.commands.ManualMoveCommand;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.commands.SearchCommand;
-import frc.robot.commands.ShootAtDefaultCommand;
 import frc.robot.commands.SpinIntakeCommand;
 import frc.robot.commands.ZeroCommandSimple;
 import frc.robot.helpers.JoystickAnalogButton;
@@ -39,13 +38,12 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.EDeviceType;
+import frc.robot.testing.ShootAtDefaultCommand;
+import frc.robot.testing.TestAutoCommand;
+import frc.robot.testing.TuneShooterCommand;
 import frc.robot.commands.AimCommand;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.CavalierLedCommand;
-import frc.robot.commands.RainbowLedCommand;
-import frc.robot.commands.TestAutoCommand;
-import frc.robot.commands.TuneShooterCommand;
 
 public class RobotContainer {
 

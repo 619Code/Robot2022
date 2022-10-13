@@ -1,23 +1,24 @@
-package frc.robot.commands;
+package frc.robot.testing;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Shooter.EDeviceType;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
-import frc.robot.Constants;
 import frc.robot.States;
 import frc.robot.helpers.*;
 
-public class TuneShooterCommand extends CommandBase implements Loggable {
+public class ShootAtDefaultCommand extends CommandBase implements Loggable {
 
     private Shooter shooter;   
 
-    private double velocity = 0;
-    private double hoodAngle = 81;
+    private double velocity;
+    private double hoodAngle;
 
-    public TuneShooterCommand(Shooter shooter) {
+    public ShootAtDefaultCommand(Shooter shooter) {
         this.shooter = shooter;
+        velocity = 3000;
+        hoodAngle = 81;
         addRequirements(shooter);
     }
 
@@ -26,14 +27,8 @@ public class TuneShooterCommand extends CommandBase implements Loggable {
 
     public void execute() {
         States.isShooterReady = true;
-
-        double shootingVelocity = Math.max(velocity, 0);
-        shootingVelocity = Math.min(shootingVelocity, 4000);
-        this.shooter.setShooterSpeedByRPM(shootingVelocity);
-
-        double shootingAngle = Math.max(hoodAngle, Constants.HIGH_HOOD_ANGLE);
-        shootingAngle = Math.min(shootingAngle, Constants.BASE_HOOD_ANGLE);
-        this.shooter.setAngle(EDeviceType.Hood, shootingAngle);
+        this.shooter.setShooterSpeedByRPM(this.velocity);
+        this.shooter.setAngle(EDeviceType.Hood, this.hoodAngle);
     }
 
     @Config(name = "Set Shooter Velocity")
@@ -44,5 +39,13 @@ public class TuneShooterCommand extends CommandBase implements Loggable {
     @Config(name = "Set Hood Angle")
     public void setHoodAngle(int value) {
         this.hoodAngle = value;
+    }
+
+    public boolean isFinished(boolean isInterrupted) {
+        return false;
+    }
+
+    public void end(boolean isInterrupted) {        
+        shooter.stopAll();
     }
 }
