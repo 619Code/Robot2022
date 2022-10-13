@@ -28,6 +28,8 @@ public class ManualMoveCommand extends CommandBase {
             rotation = 0;
         }
 
+        System.out.println("Speed " + rotation);
+        System.out.println("Position " + shooter.getTurretPosition());
         shooter.move(EDeviceType.Turret, rotation);
     }
 

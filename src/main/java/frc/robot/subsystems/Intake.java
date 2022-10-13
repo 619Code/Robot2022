@@ -22,6 +22,8 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         intakeMotor = new CANSparkMax(Constants.LOADING_MOTOR, MotorType.kBrushless);
+        intakeMotor.setSmartCurrentLimit(35);
+
         wrist = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.INTAKE_SOLENOID);
         raiseTimer = new Timer();
     }
