@@ -17,11 +17,12 @@ public final class Constants {
     public static final int RIGHT_FOLLOWER_1 = 12;
     
     //Turret Constants
-    public static final double MINIMUM_TURRET_ANGLE = -90;
-    public static final double MAXIMUM_TURRET_ANGLE = 90;
-    public static final double MAXIMUM_TURRET_ANGLE_REV = 450;
-    public static final double TURRET_DEGREES_PER_REV = (MAXIMUM_TURRET_ANGLE - MINIMUM_TURRET_ANGLE) / MAXIMUM_TURRET_ANGLE_REV;
-    public static final double TURRET_MAX_OUTPUT = 0.25; //0.8
+    public static final double MAXIMUM_TURRET_ANGLE_REV = 460;
+    public static final double TURRET_SOFT_MIN_REV = 50;
+    public static final double TURRET_SOFT_MAX_REV = 460;
+    public static final double TURRET_ZERO_REV = 256;
+    public static final double TURRET_ZERO_SPEED = 0.1;
+    public static final double TURRET_MAX_SPEED = 0.5;
 
     //Hood Constants
     public static final double BASE_HOOD_ANGLE = 81;
@@ -53,17 +54,17 @@ public final class Constants {
     public static final double SHOOTER_MIN_OUTPUT = 0;
 
     //Shooter interpolation
-    public static final double DISTANCE_CLOSE = 106;
-    public static final double RPM_CLOSE = 3000;
-    public static final double ANGLE_CLOSE = 67;
+    public static final double DISTANCE_CLOSE = 104;
+    public static final double RPM_CLOSE = 3100;
+    public static final double ANGLE_CLOSE = 63;
 
     public static final double DISTANCE_MID = 149;
-    public static final double RPM_MID = 3350;
-    public static final double ANGLE_MID = 62;
+    public static final double RPM_MID = 3350; //3250
+    public static final double ANGLE_MID = 55; //60
 
     public static final double DISTANCE_FAR = 205;
     public static final double RPM_FAR = 3800;
-    public static final double ANGLE_FAR = 52;
+    public static final double ANGLE_FAR = 48;
 
     //Shooter presets
     public static final double DISTANCE_PRESET = 69;
@@ -71,8 +72,8 @@ public final class Constants {
     public static final double LOW_GOAL_ANGLE = 66;
     public static final double LOW_GOAL_RPM = 1700;
 
-    public static final double HIGH_GOAL_ANGLE = 81;
-    public static final double HIGH_GOAL_RPM = 2900;
+    public static final double HIGH_GOAL_ANGLE = 75; //81
+    public static final double HIGH_GOAL_RPM = 3100; //2900
 
     //Aiming PID
     public static final double AIMING_P = 0.12; //0.15
@@ -82,7 +83,7 @@ public final class Constants {
     //Drive constants
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(5.827); //meters
     public static final int NEO_LIMIT = 45; //amps
-    public static final double SPEED_ADJUST = 0.4; //how much to adjust speed of drive //0.5 //UNDO
+    public static final double SPEED_ADJUST = 0.5; //how much to adjust speed of drive
     public static final double DRIVE_RATIO_HIGH = (10.0/66.0) * (40.0/44.0); // gear ratio for high gear
     public static final double DRIVE_RATIO_LOW = (10.0/66.0) * (24.0/60.0); // gear ratio for low gear
     public static final double TRACK_WIDTH = Units.inchesToMeters(23); //distance between wheels in meters
@@ -145,8 +146,8 @@ public final class Constants {
     public static final double CLIMBER_UP_RATE = .75;
     public static final double CLIMBER_DOWN_RATE = .75;
 
-    public static final double LEFT_REV_LIMIT_UP = 155.0;
-    public static final double RIGHT_REV_LIMIT_UP = 137.0;
+    public static final double LEFT_REV_LIMIT_UP = 144.0; //155
+    public static final double RIGHT_REV_LIMIT_UP = 129.0; //137
     public static final double LEFT_REV_LIMIT_TRAV = 155.0;
     public static final double RIGHT_REV_LIMIT_TRAV = 137.0;
 

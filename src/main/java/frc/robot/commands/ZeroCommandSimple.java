@@ -48,23 +48,23 @@ public class ZeroCommandSimple extends CommandBase {
             }
 
             if(!turretBackedOff) {
-                shooter.move(EDeviceType.Turret, -0.1);
+                shooter.move(EDeviceType.Turret, -Constants.TURRET_ZERO_SPEED); //move away from hall effect sensor
             } else if(!turretDone) {
-                shooter.move(EDeviceType.Turret, 0.1); //0.25
+                shooter.move(EDeviceType.Turret, Constants.TURRET_ZERO_SPEED); //move towards hall effect sensor
             } else {
-                shooter.move(EDeviceType.Turret, 0);
+                shooter.move(EDeviceType.Turret, 0); //stop
             }
 
-            if(!turretBackedOff && shooter.getTurretPosition() < -20.0) {
+            if(!turretBackedOff && shooter.getTurretPosition() < -20.0) { //back off until it is 20 revolutions off
                 turretBackedOff = true;
             }
-        } else if(Math.abs(shooter.getAngle(EDeviceType.Turret) + 90) < 1) {
+        } else if(shooter.turretNearRev(0.0)) { //wait until the turret is set to the zero point before starting
             ready = true;
         }
     }
 
     public void end(boolean isInterrupted){
-        while(Math.abs(shooter.getAngle(EDeviceType.Turret) + 90) > 1) {
+        while(!shooter.turretNearRev(0.0)) { //wait until the turret is set to the zero point before proceeding
             States.zeroed = true;
             shooter.setZeroPoint(EDeviceType.Hood);
             shooter.setZeroPoint(EDeviceType.Turret);

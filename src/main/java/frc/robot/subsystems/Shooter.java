@@ -10,6 +10,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.States;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
@@ -114,6 +115,10 @@ public class Shooter extends SubsystemBase implements Loggable {
         turretMotor.setInverted(true);
     }
 
+    public void periodic() {
+        States.centered = turretNearRev(Constants.TURRET_ZERO_REV);
+    }
+
     public void initPIDs() {
         shooterOnboardPID = new PIDController(Constants.SHOOTER_KP, Constants.SHOOTER_KI, Constants.SHOOTER_KD);
         shooterFeedforward = new SimpleMotorFeedforward(Constants.SHOOTER_KS, Constants.SHOOTER_KV, Constants.SHOOTER_KA);
@@ -137,14 +142,6 @@ public class Shooter extends SubsystemBase implements Loggable {
 
     /////////////////////////////////////////////////////////////////
 
-    public void setAngle(EDeviceType deviceType, double angle) {
-        if (deviceType == EDeviceType.Hood) {
-            this.setHoodAngle(angle);
-        } else {
-            this.setTurretAngle(angle);
-        }
-    }
-
     public void setHoodAngle(double angle) {
         hoodSetpoint = (Constants.BASE_HOOD_ANGLE - angle)/Constants.HOOD_DEGREES_PER_REV;
         hoodPosition = hoodMotor.getEncoder().getPosition();
@@ -164,27 +161,6 @@ public class Shooter extends SubsystemBase implements Loggable {
             hoodSpeed = 0;
         }
         this.hoodMotor.set(hoodSpeed);
-    }
-
-    public void setTurretAngle(double angle) {
-        turretSetpoint = (angle - Constants.MINIMUM_TURRET_ANGLE) / Constants.TURRET_DEGREES_PER_REV;
-        turretPosition = turretEncoder.getPosition();
-        turretError = turretSetpoint - turretPosition;
-        turretSpeed = (turretError < 0) ? -Constants.TURRET_MAX_OUTPUT : Constants.TURRET_MAX_OUTPUT;
-
-        // System.out.println("Turret setpoint: " + turretSetpoint);
-        // System.out.println("Turret position: " + turretPosition);
-        // System.out.println("Turret speed: " + turretSpeed);
-        
-        if(turretPosition > Constants.MAXIMUM_TURRET_ANGLE_REV && turretSpeed > 0){
-            turretSpeed = 0;
-        } else if(turretPosition < 0 && turretSpeed < 0) {
-            turretSpeed = 0;
-        }
-        if(Math.abs(turretError) < 1){
-            turretSpeed = 0;
-        }
-        this.turretMotor.set(turretSpeed);
     }
 
     /////////////////////////////////////////////////////////////////
@@ -215,27 +191,15 @@ public class Shooter extends SubsystemBase implements Loggable {
 
     /////////////////////////////////////////////////////////////////
 
-    public double getAngle(EDeviceType deviceType) {
-        if (deviceType == EDeviceType.Hood) {
-            return getHoodAngle();
-        } else {
-            return getTurretAngle();
-        }
-    }
-
     @Log
     public double getHoodAngle() {
         return Constants.BASE_HOOD_ANGLE - (hoodEncoder.getPosition() * Constants.HOOD_DEGREES_PER_REV);
     }
 
-    public double getTurretAngle() {
-        return Constants.MINIMUM_TURRET_ANGLE - turretEncoder.getPosition() * Constants.TURRET_DEGREES_PER_REV;
-    }
-
     /////////////////////////////////////////////////////////////////
 
     public double getPosition(EDeviceType deviceType) {
-        if (deviceType == EDeviceType.Hood) {
+        if(deviceType == EDeviceType.Hood) {
             return getHoodPosition();
         } else {
             return getTurretPosition();
@@ -252,25 +216,77 @@ public class Shooter extends SubsystemBase implements Loggable {
 
     /////////////////////////////////////////////////////////////////
 
+    public boolean turretNearRev(double revolution) {
+        return turretNearRev(revolution, 3.0);
+    }
+
+    public boolean turretNearRev(double revolution, double deadzone) {
+        //System.out.println("Current distance: " + Math.abs(revolution + getTurretPosition()));
+        return Math.abs(revolution + getTurretPosition()) < deadzone;
+    }
+
+    public void turretGoToRev(double revolution, double speed) {
+        if(turretNearRev(revolution)) {
+            moveTurretInBounds(0.0);
+        } else if(-getTurretPosition() < revolution) {
+            moveTurretInBounds(-speed);
+        } else {
+            moveTurretInBounds(speed);
+        }
+    }
+
+    public boolean turretNearCenter() {
+        return turretNearRev(Constants.TURRET_ZERO_REV);
+    }
+
+    public void turretGoToCenter(double speed) {
+        turretGoToRev(Constants.TURRET_ZERO_REV, speed);
+    }
+
+    /////////////////////////////////////////////////////////////////
+
     public void move(EDeviceType deviceType, double speed) {
-        if (deviceType == EDeviceType.Hood) {
+        move(deviceType, speed, false);
+    }
+
+    public void move(EDeviceType deviceType, double speed, boolean overrideStops) {
+        if(deviceType == EDeviceType.Hood) {
             hoodMotor.set(speed);
         } else {
-            if(speed > 0 && atZeroPoint(EDeviceType.Turret)) {
-                speed = 0;
+            if(!overrideStops) {
+                if(speed > 0 && atZeroPoint(EDeviceType.Turret)) {
+                    speed = 0;
+                }
+                if(!States.armsUp) {
+                    speed = 0;
+                }
             }
+
+            speed = Math.min(speed,Constants.TURRET_MAX_SPEED);
+            speed = Math.max(speed,-Constants.TURRET_MAX_SPEED);
+
             turretMotor.set(speed);
         }
+    }
+
+    public void moveTurretInBounds(double speed) {
+        if(checkLowerBound(speed)) {
+            speed = 0;
+        } else if(checkUpperBound(speed)) {
+            speed = 0;
+        }
+
+        move(EDeviceType.Turret, speed);
     }
 
     /////////////////////////////////////////////////////////////////
 
     public boolean checkLowerBound(double rotation) {
-        return (rotation > 0 && getTurretPosition() > 0) || (rotation > 0 && atZeroPoint(EDeviceType.Turret));
+        return (rotation > 0 && -getTurretPosition() < Constants.TURRET_SOFT_MIN_REV) || (rotation > 0 && atZeroPoint(EDeviceType.Turret));
     }
 
     public boolean checkUpperBound(double rotation) {
-        return rotation < 0 && getTurretPosition() < -Constants.MAXIMUM_TURRET_ANGLE_REV;
+        return rotation < 0 && -getTurretPosition() > Constants.TURRET_SOFT_MAX_REV;
     }
 
     /////////////////////////////////////////////////////////////////
@@ -281,6 +297,10 @@ public class Shooter extends SubsystemBase implements Loggable {
         } else {
             turretEncoder.setPosition(0);
         }
+    }
+
+    public void setTurretRevolution(double revolution) {
+        turretEncoder.setPosition(-revolution);
     }
 
     /////////////////////////////////////////////////////////////////

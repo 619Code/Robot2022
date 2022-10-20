@@ -19,8 +19,8 @@ public class ManualMoveCommand extends CommandBase {
 
     public void execute() {
         rotation = speed;
-        rotation = Math.min(rotation,Constants.TURRET_MAX_OUTPUT);
-        rotation = Math.max(rotation,-Constants.TURRET_MAX_OUTPUT);
+        rotation = Math.min(rotation,Constants.TURRET_MAX_SPEED);
+        rotation = Math.max(rotation,-Constants.TURRET_MAX_SPEED);
 
         if(shooter.checkLowerBound(rotation)) {
             rotation = 0;
@@ -28,8 +28,8 @@ public class ManualMoveCommand extends CommandBase {
             rotation = 0;
         }
 
-        System.out.println("Speed " + rotation);
-        System.out.println("Position " + shooter.getTurretPosition());
+        //System.out.println("Speed " + rotation);
+        //System.out.println("Position " + shooter.getTurretPosition());
         shooter.move(EDeviceType.Turret, rotation);
     }
 

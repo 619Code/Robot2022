@@ -18,20 +18,20 @@ public class SearchCommand extends CommandBase {
     public SearchCommand(Shooter shooter, Limelight limelight) {
         this.shooter = shooter;
         this.limelight = limelight;
-        goToMin = true;
+        goToMin = true; //turret starts by going to the minumum angle
         addRequirements(shooter);
     }
 
     public void execute() {
-        if(!States.zeroed) {
+        if(!States.zeroed) { //if the turret is not zeroed, do not move!
             shooter.move(EDeviceType.Turret, 0);
         } else if(limelight.hasTarget) {
             if(limelight.isInRange()) {
                 shooter.move(EDeviceType.Turret, 0);
             } else {
                 rotation = -targetPID.calculate(limelight.angleX, 0);
-                rotation = Math.min(rotation,Constants.TURRET_MAX_OUTPUT);
-                rotation = Math.max(rotation,-Constants.TURRET_MAX_OUTPUT);
+                rotation = Math.min(rotation,Constants.TURRET_MAX_SPEED);
+                rotation = Math.max(rotation,-Constants.TURRET_MAX_SPEED);
 
                 if(shooter.checkLowerBound(rotation)) {
                     rotation = 0;
@@ -42,16 +42,16 @@ public class SearchCommand extends CommandBase {
                 shooter.move(EDeviceType.Turret, rotation);
             }
         } else {
+            //System.out.println("Position: " + shooter.getTurretPosition());
             if(goToMin) {
-                shooter.setAngle(EDeviceType.Turret, -90);
+                shooter.turretGoToRev(Constants.TURRET_SOFT_MIN_REV, Constants.TURRET_MAX_SPEED);
             } else {
-                shooter.setAngle(EDeviceType.Turret, 90);
+                shooter.turretGoToRev(Constants.TURRET_SOFT_MAX_REV, Constants.TURRET_MAX_SPEED);
             }
     
-            if(Math.abs(-90 - shooter.getAngle(EDeviceType.Turret)) < 1) {
+            if(shooter.turretNearRev(Constants.TURRET_SOFT_MIN_REV)) {
                 goToMin = false;
-            }
-            if(Math.abs(90 - shooter.getAngle(EDeviceType.Turret)) < 1) {
+            } else if(shooter.turretNearRev(Constants.TURRET_SOFT_MAX_REV)) {
                 goToMin = true;
             }
         }

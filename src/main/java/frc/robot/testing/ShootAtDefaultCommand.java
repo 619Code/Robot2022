@@ -28,7 +28,7 @@ public class ShootAtDefaultCommand extends CommandBase implements Loggable {
     public void execute() {
         States.isShooterReady = true;
         this.shooter.setShooterSpeedByRPM(this.velocity);
-        this.shooter.setAngle(EDeviceType.Hood, this.hoodAngle);
+        this.shooter.setHoodAngle(this.hoodAngle);
     }
 
     @Config(name = "Set Shooter Velocity")

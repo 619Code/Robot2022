@@ -1,8 +1,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.States;
 import frc.robot.subsystems.Climber;
 
 public class ClimbCommand extends CommandBase {
@@ -34,8 +36,8 @@ public class ClimbCommand extends CommandBase {
             } else {
                 leftMoveRate = upDown * Constants.CLIMBER_UP_RATE;
                 rightMoveRate = upDown * Constants.CLIMBER_UP_RATE * (climber.getRightClimbLimit() / climber.getLeftClimbLimit());
-                //leftMoveRate = -climber.leftClimbEncoder.getPosition() >= climber.getLeftClimbLimit() ? 0 : leftMoveRate; //UNDO
-                //rightMoveRate = -climber.rightClimbEncoder.getPosition() >= climber.getRightClimbLimit() ? 0 : rightMoveRate; //UNDO
+                leftMoveRate = -climber.leftClimbEncoder.getPosition() >= climber.getLeftClimbLimit() ? 0 : leftMoveRate;
+                rightMoveRate = -climber.rightClimbEncoder.getPosition() >= climber.getRightClimbLimit() ? 0 : rightMoveRate;
             }
     
             this.climber.moveLeft(leftMoveRate);

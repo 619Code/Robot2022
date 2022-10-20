@@ -12,9 +12,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
+        States.zeroed = true; //makes zeroed redundant
+        States.centered = true;
         robotContainer = new RobotContainer();
         Logger.configureLoggingAndConfig(robotContainer, false);
-        States.zeroed = false;
     }
 
     @Override

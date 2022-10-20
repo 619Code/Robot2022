@@ -19,7 +19,7 @@ public class MoveHoodUpCommand extends CommandBase{
     public void initialize() {
         this.finalHoodAngle =  (this.shooter.getHoodAngle()-5);
         //System.out.println("HoodUpTo:" + this.finalHoodAngle);
-        this.shooter.setAngle(Shooter.EDeviceType.Hood, this.finalHoodAngle);
+        this.shooter.setHoodAngle(this.finalHoodAngle);
     }
 
     public boolean isFinished()
