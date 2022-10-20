@@ -30,7 +30,6 @@ import frc.robot.commands.ManualMoveCommand;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RetractIntakeCommand;
 import frc.robot.commands.SearchCommand;
-import frc.robot.commands.ShootAtDefaultCommand;
 import frc.robot.commands.SpinIntakeCommand;
 import frc.robot.commands.ZeroCommandSimple;
 import frc.robot.helpers.JoystickAnalogButton;
@@ -39,13 +38,13 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.EDeviceType;
+import frc.robot.testing.ShootAtDefaultCommand;
+import frc.robot.testing.TestAutoCommand;
+import frc.robot.testing.TuneShooterCommand;
 import frc.robot.commands.AimCommand;
+import frc.robot.commands.CenterTurretCommand;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.CavalierLedCommand;
-import frc.robot.commands.RainbowLedCommand;
-import frc.robot.commands.TestAutoCommand;
-import frc.robot.commands.TuneShooterCommand;
 
 public class RobotContainer {
 
@@ -78,6 +77,7 @@ public class RobotContainer {
     @Log
     public ShootAtDefaultCommand shootAtDefaultCommand;
     public TuneShooterCommand tuneShooterCommand;
+    public CenterTurretCommand centerTurretCommand;
 
     @Config.PIDController
     private PIDController targetPID;
@@ -95,16 +95,22 @@ public class RobotContainer {
 
         magazine = new Magazine();
         climber = new Climber();
+        climber.pistonsUp();
 
         shooter = new Shooter();
-        ledStrip = new LedStrip();
-        limelight = new Limelight(ledStrip);
-        limelight.turnLightOff();
+        shooter.setTurretRevolution(Constants.TURRET_ZERO_REV);
+        shooter.setZeroPoint(EDeviceType.Hood);
+        shooter.setHoodAngle(Constants.BASE_HOOD_ANGLE);
 
-        //configureControls();
+        ledStrip = new LedStrip();
+
+        limelight = new Limelight(ledStrip);
+        limelight.turnLightOn();
+
+        configureControls();
         //testTurret();
         //demoMode();
-        climbTest();
+        //climbTest();
         //shooterTest();
     }
 
@@ -127,6 +133,7 @@ public class RobotContainer {
         -B Button: auto-aim
         -X Button: zero turret
         -A Button: low goal preset
+        -Start: toggle pistons
         
         operator: (back button pressed)
         -Right Joystick: move one climb arm without limits
@@ -138,15 +145,17 @@ public class RobotContainer {
         shootButtons();
         zeroTurretButtons();
         climbButtons();
+        centerButtons();
+        pistonButtons();
 
         JoystickButton lowGoalButton = new JoystickButton(operator, XboxController.Button.kA.value);
-        lowGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, Constants.LOW_GOAL_ANGLE, Constants.LOW_GOAL_RPM));
+        lowGoalButton.whileHeld(new AimCommand(shooter, limelight, Constants.LOW_GOAL_ANGLE, Constants.LOW_GOAL_RPM));
 
         JoystickButton highGoalButton = new JoystickButton(operator, XboxController.Button.kY.value);
-        highGoalButton.whileHeld(new AimCommand(shooter, drive, limelight, Constants.HIGH_GOAL_ANGLE, Constants.HIGH_GOAL_RPM));
+        highGoalButton.whileHeld(new AimCommand(shooter, limelight, Constants.HIGH_GOAL_ANGLE, Constants.HIGH_GOAL_RPM));
 
         JoystickButton aimButton = new JoystickButton(operator, XboxController.Button.kB.value);
-        aimButton.whileHeld(new AimCommand(shooter, drive, limelight));
+        aimButton.whileHeld(new AimCommand(shooter, limelight));
     }
 
     //for demonstrations: manual control of turret and shooter
@@ -197,6 +206,7 @@ public class RobotContainer {
     private void testTurret() {
         manualTurretButtons(true); //controlled by operator
         zeroTurretButtons();
+        centerButtons();
 
         JoystickButton stopButton = new JoystickButton(operator, XboxController.Button.kB.value);
         stopButton.whileHeld(new ManualMoveCommand(shooter, 0.0));
@@ -214,8 +224,7 @@ public class RobotContainer {
 
         operator:
         -Right Joystick: move climb arms up / down
-        -Left Bumper: move pistons one direction
-        -Right Bumper: move pistons the other directon
+        -Start: toggle pistons
 
         operator: (back button pressed)
         -Right Joystick: move one climb arm without limits
@@ -224,9 +233,7 @@ public class RobotContainer {
     private void climbTest() {
         driveButtons();
         climbButtons();
-
-        JoystickButton togglePistonsButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-        togglePistonsButton.whenPressed(new InstantCommand(() -> climber.togglePistons()));
+        pistonButtons();
     }
 
     //for shooter testing: driving and shooting only
@@ -242,6 +249,8 @@ public class RobotContainer {
     private void shooterTest() {
         driveButtons();
         tuneShooterButtons();
+        intakeButtons();
+        zeroTurretButtons();
 
         JoystickAnalogButton shootButton = new JoystickAnalogButton(operator, XboxController.Axis.kRightTrigger.value, .5);
         shootButton.whileHeld(new ParallelCommandGroup(new LoadShooterCommand(magazine), new RetractIntakeCommand(intake)));
@@ -272,6 +281,11 @@ public class RobotContainer {
 
         JoystickButton climbCommandButton = new JoystickButton(operator, XboxController.Button.kBack.value);
         climbCommandButton.whileHeld(new ManualClimbingCommand(climber, operator));
+    }
+
+    private void pistonButtons() {
+        JoystickButton togglePistonsButton = new JoystickButton(operator, XboxController.Button.kStart.value);
+        togglePistonsButton.whenPressed(new InstantCommand(() -> climber.togglePistons()));
     }
 
     private void shootButtons() {
@@ -305,9 +319,14 @@ public class RobotContainer {
         zeroTurret.whenPressed(new ZeroCommandSimple(shooter));
     }
 
+    private void centerButtons() {
+        centerTurretCommand = new CenterTurretCommand(shooter);
+        shooter.setDefaultCommand(centerTurretCommand);
+    }
+
     public Command getAutonomousCommand() {
         return new SequentialCommandGroup(
-        new ParallelCommandGroup(new TestAutoCommand(drive, 2.5), new ZeroCommandSimple(shooter), new IntakeCommand(intake, magazine).withTimeout(6)),
-        new ParallelCommandGroup(new SpinIntakeCommand(intake), new LoadShooterCommand(magazine), new AimCommand(shooter, drive, limelight)).withTimeout(8));
+        new ParallelCommandGroup(new TestAutoCommand(drive, 2.5), new IntakeCommand(intake, magazine).withTimeout(6)),
+        new ParallelCommandGroup(new SpinIntakeCommand(intake), new LoadShooterCommand(magazine), new AimCommand(shooter, limelight)).withTimeout(8));
    }
 }

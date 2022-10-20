@@ -49,7 +49,11 @@ public class Limelight extends SubsystemBase {
         }
 
         if(hasTarget) {
-            ledStrip.setWholeStripRGB(0, 0, 255);
+            if(States.isShooterReady) {
+                ledStrip.setWholeStripRGB(0, 0, 255);
+            } else {
+                ledStrip.setWholeStripRGB(255, 100, 0);
+            }
         } else {
             ledStrip.setWholeStripRGB(255, 0, 0);
         }

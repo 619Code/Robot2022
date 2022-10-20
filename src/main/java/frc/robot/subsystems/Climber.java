@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.States;
 
 public class Climber extends SubsystemBase {
     public CANSparkMax leftClimber;
@@ -20,7 +21,7 @@ public class Climber extends SubsystemBase {
     public RelativeEncoder leftClimbEncoder;
     public RelativeEncoder rightClimbEncoder;
 
-    DoubleSolenoid pistons;
+    public DoubleSolenoid pistons;
 
     public Climber() {
         pistons = new DoubleSolenoid(Constants.PCM_CAN_ID, PneumaticsModuleType.CTREPCM,
@@ -41,6 +42,8 @@ public class Climber extends SubsystemBase {
         rightClimbEncoder = rightClimber.getEncoder();
         rightClimbEncoder.setPosition(0);
         rightClimber.setInverted(true);
+
+        States.armsUp = false;
     }
     
     public void moveLeft(double power) {
@@ -54,25 +57,31 @@ public class Climber extends SubsystemBase {
     }
 
     public void togglePistons() {
-        if(pistons.get() == Value.kForward) {
-            pistonsBack();
+        if(States.armsUp) {
+            pistonsDown();
         } else {
-            pistonsForward();
+            pistonsUp();
         }
     }
 
-    public void pistonsBack() {
-        System.out.println("Pistons back");
-        pistons.set(Value.kReverse);
+    public void pistonsUp() {
+        if(States.centered) {
+            //System.out.println("Pistons up");
+            pistons.set(Value.kForward);
+            States.armsUp = true;
+        }
     }
 
-    public void pistonsForward() {
-        System.out.println("Pistons forward");
-        pistons.set(Value.kForward);
+    public void pistonsDown() {
+        if(States.centered) {
+            //System.out.println("Pistons down");
+            pistons.set(Value.kReverse);
+            States.armsUp = false;
+        }
     }
 
     public double getLeftClimbLimit() {
-        if(pistons.get() == Value.kForward) {
+        if(States.armsUp) {
             return Constants.LEFT_REV_LIMIT_UP;
         } else {
             return Constants.LEFT_REV_LIMIT_TRAV;
@@ -80,7 +89,7 @@ public class Climber extends SubsystemBase {
     }
 
     public double getRightClimbLimit() {
-        if(pistons.get() == Value.kForward) {
+        if(States.armsUp) {
             return Constants.RIGHT_REV_LIMIT_UP;
         } else {
             return Constants.RIGHT_REV_LIMIT_TRAV;

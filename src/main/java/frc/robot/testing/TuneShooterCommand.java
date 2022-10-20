@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.testing;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.*;
@@ -25,6 +25,7 @@ public class TuneShooterCommand extends CommandBase implements Loggable {
     public void initialize() {}
 
     public void execute() {
+
         States.isShooterReady = true;
 
         double shootingVelocity = Math.max(velocity, 0);
@@ -33,7 +34,7 @@ public class TuneShooterCommand extends CommandBase implements Loggable {
 
         double shootingAngle = Math.max(hoodAngle, Constants.HIGH_HOOD_ANGLE);
         shootingAngle = Math.min(shootingAngle, Constants.BASE_HOOD_ANGLE);
-        this.shooter.setAngle(EDeviceType.Hood, shootingAngle);
+        this.shooter.setHoodAngle(shootingAngle);
     }
 
     @Config(name = "Set Shooter Velocity")
