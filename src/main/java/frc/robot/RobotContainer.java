@@ -164,7 +164,7 @@ public class RobotContainer {
 
     private Command aimCommandFactory()
     {
-        if (Constants.hasTurret)
+        if (States.hasTurret)
             return new AimCommand(shooter, limelight);
         else
             return new AimCommandDriveTrain(shooter, drive, limelight);
@@ -172,7 +172,7 @@ public class RobotContainer {
 
     private Command aimCommandFactory(double goalAngle, double shooterRPM)
     {
-        if (Constants.hasTurret)
+        if (States.hasTurret)
             return new AimCommand(shooter, limelight, goalAngle, shooterRPM);
         else
             return new AimCommandDriveTrain(shooter, drive, limelight, goalAngle, shooterRPM);

@@ -17,9 +17,7 @@ public class CenterTurretCommand extends CommandBase {
 
     public void execute() {
         if(ready) {
-            if(States.zeroed) {
-                shooter.turretGoToCenter(Constants.TURRET_MAX_SPEED);
-            }
+            shooter.turretGoToCenter(Constants.TURRET_MAX_SPEED);
         } else if(shooter.turretNearRev(Constants.TURRET_ZERO_REV)) {
             ready = true;
         }

@@ -153,7 +153,4 @@ public final class Constants {
 
     // Shot finding constants
     public static final double GRAVITY = 9.81; // m/s^2
-
-    // Global Configs
-    public static final boolean hasTurret = true;
 }

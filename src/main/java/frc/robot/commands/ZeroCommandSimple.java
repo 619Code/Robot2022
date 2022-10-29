@@ -47,7 +47,7 @@ public class ZeroCommandSimple extends CommandBase {
                 shooter.move(EDeviceType.Hood, 0);
             }
 
-            if (Constants.hasTurret)
+            if (States.hasTurret)
             {
                 if(!turretBackedOff) {
                     shooter.move(EDeviceType.Turret, -Constants.TURRET_ZERO_SPEED); //move away from hall effect sensor
@@ -61,19 +61,16 @@ public class ZeroCommandSimple extends CommandBase {
                     turretBackedOff = true;
                 }
             }
-            //If the turret is present check to see if it is finished.  Otherwise just check the 
-            // hood to mark zero ready.
-        } else if(((!Constants.hasTurret || shooter.turretNearRev(0.0)) && hoodDone)) { //wait until the turret is set to the zero point before starting
+        } else if(!States.hasTurret || shooter.turretNearRev(0.0)) { //wait until the turret is set to the zero point before starting
             ready = true;
         }
     }
 
     public void end(boolean isInterrupted){
 
-        if (Constants.hasTurret)
+        if (States.hasTurret)
         {
             while(!shooter.turretNearRev(0.0)) { //wait until the turret is set to the zero point before proceeding
-                States.zeroed = true;
                 shooter.setZeroPoint(EDeviceType.Hood);
                 shooter.setHoodAngle(Constants.BASE_HOOD_ANGLE);
                 shooter.move(EDeviceType.Hood, 0);
@@ -84,7 +81,6 @@ public class ZeroCommandSimple extends CommandBase {
         else {
             if (hoodDone)
             {
-                States.zeroed = true;
                 shooter.setZeroPoint(EDeviceType.Hood);
                 shooter.setHoodAngle(Constants.BASE_HOOD_ANGLE);
                 shooter.move(EDeviceType.Hood, 0);
@@ -101,6 +97,6 @@ public class ZeroCommandSimple extends CommandBase {
         }
         hoodDone = endTimer.hasElapsed(1);
         turretDone = this.shooter.atZeroPoint(EDeviceType.Turret);
-        return hoodDone && (!Constants.hasTurret || turretDone);
+        return hoodDone && (!States.hasTurret || turretDone);
     }
 }

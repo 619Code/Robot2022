@@ -116,7 +116,7 @@ public class Shooter extends SubsystemBase implements Loggable {
     }
 
     public void periodic() {
-        if (Constants.hasTurret)
+        if (States.hasTurret)
             States.centered = turretNearRev(Constants.TURRET_ZERO_REV);
         else
             States.centered = true;
