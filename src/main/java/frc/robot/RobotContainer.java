@@ -42,6 +42,7 @@ import frc.robot.testing.ShootAtDefaultCommand;
 import frc.robot.testing.TestAutoCommand;
 import frc.robot.testing.TuneShooterCommand;
 import frc.robot.commands.AimCommand;
+import frc.robot.commands.AimCommandDriveTrain;
 import frc.robot.commands.CenterTurretCommand;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DriveCommand;
@@ -147,17 +148,36 @@ public class RobotContainer {
         climbButtons();
         centerButtons();
         pistonButtons();
-
-        JoystickButton lowGoalButton = new JoystickButton(operator, XboxController.Button.kA.value);
-        lowGoalButton.whileHeld(new AimCommand(shooter, limelight, Constants.LOW_GOAL_ANGLE, Constants.LOW_GOAL_RPM));
-
-        JoystickButton highGoalButton = new JoystickButton(operator, XboxController.Button.kY.value);
-        highGoalButton.whileHeld(new AimCommand(shooter, limelight, Constants.HIGH_GOAL_ANGLE, Constants.HIGH_GOAL_RPM));
-
-        JoystickButton aimButton = new JoystickButton(operator, XboxController.Button.kB.value);
-        aimButton.whileHeld(new AimCommand(shooter, limelight));
+        aimButtons();
     }
 
+    private void aimButtons() {
+        JoystickButton lowGoalButton = new JoystickButton(operator, XboxController.Button.kA.value);
+        lowGoalButton.whileHeld(this.aimCommandFactory(Constants.LOW_GOAL_ANGLE, Constants.LOW_GOAL_RPM));
+
+        JoystickButton highGoalButton = new JoystickButton(operator, XboxController.Button.kY.value);
+        highGoalButton.whileHeld(this.aimCommandFactory(Constants.HIGH_GOAL_ANGLE, Constants.HIGH_GOAL_RPM));
+
+        JoystickButton aimButton = new JoystickButton(operator, XboxController.Button.kB.value);
+        aimButton.whileHeld(this.aimCommandFactory());
+    }
+
+    private Command aimCommandFactory()
+    {
+        if (Constants.hasTurret)
+            return new AimCommand(shooter, limelight);
+        else
+            return new AimCommandDriveTrain(shooter, drive, limelight);
+    }
+
+    private Command aimCommandFactory(double goalAngle, double shooterRPM)
+    {
+        if (Constants.hasTurret)
+            return new AimCommand(shooter, limelight, goalAngle, shooterRPM);
+        else
+            return new AimCommandDriveTrain(shooter, drive, limelight, goalAngle, shooterRPM);
+    }
+    
     //for demonstrations: manual control of turret and shooter
     /* 
         driver: 
