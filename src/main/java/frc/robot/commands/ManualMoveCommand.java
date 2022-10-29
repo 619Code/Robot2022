@@ -34,9 +34,6 @@ public class ManualMoveCommand extends CommandBase {
     }
 
     public boolean isFinished() {
-        if(!States.zeroed) {
-            return true;
-        }
         return false;
     }
 

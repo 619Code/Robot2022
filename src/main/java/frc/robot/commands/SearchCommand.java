@@ -23,9 +23,7 @@ public class SearchCommand extends CommandBase {
     }
 
     public void execute() {
-        if(!States.zeroed) { //if the turret is not zeroed, do not move!
-            shooter.move(EDeviceType.Turret, 0);
-        } else if(limelight.hasTarget) {
+        if(limelight.hasTarget) {
             if(limelight.isInRange()) {
                 shooter.move(EDeviceType.Turret, 0);
             } else {

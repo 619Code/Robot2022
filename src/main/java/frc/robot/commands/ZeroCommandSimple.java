@@ -47,30 +47,44 @@ public class ZeroCommandSimple extends CommandBase {
                 shooter.move(EDeviceType.Hood, 0);
             }
 
-            if(!turretBackedOff) {
-                shooter.move(EDeviceType.Turret, -Constants.TURRET_ZERO_SPEED); //move away from hall effect sensor
-            } else if(!turretDone) {
-                shooter.move(EDeviceType.Turret, Constants.TURRET_ZERO_SPEED); //move towards hall effect sensor
-            } else {
-                shooter.move(EDeviceType.Turret, 0); //stop
-            }
+            if (States.hasTurret)
+            {
+                if(!turretBackedOff) {
+                    shooter.move(EDeviceType.Turret, -Constants.TURRET_ZERO_SPEED); //move away from hall effect sensor
+                } else if(!turretDone) {
+                    shooter.move(EDeviceType.Turret, Constants.TURRET_ZERO_SPEED); //move towards hall effect sensor
+                } else {
+                    shooter.move(EDeviceType.Turret, 0); //stop
+                }
 
-            if(!turretBackedOff && shooter.getTurretPosition() < -20.0) { //back off until it is 20 revolutions off
-                turretBackedOff = true;
+                if(!turretBackedOff && shooter.getTurretPosition() < -20.0) { //back off until it is 20 revolutions off
+                    turretBackedOff = true;
+                }
             }
-        } else if(shooter.turretNearRev(0.0)) { //wait until the turret is set to the zero point before starting
+        } else if(!States.hasTurret || shooter.turretNearRev(0.0)) { //wait until the turret is set to the zero point before starting
             ready = true;
         }
     }
 
     public void end(boolean isInterrupted){
-        while(!shooter.turretNearRev(0.0)) { //wait until the turret is set to the zero point before proceeding
-            States.zeroed = true;
-            shooter.setZeroPoint(EDeviceType.Hood);
-            shooter.setZeroPoint(EDeviceType.Turret);
-            shooter.setHoodAngle(Constants.BASE_HOOD_ANGLE);
-            shooter.move(EDeviceType.Hood, 0);
-            shooter.move(EDeviceType.Turret, 0);
+
+        if (States.hasTurret)
+        {
+            while(!shooter.turretNearRev(0.0)) { //wait until the turret is set to the zero point before proceeding
+                shooter.setZeroPoint(EDeviceType.Hood);
+                shooter.setHoodAngle(Constants.BASE_HOOD_ANGLE);
+                shooter.move(EDeviceType.Hood, 0);
+                shooter.setZeroPoint(EDeviceType.Turret);
+                shooter.move(EDeviceType.Turret, 0);
+            }
+        }
+        else {
+            if (hoodDone)
+            {
+                shooter.setZeroPoint(EDeviceType.Hood);
+                shooter.setHoodAngle(Constants.BASE_HOOD_ANGLE);
+                shooter.move(EDeviceType.Hood, 0);
+            }
         }
     }
 
@@ -83,6 +97,6 @@ public class ZeroCommandSimple extends CommandBase {
         }
         hoodDone = endTimer.hasElapsed(1);
         turretDone = this.shooter.atZeroPoint(EDeviceType.Turret);
-        return hoodDone && turretDone;
+        return hoodDone && (!States.hasTurret || turretDone);
     }
 }
