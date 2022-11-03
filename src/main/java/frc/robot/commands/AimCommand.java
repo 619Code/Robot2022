@@ -61,8 +61,9 @@ public class AimCommand extends CommandBase implements Loggable {
     public void execute() {
         spinupTimer.start();
 
-        if(!preset && limelight.hasTarget) {
-            if(limelight.hasTarget) {
+        if (!preset)
+        {
+            if(limelight.hasTarget) {               
                 if(limelight.distance < (Constants.DISTANCE_CLOSE - 10)) { //very very close
                     //System.out.println("VERY CLOSE");
                     tempVelocity = Constants.HIGH_GOAL_RPM + (Constants.RPM_CLOSE - Constants.HIGH_GOAL_RPM)/(Constants.DISTANCE_CLOSE - Constants.DISTANCE_PRESET) * (limelight.distance - Constants.DISTANCE_PRESET);
@@ -80,6 +81,7 @@ public class AimCommand extends CommandBase implements Loggable {
                 tempVelocity = 0.0;
             }
         }
+
         tempAngle = Math.max(tempAngle, Constants.HIGH_HOOD_ANGLE);
         tempAngle = Math.min(tempAngle, Constants.BASE_HOOD_ANGLE);
         

@@ -30,13 +30,15 @@ public class ZeroCommandSimple extends CommandBase {
     }
 
     public void initialize() {
+        endTimer.stop();
+        endTimer.reset();        
         shooter.setZeroPoint(EDeviceType.Hood);
         shooter.setZeroPoint(EDeviceType.Turret);
-        endTimer.reset();
         hoodDone = false;
         turretDone = false;
         turretBackedOff = false;
         ready = false;
+        endTimer.start();
     }
 
     public void execute() {
@@ -68,9 +70,13 @@ public class ZeroCommandSimple extends CommandBase {
 
     public void end(boolean isInterrupted){
 
+        endTimer.stop();
+        endTimer.reset();
+
         if (States.hasTurret)
         {
-            while(!shooter.turretNearRev(0.0)) { //wait until the turret is set to the zero point before proceeding
+            // If the command was interrupted and stuff didn't finish, don't zero stuff
+            while(!shooter.turretNearRev(0.0) && hoodDone && turretDone) { //wait until the turret is set to the zero point before proceeding
                 shooter.setZeroPoint(EDeviceType.Hood);
                 shooter.setHoodAngle(Constants.BASE_HOOD_ANGLE);
                 shooter.move(EDeviceType.Hood, 0);
@@ -92,10 +98,11 @@ public class ZeroCommandSimple extends CommandBase {
     //  the stop switch never reports true :(
     public boolean isFinished(){
         endTimer.start();
+        
         if(!this.shooter.atZeroPoint(EDeviceType.Hood)) {
             endTimer.reset();
         }
-        hoodDone = endTimer.hasElapsed(1);
+        hoodDone = endTimer.hasElapsed(2);
         turretDone = this.shooter.atZeroPoint(EDeviceType.Turret);
         return hoodDone && (!States.hasTurret || turretDone);
     }
