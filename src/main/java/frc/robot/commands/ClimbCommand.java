@@ -19,8 +19,8 @@ public class ClimbCommand extends CommandBase {
     }
 
     public void execute() {
-        System.out.println("Left rotations: " + (-climber.leftClimbEncoder.getPosition()));
-        System.out.println("Right rotations: " + (-climber.rightClimbEncoder.getPosition()));
+        //System.out.println("Left rotations: " + (-climber.leftClimbEncoder.getPosition()));
+        //System.out.println("Right rotations: " + (-climber.rightClimbEncoder.getPosition()));
 
         double upDown = this.controller.getRightY();
         double leftMoveRate = 0.0;

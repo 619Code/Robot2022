@@ -90,7 +90,11 @@ public class AimCommand extends CommandBase implements Loggable {
         // System.out.println("Angle: " + tempAngle);
 
         shooter.setShooterSpeedByRPM(tempVelocity);
-        shooter.setHoodAngle(tempAngle);
+        if(preset || limelight.hasTarget) {
+            shooter.setHoodAngle(tempAngle);
+        } else {
+            shooter.move(EDeviceType.Hood, 0.0);
+        }
 
         //System.out.println("Velocity (true): " + (-shooter.getShooterRPM()));
         //System.out.println("Velocity (goal): " + tempVelocity);
