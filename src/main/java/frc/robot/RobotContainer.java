@@ -46,6 +46,7 @@ import frc.robot.commands.AimCommandDriveTrain;
 import frc.robot.commands.CenterTurretCommand;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.helpers.ZeroButton;
 
 public class RobotContainer {
 
@@ -335,8 +336,10 @@ public class RobotContainer {
     }
 
     private void zeroTurretButtons() {
-        JoystickButton zeroTurret = new JoystickButton(operator, XboxController.Button.kX.value);
-        zeroTurret.whenPressed(new ZeroCommandSimple(shooter));
+        JoystickButton zeroTurretButton1 = new JoystickButton(operator, XboxController.Button.kX.value);
+        JoystickButton zeroTurretButton2 = new JoystickButton(operator, XboxController.Button.kRightStick.value);
+        ZeroButton zeroButton = new ZeroButton(zeroTurretButton1, zeroTurretButton2);
+        zeroButton.whenPressed(new ZeroCommandSimple(shooter));
     }
 
     private void centerButtons() {
