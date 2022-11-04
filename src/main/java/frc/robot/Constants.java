@@ -148,8 +148,10 @@ public final class Constants {
 
     public static final double LEFT_REV_LIMIT_UP = 144.0; //155
     public static final double RIGHT_REV_LIMIT_UP = 129.0; //137
-    public static final double LEFT_REV_LIMIT_TRAV = 155.0 * 1.2;
-    public static final double RIGHT_REV_LIMIT_TRAV = 137.0 * 1.2;
+    public static final double RIGHT_REV_LIMIT_UP_SPEED = 135.0;
+    public static final double LEFT_REV_LIMIT_UP_SPEED = LEFT_REV_LIMIT_UP;
+    public static final double LEFT_REV_LIMIT_TRAV = 176.0; //186
+    public static final double RIGHT_REV_LIMIT_TRAV = 165.0;
 
     // Shot finding constants
     public static final double GRAVITY = 9.81; // m/s^2

@@ -30,12 +30,12 @@ public class ClimbCommand extends CommandBase {
         if (Math.abs(upDown) > 0.075) {
             if (upDown > 0) {
                 leftMoveRate = upDown * Constants.CLIMBER_DOWN_RATE;
-                rightMoveRate = upDown * Constants.CLIMBER_DOWN_RATE * (climber.getRightClimbLimit() / climber.getLeftClimbLimit());
-                leftMoveRate = -climber.leftClimbEncoder.getPosition() < -15 ? 0 : leftMoveRate;
+                rightMoveRate = upDown * Constants.CLIMBER_DOWN_RATE * (Constants.RIGHT_REV_LIMIT_UP_SPEED / Constants.LEFT_REV_LIMIT_UP_SPEED);
+                leftMoveRate = -climber.leftClimbEncoder.getPosition() < -10 ? 0 : leftMoveRate;
                 rightMoveRate = -climber.rightClimbEncoder.getPosition() < -15 ? 0 : rightMoveRate;
             } else {
                 leftMoveRate = upDown * Constants.CLIMBER_UP_RATE;
-                rightMoveRate = upDown * Constants.CLIMBER_UP_RATE * (climber.getRightClimbLimit() / climber.getLeftClimbLimit());
+                rightMoveRate = upDown * Constants.CLIMBER_UP_RATE * (Constants.RIGHT_REV_LIMIT_UP_SPEED / Constants.LEFT_REV_LIMIT_UP_SPEED);
                 leftMoveRate = -climber.leftClimbEncoder.getPosition() >= climber.getLeftClimbLimit() ? 0 : leftMoveRate;
                 rightMoveRate = -climber.rightClimbEncoder.getPosition() >= climber.getRightClimbLimit() ? 0 : rightMoveRate;
             }
