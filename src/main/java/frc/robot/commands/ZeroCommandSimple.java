@@ -79,15 +79,20 @@ public class ZeroCommandSimple extends CommandBase {
         endTimer.stop();
         endTimer.reset();
 
+        if (hoodDone)
+        {
+            System.out.println("HOOD ZEROED");
+            shooter.setZeroPoint(EDeviceType.Hood);
+            shooter.setHoodAngle(Constants.BASE_HOOD_ANGLE);
+            shooter.move(EDeviceType.Hood, 0);
+        }
+
         if (States.hasTurret)
         {
             // If the command was interrupted and stuff didn't finish, don't zero stuff
             //boolean reset = true;
-            while(!shooter.turretNearRev(0.0) && hoodDone && turretDone) { //wait until the turret is set to the zero point before proceeding
-                System.out.println("ZEROED");
-                shooter.setZeroPoint(EDeviceType.Hood);
-                shooter.setHoodAngle(Constants.BASE_HOOD_ANGLE);
-                shooter.move(EDeviceType.Hood, 0);
+            if (!shooter.turretNearRev(0.0) && turretDone) { //wait until the turret is set to the zero point before proceeding
+                System.out.println("TURRET ZEROED");
                 shooter.setZeroPoint(EDeviceType.Turret);
                 shooter.move(EDeviceType.Turret, 0);
                 //reset = false;
@@ -96,14 +101,6 @@ public class ZeroCommandSimple extends CommandBase {
                 hoodDone = false;
                 turretDone = false;
             }*/
-        }
-        else {
-            if (hoodDone)
-            {
-                shooter.setZeroPoint(EDeviceType.Hood);
-                shooter.setHoodAngle(Constants.BASE_HOOD_ANGLE);
-                shooter.move(EDeviceType.Hood, 0);
-            }
         }
     }
 

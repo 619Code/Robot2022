@@ -98,9 +98,9 @@ public class AimCommand extends CommandBase implements Loggable {
 
         //System.out.println("Velocity (true): " + (-shooter.getShooterRPM()));
         //System.out.println("Velocity (goal): " + tempVelocity);
-        boolean shooterClose = Math.abs(shooter.getShooterRPM() - tempVelocity) < 175; //200
-        boolean hoodClose = Math.abs(shooter.getHoodAngle() - tempAngle) < 3;
-
+        boolean shooterClose = Math.abs(shooter.getShooterRPM() - tempVelocity) < 150;//175 //200
+        boolean hoodClose = Math.abs(shooter.getHoodAngle() - tempAngle) < 3; //3
+        //System.out.println("Angle is: " + shooter.getHoodAngle());
         if((shooterClose && hoodClose)) {
             States.isShooterReady = true;
         } else {

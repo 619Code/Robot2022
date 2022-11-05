@@ -59,12 +59,12 @@ public final class Constants {
     public static final double ANGLE_CLOSE = 63;
 
     public static final double DISTANCE_MID = 149;
-    public static final double RPM_MID = 3350; //3250
+    public static final double RPM_MID = 3400; //3350 //3250
     public static final double ANGLE_MID = 55; //60
 
     public static final double DISTANCE_FAR = 205;
-    public static final double RPM_FAR = 3800;
-    public static final double ANGLE_FAR = 48;
+    public static final double RPM_FAR = 3950; //3900 //3800
+    public static final double ANGLE_FAR = 46; //48
 
     //Shooter presets
     public static final double DISTANCE_PRESET = 69;
